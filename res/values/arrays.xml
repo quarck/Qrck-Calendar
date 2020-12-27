@@ -416,4 +416,62 @@
         <item>"6"</item>
         <item>"7"</item>
     </string-array>
+	
+	  <string-array name="days_of_week_entries">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
+    <integer-array name="days_of_week_values">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>1</item>
+    </integer-array>
+
+    <integer-array name="default_reminder_intervals_milliseconds_values">
+        <item>60000</item>
+        <item>900000</item>
+        <item>1800000</item>
+        <item>3600000</item>
+        <item>7200000</item>
+        <item>14400000</item>
+        <item>86400000</item>
+        <item>604800000</item>
+        <item>-1</item>
+    </integer-array>
+
+    <integer-array name="default_reminder_intervals_all_day_seconds_values">
+        <item>-2147483648</item>     <!-- since both negative and positive values are legal here, -2^31 is used as an indicator for 'enter manually' -->
+        <item>57600</item>
+        <item>43200</item>
+        <item>21600</item>
+        <item>10800</item>
+        <item>-28800</item>
+        <item>-43200</item>
+    </integer-array>
+
+    <string-array name="month_names">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+
 </resources>

@@ -31,10 +31,15 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.QUICKBOOT_POWERON" /> <!-- For HTC -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
     <application android:name="com.android.calendar.CalendarApplication"
         android:requestLegacyExternalStorage="true"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_new"
         android:label="@string/standalone_app_label"
         android:taskAffinity="org.qrck.seshat.task"
         android:requiredAccountType="*"
@@ -282,6 +287,161 @@
         </service>
 
         <service android:name="com.android.calendar.AsyncQueryServiceHelper" />
+
+
+        <!-- CN Light original activities and receivers -->
+
+        <activity
+            android:name="com.github.quarck.calnotify.ui.MainActivityNG"
+            android:label="@string/main_activity_title"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.github.quarck.calnotify.ui.ViewEventActivity"
+            android:label=""
+            android:launchMode="singleTask"
+            android:parentActivityName="com.github.quarck.calnotify.ui.MainActivityNG"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.github.quarck.calnotify.ui.SnoozeAllActivity"
+            android:label="@string/snooze_all"
+            android:parentActivityName="com.github.quarck.calnotify.ui.MainActivityNG"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.github.quarck.calnotify.prefs.CalendarsActivity"
+            android:label="@string/title_calendars_activity"
+            android:parentActivityName="com.github.quarck.calnotify.ui.MainActivityNG"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="com.github.quarck.calnotify.prefs.CalendarsActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.github.quarck.calnotify.ui.TestActivity"
+            android:label="@string/title_activity_activity_test_buttons_and_to_do"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.github.quarck.calnotify.ui.PrivacyPolicyActivity"
+            android:label="@string/title_activity_privacy_policy"
+            android:parentActivityName="com.github.quarck.calnotify.ui.MainActivityNG"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.github.quarck.calnotify.ui.EditEventActivity"
+            android:label="@string/empty"
+            android:parentActivityName="com.github.quarck.calnotify.ui.MainActivityNG"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.github.quarck.calnotify.ui.EditEventActivityTextReceiver"
+            android:label="@string/create_event"
+            android:parentActivityName="com.github.quarck.calnotify.ui.MainActivityNG"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <service android:name="com.github.quarck.calnotify.calendarmonitor.CalendarMonitorIntentService" />
+        <service
+            android:name="com.github.quarck.calnotify.calendarmonitor.CalendarMonitorOneTimeJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name="com.github.quarck.calnotify.calendarmonitor.CalendarMonitorPeriodicJobService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service android:name="com.github.quarck.calnotify.notification.NotificationActionMarkDoneService" />
+
+        <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.AppUpdatedBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.github.quarck.calnotify.broadcastreceivers.BootCompleteBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <!-- Well, HTC -->
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+                <!-- Well, OLD HTC -->
+                <action android:name="android.intent.action.REBOOT" />
+                <!-- Well, MIUI -->
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.EventReminderBroadcastReceiver">
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.intent.action.EVENT_REMINDER" />
+
+                <data android:mimeType="vnd.android.cursor.item/calendar-alert" />
+            </intent-filter>
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.intent.action.EVENTEX_REMINDER" />
+
+                <data android:mimeType="vnd.android.cursor.item/calendarEx-alert" />
+            </intent-filter>
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.intent.action.EVENT_REMINDER" />
+
+                <data android:scheme="content" />
+            </intent-filter>
+            <intent-filter android:priority="2147483647">
+                <action android:name="android.intent.action.EVENT_REMINDER" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/calendar_alert_time" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.CalendarChangedBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PROVIDER_CHANGED" />
+
+                <data android:scheme="content" />
+                <data android:host="com.android.calendar" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.SnoozeAlarmBroadcastReceiver" />
+        <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.ReminderAlarmBroadcastReceiver" />
+        <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.ManualEventAlarmBroadcastReceiver" />
+        <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.SnoozeExactAlarmBroadcastReceiver" />
+        <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.ReminderExactAlarmBroadcastReceiver" />
+        <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.ManualEventExactAlarmBroadcastReceiver" />
+        <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.TimeSetBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+        </receiver>
 
     </application>
 </manifest>

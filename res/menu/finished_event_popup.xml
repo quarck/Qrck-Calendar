@@ -1,0 +1,11 @@
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.FinishedEventsActivity" >
+
+    <item
+        android:id="@+id/action_mark_not_finished"
+        android:title="@string/restore_notification" />
+
+</menu>

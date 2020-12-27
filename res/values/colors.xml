@@ -428,4 +428,53 @@
         <item>#FFCC3F00</item>
         <item>#FFCC770C</item>
     </array>
+	
+	
+	
+    <color name="background">#000</color>
+
+    <color name="backgroundToolbar">#111111</color>
+
+    <color name="primary">#A08375</color>
+    <color name="primary_dark">#BAA59C</color>
+    <color name="primary_light">#302724</color>
+
+    <color name="accent">#107EED</color>
+    <color name="primary_text">#DEDEDF</color>
+    <color name="secondary_text">#8D8D8E</color>
+    <color name="icons">#000000</color>
+    <color name="divider">#89494A</color>
+    <color name="divider_light">#39393A</color>
+
+    <color name="event_title_color">#FFFFFF</color>
+    <color name="event_title_hint_color">#313132</color>
+
+    <color name="event_unselected_tag_color">#515152</color>
+    <color name="event_selected_tag_color">#FFFFFF</color>
+
+    <color name="light_divider">#292929</color>
+
+    <color name="ultra_light_divider">#0F0F0F</color>
+
+    <color name="material_red">#c3362b</color>
+    <color name="material_blue">#3f51b8</color>
+
+
+    <color name="complete_event_bg">#03A9e4</color>
+
+    <color name="cal_sample_primary">#03A9F4</color>
+
+    <color name="quiet_hours_active_text">#FFC107</color>
+    <color name="quiet_hours_active_background">#221111</color>
+
+    <color name="nearly_black">#0f0f0f</color>
+    <color name="true_black_as_night">#000</color>
+
+    <color name="cal_current_month">#EEEEEF</color>
+    <color name="cal_today_color">#Ff2924</color>
+    <color name="cal_other_month">#4D4D4E</color>
+
+    <color name="cal_current_day_bg">#757575</color>
+
+	
 </resources>
