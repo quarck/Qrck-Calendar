@@ -43,7 +43,7 @@ import android.widget.Toast;
 import com.android.calendarcommon2.DateException;
 import com.android.calendarcommon2.Duration;
 
-import ws.xsoh.etar.R;
+import org.qrck.seshat.R;
 
 public class GoogleCalendarUriIntentFilter extends Activity {
     static final boolean debug = false;

@@ -1,18 +1,14 @@
-![Etar Calendar](metadata/en-US/images/featureGraphic.png)
-# Etar Calendar
-Etar (from Arabic:  `إِيتَار`)  is an open source material designed calendar made for everyone!
+![Seshat Calendar](metadata/en-US/images/featureGraphic.png)
+# Seshat Calendar
+Seshat (the ancient Egyptian goddess of wisdom, knowledge, and writing) is an open source material designed calendar made for everyone!
+Forked from The Etar Calendar.
 
-[<img src="metadata/en_fdroid.png" height="60" alt="Get it on F-Droid">](https://f-droid.org/packages/ws.xsoh.etar/)[<img src="metadata/en_google_play.png" height="60" alt="Get it on Google Play">](https://play.google.com/store/apps/details?id=ws.xsoh.etar)
-
-![Etar Calendar](metadata/animation.gif)
-
-## Why?
-Well, I wanted a simple, material designed and state of the art open source calendar that anyone can make better.
+![Seshat Calendar](metadata/animation.gif)
 
 ## Special thanks
 
-The application is an enhanced version of AOSP Calendar. Without the help of
-[Free Software for Android](https://github.com/Free-Software-for-Android/Standalone-Calendar) team, 
+The application is an enhanced version of The Etar Calendar, which itself is en enhanced version of AOSP Calendar.
+Without the help of [Free Software for Android](https://github.com/Free-Software-for-Android/Standalone-Calendar) team,
 this app would be just a dream. So thanks to them!
 
 ## Features
@@ -24,7 +20,7 @@ this app would be just a dream. So thanks to them!
 - Agenda widget.
 - Multilingual UI.
 
-## How to use Etar
+## How to use Seshat
 Store your calendar on the phone only:
   - Create an offline calendar.
 
@@ -34,18 +30,18 @@ Sync your calendar to a server:
   only way to keep full control over your data and still have ONE calendar
   usable from different devices.) To sync such a calendar to some server you
   need yet another app, e. g. DAVx5. That’s necessary because a Caldav client
-  isn't included in Etar.
+  isn't included in Seshat.
 
-  The following [link](https://ownyourbits.com/2017/12/30/sync-nextcloud-tasks-calendars-and-contacts-on-your-android-device/) provides a tutorial how to use Nextcloud + DAVx5 + Etar.
+  The following [link](https://ownyourbits.com/2017/12/30/sync-nextcloud-tasks-calendars-and-contacts-on-your-android-device/) provides a tutorial how to use Nextcloud + DAVx5 + Seshat.
 
 ### Technical explanation
 On Android there are "Calendar providers". These can be calendars that are
 synchronized with a cloud service or local calendars. Basically any app
-could provide a calendar. Those "provided" calendars can be used by Etar.
-You can even configure in Etar which ones are to be shown and when adding
+could provide a calendar. Those "provided" calendars can be used by Seshat.
+You can even configure in Seshat which ones are to be shown and when adding
 an event to which calendar it should be added.
 
-### Important permissions Etar requires
+### Important permissions Seshat requires
 - READ_EXTERNAL_STORAGE & WRITE_EXTERNAL_STORAGE  
 ->import and export ics calendar files  
 - READ_CONTACTS(optional)  
@@ -56,7 +52,7 @@ an event to which calendar it should be added.
 
 ## Contribute
 ### Translations
-Interested in helping to translate Etar? Contribute here: https://hosted.weblate.org/projects/etar-calendar/strings/
+Interested in helping to translate Seshat? Contribute here: https://hosted.weblate.org/projects/Seshat-calendar/strings/
 
 ##### Google Play app description:
 You can update/add your own language and all artwork files [here](metadata)
@@ -75,7 +71,9 @@ Copyright (c) 2005-2013, The Android Open Source Project
 
 Copyright (c) 2013, Dominik Schürmann
 
-Copyright (c) 2015-, The Etar Project
+Copyright (c) 2015-2020, The Seshat Project
+
+Copyright (c) 2020-, Sergey Parshin
 
 Licensed under the GPLv3: https://www.gnu.org/licenses/gpl-3.0.html
 Except where otherwise noted.

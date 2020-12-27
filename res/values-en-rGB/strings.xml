@@ -245,7 +245,7 @@
     <string name="preferences_list_add_offline_button">Add calendar</string>
     <string name="preferences_list_add_offline_name">Name</string>
     <string name="preferences_list_add_offline_cancel">Cancel</string>
-    <string name="preferences_menu_about">About Etar</string>
+    <string name="preferences_menu_about">About Seshat</string>
     <string name="offline_account_name">Offline Calendar</string>
     <string name="preferences_list_general">General settings</string>
     <string name="preferences_list_calendar_summary_invisible">Events are not displayed</string>
@@ -290,14 +290,14 @@
     <string name="fifteen_minutes">15 minutes</string>
     <string name="zero_minutes">0 minutes</string>
     <string name="visibility_confidential">Confidential</string>
-    <string name="calendar_permission_not_granted">Sorry this feature can\'t work. Etar requires calendar read and write permissions to work properly</string>
-    <string name="user_rejected_calendar_write_permission">Etar requires calendar read and write permissions to work properly. Please try again.</string>
+    <string name="calendar_permission_not_granted">Sorry this feature can\'t work. Seshat requires calendar read and write permissions to work properly</string>
+    <string name="user_rejected_calendar_write_permission">Seshat requires calendar read and write permissions to work properly. Please try again.</string>
     <string name="source_code">Source</string>
     <string name="preferences_issues">Report issues</string>
     <string name="license">License</string>
     <string name="changelog">Changelog</string>
     <string name="authors">Authors</string>
-    <string name="app_copyright">© 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Portions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Portions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="preferences_default_snooze_delay_dialog">Default snooze delay</string>
     <string name="preferences_default_snooze_delay_title">Default snooze delay time</string>
     <string name="snooze_delay_dialog_title">Set snooze delay</string>

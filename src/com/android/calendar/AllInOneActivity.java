@@ -89,9 +89,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import ws.xsoh.etar.R;
-import ws.xsoh.etar.databinding.AllInOneMaterialBinding;
-import ws.xsoh.etar.databinding.DateRangeTitleBinding;
+import org.qrck.seshat.R;
+import org.qrck.seshat.databinding.AllInOneMaterialBinding;
+import org.qrck.seshat.databinding.DateRangeTitleBinding;
 
 import static android.provider.CalendarContract.Attendees.ATTENDEE_STATUS;
 import static android.provider.CalendarContract.EXTRA_EVENT_ALL_DAY;

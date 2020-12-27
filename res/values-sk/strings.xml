@@ -256,8 +256,8 @@
     <string name="preferences_days_per_week_dialog">Dni v týždni</string>
     <string name="preferences_default_event_duration_title">Predvolená doba trvania udalosti</string>
     <string name="preferences_issues">Nahlásiť problémy</string>
-    <string name="user_rejected_calendar_write_permission">Etar vyžaduje na správne fungovanie písanie a zápis do kalendára. Prosím skúste znova.</string>
-    <string name="calendar_permission_not_granted">Ľutujeme, táto funkcia nemôže fungovať. Etar vyžaduje na správne fungovanie písanie a zápis do kalendára</string>
+    <string name="user_rejected_calendar_write_permission">Seshat vyžaduje na správne fungovanie písanie a zápis do kalendára. Prosím skúste znova.</string>
+    <string name="calendar_permission_not_granted">Ľutujeme, táto funkcia nemôže fungovať. Seshat vyžaduje na správne fungovanie písanie a zápis do kalendára</string>
     <string name="visibility_confidential">Dôverné</string>
     <string name="zero_minutes">0 minút</string>
     <string name="fifteen_minutes">15 minút</string>

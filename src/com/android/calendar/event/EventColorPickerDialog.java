@@ -22,7 +22,7 @@ import android.os.Bundle;
 
 import com.android.colorpicker.ColorPickerDialog;
 
-import ws.xsoh.etar.R;
+import org.qrck.seshat.R;
 
 /**
  * A dialog which displays event colors, with an additional button for the calendar color.

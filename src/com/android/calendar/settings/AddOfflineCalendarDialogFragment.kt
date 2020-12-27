@@ -28,7 +28,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.android.calendar.persistence.CalendarRepository
 import com.google.android.material.textfield.TextInputLayout
-import ws.xsoh.etar.R
+import org.qrck.seshat.R
 
 
 class AddOfflineCalendarDialogFragment : DialogFragment() {

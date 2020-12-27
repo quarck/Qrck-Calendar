@@ -4,5 +4,5 @@ Egenskaper:
 - Bruk av Androids kalendersynkronisering.
 - Gratis, friprog, og uten reklamer.
 
-Bugs, feilmeldinger og tilbakemeldinger: https://github.com/xsoh/Etar-Calendar/issues
-Kildekode: https://github.com/xsoh/Etar-Calendar
+Bugs, feilmeldinger og tilbakemeldinger: https://github.com/quarck/Seshat-Calendar/issues
+Kildekode: https://github.com/quarck/Seshat-Calendar

@@ -56,7 +56,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import ws.xsoh.etar.R;
+import org.qrck.seshat.R;
 
 import static com.android.calendar.alerts.AlertService.ALERT_CHANNEL_ID;
 
@@ -128,7 +128,7 @@ public class AlertReceiver extends BroadcastReceiver {
                 PowerManager pm =
                     (PowerManager)context.getSystemService(Context.POWER_SERVICE);
                 mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                        "Etar:StartingAlertService");
+                        "Seshat:StartingAlertService");
                 mStartingService.setReferenceCounted(false);
             }
             mStartingService.acquire();

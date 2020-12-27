@@ -39,7 +39,7 @@ import com.android.calendar.DynamicTheme;
 import com.android.calendar.Utils;
 import com.android.calendar.selectcalendars.CalendarColorCache.OnCalendarColorsLoadedListener;
 
-import ws.xsoh.etar.R;
+import org.qrck.seshat.R;
 
 public class SelectCalendarsSimpleAdapter extends BaseAdapter implements ListAdapter,
     OnCalendarColorsLoadedListener {

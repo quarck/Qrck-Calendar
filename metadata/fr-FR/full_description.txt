@@ -5,5 +5,5 @@ Caractéristiques:
 - Material design.
 - Gratuit, open source et sans publicité.
 
-Aide et commentaires : https://github.com/Etar-Group/Etar-Calendar/issues
-Code source : https://github.com/Etar-Group/Etar-Calendar
+Aide et commentaires : https://github.com/quarck/Seshat-Calendar/issues
+Code source : https://github.com/quarck/Seshat-Calendar

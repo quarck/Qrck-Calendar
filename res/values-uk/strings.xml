@@ -268,8 +268,8 @@
     <string name="preferences_days_per_week_dialog">Днів на тиждень</string>
     <string name="preferences_default_event_duration_title">Типова тривалість події</string>
     <string name="preferences_issues">Повідомити про проблеми</string>
-    <string name="user_rejected_calendar_write_permission">Для коректної роботи Etar потребує дозволу на читання та запис до календаря. Спробуйте ще раз, будь ласка.</string>
-    <string name="calendar_permission_not_granted">На жаль, ця функція не може працювати. Для коректної роботи Etar потребує дозволу на читання та запис до календаря.</string>
+    <string name="user_rejected_calendar_write_permission">Для коректної роботи Seshat потребує дозволу на читання та запис до календаря. Спробуйте ще раз, будь ласка.</string>
+    <string name="calendar_permission_not_granted">На жаль, ця функція не може працювати. Для коректної роботи Seshat потребує дозволу на читання та запис до календаря.</string>
     <string name="visibility_confidential">Конфіденційно</string>
     <string name="zero_minutes">0 хвилин</string>
     <string name="fifteen_minutes">15 хвилин</string>
@@ -334,9 +334,9 @@
     <string name="preferences_calendar_delete_message">Ви дійсно бажаєте видалити календар\?</string>
     <string name="preferences_calendar_delete_delete">Видалити календар</string>
     <string name="preferences_calendar_delete_cancel">Скасувати</string>
-    <string name="preferences_menu_about">Про Etar</string>
+    <string name="preferences_menu_about">Про Seshat</string>
     <string name="offline_account_name">Автономний календар</string>
-    <string name="app_copyright">© 2015-<xliff:g>%1$s</xliff:g> Проєкт Etar. Частково © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-<xliff:g>%1$s</xliff:g> Проєкт Etar. Частково © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="authors">Автори</string>
     <string name="changelog">Перелік змін</string>
     <string name="license">Ліцензія</string>

@@ -6,5 +6,5 @@
 - مجاني ومفتوح المصدر وبدون إعلانات.
 - إمكانية تصدير وتوريد ملفات الـics.
 
-للمشاكل والاقتراحات:  https://github.com/Etar-Group/Etar-Calendar/issues
-الشفرة المصدرية: https://github.com/Etar-Group/Etar-Calendar
+https://github.com/quarck/Seshat-Calendar/issues
+الشفرة المصدرية: https://github.com/quarck/Seshat-Calendar

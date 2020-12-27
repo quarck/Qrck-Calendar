@@ -284,8 +284,8 @@
     <string name="preferences_days_per_week_dialog">Dni w tygodniu</string>
     <string name="preferences_default_event_duration_title">Domyślna długość zdarzenia</string>
     <string name="preferences_issues">Zgłoś problem</string>
-    <string name="user_rejected_calendar_write_permission">Etar wymaga uprawnień czytania i zapisywania kalendarza aby funkcjonować. Proszę spróbować ponownie.</string>
-    <string name="calendar_permission_not_granted">Niestety ta funkcja nie działa. Etar wymaga uprawnień czytania i zapisywania kalendarza aby funkcjonować poprawnie</string>
+    <string name="user_rejected_calendar_write_permission">Seshat wymaga uprawnień czytania i zapisywania kalendarza aby funkcjonować. Proszę spróbować ponownie.</string>
+    <string name="calendar_permission_not_granted">Niestety ta funkcja nie działa. Seshat wymaga uprawnień czytania i zapisywania kalendarza aby funkcjonować poprawnie</string>
     <string name="visibility_confidential">Poufne</string>
     <string name="zero_minutes">0 minut</string>
     <string name="fifteen_minutes">15 minut</string>
@@ -321,7 +321,7 @@
     <string name="foreground_notification_channel_description">Powiadomienie na pierwszym planie jest wymagane do wewnętrznej synchronizacji alertów. Proszę wyciszyć</string>
     <string name="preferences_calendar_delete">Usuń kalendarz</string>
     <string name="preferences_list_add_offline_cancel">Anuluj</string>
-    <string name="preferences_menu_about">O programie Etar</string>
+    <string name="preferences_menu_about">O programie Seshat</string>
     <string name="authors">Autorzy</string>
     <string name="changelog">Lista zmian</string>
     <string name="license">Licencja</string>

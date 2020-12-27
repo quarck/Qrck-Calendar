@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import java.util.Formatter;
 import java.util.Locale;
 
-import ws.xsoh.etar.R;
+import org.qrck.seshat.R;
 
 /**
  * Created by xsoh64 on 7/21/15.

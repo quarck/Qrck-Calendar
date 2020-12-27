@@ -48,7 +48,7 @@ import java.util.Locale;
 
 import junit.framework.TestCase;
 
-import ws.xsoh.etar.R;
+import org.qrck.seshat.R;
 
 /**
  * Test class for verifying helper functions in Calendar's Utils

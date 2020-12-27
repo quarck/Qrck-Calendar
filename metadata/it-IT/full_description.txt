@@ -7,5 +7,5 @@ Caratteristiche:
 - Libero, open source e assolutamente nessuna pubblicità.
 - Supporta la condivisione di calendari via ics e la possibilità di importare/esportare dalla scheda sd.
 
-Errori e feedback: https://github.com/Etar-Group/Etar-Calendar/issues
-Codice sorgente: https://github.com/Etar-Group/Etar-Calendar
+Errori e feedback: https://github.com/quarck/Seshat-Calendar/issues
+Codice sorgente: https://github.com/quarck/Seshat-Calendar

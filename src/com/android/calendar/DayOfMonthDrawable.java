@@ -27,7 +27,7 @@ import android.graphics.drawable.Drawable;
 
 import java.text.NumberFormat;
 
-import ws.xsoh.etar.R;
+import org.qrck.seshat.R;
 
 /**
  * A custom view to draw the day of the month in the today button in the options menu

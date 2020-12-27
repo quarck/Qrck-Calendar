@@ -3,8 +3,8 @@ package com.android.calendar
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 
-import ws.xsoh.etar.R
-import ws.xsoh.etar.databinding.SimpleFrameLayoutMaterialBinding
+import org.qrck.seshat.R
+import org.qrck.seshat.databinding.SimpleFrameLayoutMaterialBinding
 
 private val dynamicTheme = DynamicTheme()
 

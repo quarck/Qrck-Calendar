@@ -54,7 +54,7 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import ws.xsoh.etar.R;
+import org.qrck.seshat.R;
 
 /*
 Bugs Bugs Bugs:

@@ -255,7 +255,7 @@
     <string name="preferences_days_per_week_dialog">Päiviä viikossa</string>
     <string name="preferences_default_event_duration_title">Tapahtuman oletuskesto</string>
     <string name="preferences_issues">Ilmoita ongelmista</string>
-    <string name="user_rejected_calendar_write_permission">Etar tarvitsee kalenterin luku- ja kirjoutusoikeuksia toimiakseen oikein. Yritä uudelleen.</string>
+    <string name="user_rejected_calendar_write_permission">Seshat tarvitsee kalenterin luku- ja kirjoutusoikeuksia toimiakseen oikein. Yritä uudelleen.</string>
     <string name="calendar_permission_not_granted">Vaaditut käyttöoikeudet evättiin. Ota ne käyttöön Asetukset-sovelluksessa muokkaamaan tapahtumia</string>
     <string name="visibility_confidential">Luottamuksellinen</string>
     <string name="zero_minutes">0 minuuttia</string>
@@ -291,7 +291,7 @@
     <string name="preferences_list_add_offline_message">Ei-verkossa-kalentereita EI synkronoida pilvipalveluun, ja ne ovat käytettävissä vain puhelimessasi.</string>
     <string name="preferences_list_add_offline_title">Lisää ei-verkossa-kalenteri</string>
     <string name="preferences_list_add_offline">Lisää ei-verkossa-kalenteri</string>
-    <string name="preferences_menu_about">Tietoja Etarista</string>
+    <string name="preferences_menu_about">Tietoja Seshatista</string>
     <string name="preferences_list_add_offline_cancel">Peruuta</string>
     <string name="preferences_list_add_offline_name">Nimi</string>
     <string name="preferences_list_add_offline_button">Lisää kalenteri</string>
@@ -326,7 +326,7 @@
     <string name="license">Lisenssi</string>
     <string name="changelog">Muutosloki</string>
     <string name="authors">Tekijät</string>
-    <string name="app_copyright">© 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Portions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Portions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="preferences_system_theme">Järjestelmän oletusasetus</string>
     <string name="foreground_notification_channel_description">Sisäisen hälytyksen synkronointiin tarvitaan tulosilmoitus.</string>
     <string name="foreground_notification_channel_name">Hälytyksen synkronointi</string>

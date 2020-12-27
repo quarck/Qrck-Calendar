@@ -265,7 +265,7 @@
     <string name="preferences_days_per_week_dialog">Broj dana u tjednu</string>
     <string name="preferences_default_event_duration_title">Standardno trajanje događaja</string>
     <string name="preferences_issues">Prijavi probleme</string>
-    <string name="user_rejected_calendar_write_permission">Da bi ispravno radio, Etar mora imati dozvolu za čitanje i pisanje kalendara. Pokušaj ponovo.</string>
+    <string name="user_rejected_calendar_write_permission">Da bi ispravno radio, Seshat mora imati dozvolu za čitanje i pisanje kalendara. Pokušaj ponovo.</string>
     <string name="calendar_permission_not_granted">Potrebne dozvole su odbijene. Za uređivanje događaja, aktiviraj dozvole u postavkama aplikacije</string>
     <string name="visibility_confidential">Povjerljivo</string>
     <string name="zero_minutes">0 minuta</string>
@@ -333,7 +333,7 @@
     <string name="preferences_calendar_delete_cancel">Odustani</string>
     <string name="preferences_menu_about">Informacije</string>
     <string name="offline_account_name">Lokalni kalendar</string>
-    <string name="app_copyright">© 2015. – <xliff:g>%1$s</xliff:g>. The Etar Project. Dijelovi © 2005. – <xliff:g>%1$s</xliff:g>. The Android Open Source Project.</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015. – <xliff:g>%1$s</xliff:g>. The Etar Project. Dijelovi © 2005. – <xliff:g>%1$s</xliff:g>. The Android Open Source Project.</string>
     <string name="authors">Autori</string>
     <string name="changelog">Zapis promjena</string>
     <string name="license">Licenca</string>

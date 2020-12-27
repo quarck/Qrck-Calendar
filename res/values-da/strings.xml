@@ -254,8 +254,8 @@
     <string name="preferences_days_per_week_dialog">Dage pr. uge</string>
     <string name="preferences_default_event_duration_title">Standard begivenhed varighed</string>
     <string name="preferences_issues">Rapporter problemer</string>
-    <string name="user_rejected_calendar_write_permission">Etar kræver kalender læse- og skrivetilladelse for at fungere korrekt. Prøv igen.</string>
-    <string name="calendar_permission_not_granted">Denne funktion kan ikke fungere. Etar kræver kalender læse- og skrivetilladelse for at fungere korrekt</string>
+    <string name="user_rejected_calendar_write_permission">Seshat kræver kalender læse- og skrivetilladelse for at fungere korrekt. Prøv igen.</string>
+    <string name="calendar_permission_not_granted">Denne funktion kan ikke fungere. Seshat kræver kalender læse- og skrivetilladelse for at fungere korrekt</string>
     <string name="visibility_confidential">Fortrolig</string>
     <string name="zero_minutes">0 minutter</string>
     <string name="fifteen_minutes">15 minutter</string>
@@ -305,9 +305,9 @@
     <string name="preferences_calendar_delete_message">Vil du virkelig slette denne kalender\?</string>
     <string name="preferences_calendar_delete_delete">Slet kalender</string>
     <string name="preferences_calendar_delete_cancel">Annuller</string>
-    <string name="preferences_menu_about">Om Etar</string>
+    <string name="preferences_menu_about">Om Seshat</string>
     <string name="offline_account_name">Offlinekalender</string>
-    <string name="app_copyright">© 2015-<xliff:g>%1$s</xliff:g> Etar Projektet. Portions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-<xliff:g>%1$s</xliff:g> Etar Projektet. Portions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="authors">Forfattere</string>
     <string name="changelog">Ændringslog</string>
     <string name="license">Licens</string>

@@ -45,8 +45,8 @@ import com.android.calendar.alerts.GlobalDismissManager.AlarmId;
 import java.util.LinkedList;
 import java.util.List;
 
-import ws.xsoh.etar.R;
-import ws.xsoh.etar.databinding.AlertActivityBinding;
+import org.qrck.seshat.R;
+import org.qrck.seshat.databinding.AlertActivityBinding;
 
 /**
  * The alert panel that pops up when there is a calendar event alarm.

@@ -8,6 +8,6 @@
 - 日程小部件
 - 支持通过 ics 文件共享日历以及从 SD 卡导入 / 导出
 
-错误和反馈: https://github.com/Etar-Group/Etar-Calendar/issues
-源代码: https://github.com/Etar-Group/Etar-Calendar
+错误和反馈: https://github.com/quarck/Seshat-Calendar/issues
+源代码: https://github.com/quarck/Seshat-Calendar
 

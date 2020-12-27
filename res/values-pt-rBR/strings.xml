@@ -272,8 +272,8 @@
         <item quantity="one">Para <xliff:g id="event_count">%d</xliff:g> evento</item>
         <item quantity="other">Para <xliff:g id="event_count">%d</xliff:g> eventos</item>
     </plurals>
-    <string name="user_rejected_calendar_write_permission">Etar necessita de permissões para ler e escrever no calendário para funcionar corretamente. Tente novamente.</string>
-    <string name="calendar_permission_not_granted">Esta funcionalidade não pode ser executada. Etar necessita de permissões para ler e escrever no calendário para funcionar corretamente</string>
+    <string name="user_rejected_calendar_write_permission">Seshat necessita de permissões para ler e escrever no calendário para funcionar corretamente. Tente novamente.</string>
+    <string name="calendar_permission_not_granted">Esta funcionalidade não pode ser executada. Seshat necessita de permissões para ler e escrever no calendário para funcionar corretamente</string>
     <string name="one_and_a_half_hours">1 hora e meia</string>
     <string name="cal_export_event_sdcard_title">Exportar para cartão SD</string>
     <string name="cal_export_succ_msg">Evento exportado com sucesso: %1s</string>

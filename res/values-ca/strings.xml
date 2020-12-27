@@ -255,7 +255,7 @@
     <string name="preferences_days_per_week_dialog">Dies per setmana</string>
     <string name="preferences_default_event_duration_title">Duració d\'esdeveniment per defecte</string>
     <string name="preferences_issues">Reporta problema</string>
-    <string name="user_rejected_calendar_write_permission">Etar requereix permisos per a llegir i escriure al calendari per a funcionar correctament. Si us plau, prova-ho de nou.</string>
+    <string name="user_rejected_calendar_write_permission">Seshat requereix permisos per a llegir i escriure al calendari per a funcionar correctament. Si us plau, prova-ho de nou.</string>
     <string name="calendar_permission_not_granted">S\'han denegat els permisos necessaris, activeu-los des de la configuració per a editar esdeveniments</string>
     <string name="visibility_confidential">Confidencial</string>
     <string name="zero_minutes">0 minuts</string>
@@ -296,7 +296,7 @@
 \nEs pot desactivar l\'opció \'Gestiona els colors del calendari\' a DAVx⁵ per prevenir-ho.</string>
     <string name="cal_import_error_time_zone_msg">Incapaç d\'entendre el fus horari proporcionat: %s</string>
     <string name="offline_account_name">Calendari fora de línia</string>
-    <string name="preferences_menu_about">Sobre Etar</string>
+    <string name="preferences_menu_about">Sobre Seshat</string>
     <string name="preferences_list_add_offline_cancel">Cancel·la</string>
     <string name="preferences_list_add_offline_name">Nom</string>
     <string name="preferences_list_add_offline_button">Afegeix un calendari</string>
@@ -326,7 +326,7 @@
     <string name="license">Llicència</string>
     <string name="changelog">Registre de canvis</string>
     <string name="authors">Autors</string>
-    <string name="app_copyright">© 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Porcions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Porcions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="preferences_list_add_remote_etesync">Afegeix un calendari EteSync</string>
     <string name="seven_days">7 dies</string>
     <string name="six_days">6 dies</string>

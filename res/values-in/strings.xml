@@ -233,7 +233,7 @@
     <string name="preferences_days_per_week_dialog">Hari per minggu</string>
     <string name="preferences_default_event_duration_title">Durasi baku acara</string>
     <string name="preferences_issues">Laporkan masalah</string>
-    <string name="user_rejected_calendar_write_permission">Etar membutuhkan izin kalender agar bisa bekerja dengan baik. Silakan coba lagi.</string>
+    <string name="user_rejected_calendar_write_permission">Seshat membutuhkan izin kalender agar bisa bekerja dengan baik. Silakan coba lagi.</string>
     <string name="calendar_permission_not_granted">Izin akses ditolak, silakan aktifkan dari Pengaturan apl untuk menyunting acara</string>
     <string name="visibility_confidential">Rahasia</string>
     <string name="zero_minutes">0 menit</string>
@@ -298,7 +298,7 @@
     <string name="preferences_calendar_delete_message">Apakah anda benar-benar ingin menghapus kalender ini\?</string>
     <string name="preferences_calendar_delete_delete">Hapus kalender</string>
     <string name="preferences_calendar_delete_cancel">Batal</string>
-    <string name="preferences_menu_about">Tentang Etar</string>
+    <string name="preferences_menu_about">Tentang Seshat</string>
     <string name="offline_account_name">Kalender Luring</string>
     <string name="authors">Pengembang</string>
     <string name="changelog">Catatan perubahan</string>
@@ -308,7 +308,7 @@
     <string name="preferences_calendar_account_local">Kalender luring</string>
     <string name="preferences_calendar_number_of_events">%1$d acara</string>
     <string name="preferences_calendar_info_category">Informasi kalender</string>
-    <string name="app_copyright">© 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Sebagian © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Sebagian © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="preferences_calendar_configure_account">Konfigurasi kalender dalam %1$s</string>
     <string name="seven_days">7 hari</string>
     <string name="six_days">6 hari</string>

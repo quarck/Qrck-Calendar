@@ -263,7 +263,7 @@
     <string name="display_location">Affichage du lieu</string>
     <string name="preferences_default_event_duration_title">Durée d’événement par défaut</string>
     <string name="preferences_issues">Signaler des problèmes</string>
-    <string name="user_rejected_calendar_write_permission">Etar requiert les droits de lecture et d’écriture de l’agenda pour fonctionner correctement. Veuillez réessayer.</string>
+    <string name="user_rejected_calendar_write_permission">Seshat requiert les droits de lecture et d’écriture de l’agenda pour fonctionner correctement. Veuillez réessayer.</string>
     <string name="calendar_permission_not_granted">Les autorisations requises ont été refusées, veuillez les accorder dans les paramètres de l’application pour modifier les évènements</string>
     <string name="zero_minutes">0 minute</string>
     <string name="fifteen_minutes">15 minutes</string>
@@ -315,9 +315,9 @@
     <string name="preferences_calendar_delete_message">Voulez-vous vraiment supprimer ce calendrier \?</string>
     <string name="preferences_calendar_delete_delete">Supprimer le calendrier</string>
     <string name="preferences_calendar_delete_cancel">Annuler</string>
-    <string name="preferences_menu_about">À propos d’Etar</string>
+    <string name="preferences_menu_about">À propos d’Seshat</string>
     <string name="offline_account_name">Calendrier hors-ligne</string>
-    <string name="app_copyright">© 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Portions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Portions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="authors">Auteurs</string>
     <string name="changelog">Journal des modifications</string>
     <string name="license">Licence</string>

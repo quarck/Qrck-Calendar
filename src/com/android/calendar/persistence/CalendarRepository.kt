@@ -26,7 +26,7 @@ import android.content.Context
 import android.net.Uri
 import android.provider.CalendarContract
 import androidx.lifecycle.LiveData
-import ws.xsoh.etar.R
+import org.qrck.seshat.R
 
 
 /**
@@ -34,7 +34,7 @@ import ws.xsoh.etar.R
  * https://developer.android.com/jetpack/docs/guide#recommended-app-arch
  *
  * TODO:
- * Replace usages of AsyncQueryService in Etar with repositories
+ * Replace usages of AsyncQueryService in Seshat with repositories
  * Currently CalendarRepository is only used for settings
  */
 @SuppressLint("MissingPermission")

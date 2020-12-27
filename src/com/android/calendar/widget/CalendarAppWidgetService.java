@@ -54,7 +54,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ws.xsoh.etar.R;
+import org.qrck.seshat.R;
 
 
 public class CalendarAppWidgetService extends RemoteViewsService {

@@ -71,7 +71,7 @@
     <string name="rsvp_tentative">"Hai risposto forse."</string>
     <string name="rsvp_declined">"Hai declinato."</string>
     <string name="create_event_dialog_save" msgid="1080859798521717414">"Salva"</string>
-    <string name="alert_title" msgid="7869592820853066853">"Notifiche di Etar Calendar"</string>
+    <string name="alert_title" msgid="7869592820853066853">"Notifiche di Seshat Calendar"</string>
     <string name="event_info_title" msgid="56024222340421620">"Visualizza evento"</string>
     <string name="event_info_title_invite" msgid="9160326363769403865">"Invito a riunione"</string>
     <string name="edit_event_all_day_label" msgid="6200181113992136073">"Tutto il giorno"</string>
@@ -242,7 +242,7 @@
         <item quantity="other" msgid="8779598489398048259">"Per <xliff:g id="EVENT_COUNT">%d</xliff:g> eventi"</item>
     </plurals>
     <string name="acessibility_recurrence_choose_end_date_description" msgid="5899029840837836711">"modifica data di fine"</string>
-    <string name="user_rejected_calendar_write_permission">Etar richiede le autorizzazioni di lettura e scrittura del calendario per funzionare. Riprova.</string>
+    <string name="user_rejected_calendar_write_permission">Seshat richiede le autorizzazioni di lettura e scrittura del calendario per funzionare. Riprova.</string>
     <string name="calendar_permission_not_granted">Le autorizzazioni necessarie sono state negate, abilitarle nelle Impostazioni dell’app per modificare gli eventi</string>
     <string name="visibility_default">Predefinito</string>
     <string name="visibility_private">Privato</string>
@@ -320,8 +320,8 @@
     <string name="preferences_calendar_delete_message">Vuoi veramente cancellare questo calendario\?</string>
     <string name="preferences_calendar_delete_delete">Elimina calendario</string>
     <string name="preferences_calendar_delete_cancel">Annulla</string>
-    <string name="preferences_menu_about">Altro su Etar</string>
-    <string name="app_copyright">Progetto Etar © 2015-<xliff:g>%1$s</xliff:g>. Parte del progetto Android Open Source © 2005-<xliff:g>%1$s</xliff:g>.</string>
+    <string name="preferences_menu_about">Altro su Seshat</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, Progetto Etar © 2015-<xliff:g>%1$s</xliff:g>. Parte del progetto Android Open Source © 2005-<xliff:g>%1$s</xliff:g>.</string>
     <string name="preferences_calendar_no_display_name">Calendario senza nome</string>
     <string name="preferences_calendar_account_local">Calendario non in linea</string>
     <string name="preferences_calendar_configure_account">Configura calendario in %1$s</string>

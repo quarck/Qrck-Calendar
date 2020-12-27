@@ -6,6 +6,6 @@ Características:
 - Tema claro y oscuro.
 - Libre, de código abierto y sin anuncios.
 
-Errores y feedback: https://github.com/Etar-Group/Etar-Calendar/issues
-Código fuente: https://github.com/Etar-Group/Etar-Calendar
+Errores y feedback: https://github.com/quarck/Seshat-Calendar/issues
+Código fuente: https://github.com/quarck/Seshat-Calendar
 

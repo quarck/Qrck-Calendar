@@ -259,8 +259,8 @@
     <string name="preferences_days_per_week_dialog">Dagar per vecka</string>
     <string name="preferences_default_event_duration_title">Standardvaraktighet för händelser</string>
     <string name="preferences_issues">Rapportera problem</string>
-    <string name="user_rejected_calendar_write_permission">För att fungera korrekt behöver Etar behörigheter för att läsa och skriva till kalendern. Var vänlig försök igen.</string>
-    <string name="calendar_permission_not_granted">Beklagar, denna egenskap är inte tillgänglig. Etar behöver behörigheter för att läsa och skriva till kalendern för att fungera korrekt</string>
+    <string name="user_rejected_calendar_write_permission">För att fungera korrekt behöver Seshat behörigheter för att läsa och skriva till kalendern. Var vänlig försök igen.</string>
+    <string name="calendar_permission_not_granted">Beklagar, denna egenskap är inte tillgänglig. Seshat behöver behörigheter för att läsa och skriva till kalendern för att fungera korrekt</string>
     <string name="visibility_confidential">Konfidentiell</string>
     <string name="zero_minutes">0 minuter</string>
     <string name="fifteen_minutes">15 minuter</string>

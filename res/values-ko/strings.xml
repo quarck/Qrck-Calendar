@@ -248,7 +248,7 @@
     <string name="preferences_days_per_week_dialog">일주일에 며칠</string>
     <string name="preferences_default_event_duration_title">기본 이벤트 지속시간</string>
     <string name="preferences_issues">버그 신고하기</string>
-    <string name="user_rejected_calendar_write_permission">Etar앱은 읽기와 쓰기 권한을 필요로합니다. 다시시도해주세요.</string>
+    <string name="user_rejected_calendar_write_permission">Seshat앱은 읽기와 쓰기 권한을 필요로합니다. 다시시도해주세요.</string>
     <string name="calendar_permission_not_granted">죄송하지만 이기능은 작동하지않습니다. Etar앱은 읽기와 쓰기 권한을 필요로합니다</string>
     <string name="visibility_confidential">신뢰</string>
     <string name="zero_minutes">0 분</string>

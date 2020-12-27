@@ -271,7 +271,7 @@
     <string name="preferences_days_per_week_dialog">Дней в неделе</string>
     <string name="preferences_default_event_duration_title">Продолжительность события по умолчанию</string>
     <string name="preferences_issues">Проблема</string>
-    <string name="user_rejected_calendar_write_permission">Для правильной работы Etar требуются разрешения на чтение и запись календаря. Пожалуйста, попробуйте ещё раз.</string>
+    <string name="user_rejected_calendar_write_permission">Для правильной работы Seshat требуются разрешения на чтение и запись календаря. Пожалуйста, попробуйте ещё раз.</string>
     <string name="calendar_permission_not_granted">Необходимые разрешения были отклонены, включите их из настроек приложения для редактирования событий</string>
     <string name="visibility_confidential">Конфиденциальное</string>
     <string name="zero_minutes">0 минут</string>
@@ -331,9 +331,9 @@
     <string name="preferences_calendar_delete_message">Вы действительно хотите удалить этот календарь\?</string>
     <string name="preferences_calendar_delete_delete">Удалить календарь</string>
     <string name="preferences_calendar_delete_cancel">Отмена</string>
-    <string name="preferences_menu_about">Об Etar</string>
+    <string name="preferences_menu_about">Об Seshat</string>
     <string name="offline_account_name">Локальный календарь</string>
-    <string name="app_copyright">© 2015-<xliff:g>%1$s</xliff:g> Проект Etar. Частично © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-<xliff:g>%1$s</xliff:g> Проект Etar. Частично © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="authors">Авторы</string>
     <string name="changelog">Изменения</string>
     <string name="license">Лицензия</string>

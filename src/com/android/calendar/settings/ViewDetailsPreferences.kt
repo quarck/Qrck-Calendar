@@ -26,7 +26,7 @@ import androidx.preference.*
 import com.android.calendar.Utils
 import com.android.calendar.Utils.SHARED_PREFS_NAME
 import java.util.*
-import ws.xsoh.etar.R
+import org.qrck.seshat.R
 
 
 class ViewDetailsPreferences : PreferenceFragmentCompat() {

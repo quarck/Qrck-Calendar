@@ -66,7 +66,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
-import ws.xsoh.etar.R;
+import org.qrck.seshat.R;
 
 public class RecurrencePickerDialog extends DialogFragment implements OnItemSelectedListener,
         OnCheckedChangeListener, OnClickListener,

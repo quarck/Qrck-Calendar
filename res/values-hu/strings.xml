@@ -245,7 +245,7 @@
     <string name="preferences_default_snooze_delay_dialog">Alapértelmezett szundi időtartama</string>
     <string name="preferences_calendar_synchronize">Naptár szinkronizálása</string>
     <string name="offline_account_name">Offline naptár</string>
-    <string name="preferences_menu_about">Az Etar névjegye</string>
+    <string name="preferences_menu_about">Az Seshat névjegye</string>
     <string name="preferences_list_add_offline_cancel">Mégse</string>
     <string name="preferences_list_add_offline_name">Név</string>
     <string name="preferences_list_add_offline_button">Naptár hozzáadása</string>

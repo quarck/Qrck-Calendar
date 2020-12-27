@@ -15,7 +15,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- This is the app label used for alert notifications -->
-    <string name="standalone_app_label" translatable="false">Etar</string>
+    <string name="standalone_app_label" translatable="false">Seshat</string>
     <!-- This is the label underneath the icon for Calendar -->
     <string name="app_label">Calendar</string>
 
@@ -534,14 +534,14 @@
     <string name="preferences_default_snooze_delay_default" translatable="false">5</string>
 
     <!-- About dialog strings -->
-    <string name="app_authors" translatable="false">The Etar Project</string>
-    <string name="app_authors_url" translatable="false">https://github.com/Etar-Group/Etar-Calendar/graphs/contributors</string>
-    <string name="app_changelog" translatable="false">https://github.com/Etar-Group/Etar-Calendar/releases</string>
-    <string name="app_copyright">\u00a9 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Portions \u00a9 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
-    <string name="app_issues_url" translatable="false">https://github.com/Etar-Group/Etar-Calendar/issues</string>
+    <string name="app_authors" translatable="false">Sergey Parshin, forked from The Etar Project</string>
+    <string name="app_authors_url" translatable="false">https://github.com/quarck/Seshat-Calendar/graphs/contributors</string>
+    <string name="app_changelog" translatable="false">https://github.com/quarck/Seshat-Calendar/releases</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, \u00a9 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Portions \u00a9 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
+    <string name="app_issues_url" translatable="false">https://github.com/quarck/Seshat-Calendar/issues</string>
     <string name="app_license" translatable="false">GPLv3</string>
     <string name="app_license_url" translatable="false">https://www.gnu.org/licenses/gpl-3.0.html</string>
-    <string name="app_source_url" translatable="false">https://github.com/Etar-Group/Etar-Calendar</string>
+    <string name="app_source_url" translatable="false">https://github.com/quarck/Seshat-Calendar</string>
     <string name="authors">Authors</string>
     <string name="changelog">Changelog</string>
     <string name="license">License</string>
@@ -705,7 +705,7 @@
     <!-- Do Not Translate.  Sender identity for global notification synchronization. -->
     <string name="notification_sender_id" translatable="false"></string>
 
-    <string name="user_rejected_calendar_write_permission">Etar requires calendar read and write permissions to work properly. Please try again.</string>
+    <string name="user_rejected_calendar_write_permission">Seshat requires calendar read and write permissions to work properly. Please try again.</string>
     <string name="calendar_permission_not_granted">Required permissions were denied, enable them from Settings app to edit events</string>
 
     <!-- Strings to describe visibility array -->
@@ -780,7 +780,7 @@
     <string name="preferences_list_add_offline_button">Add calendar</string>
     <string name="preferences_list_add_offline_name">Name</string>
     <string name="preferences_list_add_offline_cancel">Cancel</string>
-    <string name="preferences_menu_about">About Etar</string>
+    <string name="preferences_menu_about">About Seshat</string>
 
     <string name="offline_account_name">Offline Calendar</string>
 

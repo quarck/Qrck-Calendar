@@ -256,8 +256,8 @@
     <string name="preferences_days_per_week_dialog">Dagen per week</string>
     <string name="preferences_default_event_duration_title">Standaardduur afspraak</string>
     <string name="preferences_issues">Rapporteer problemen</string>
-    <string name="user_rejected_calendar_write_permission">Etar heeft lees en schrijf bevoegdheden nodig om juist te kunnen werken. Probeer het svp nog een keer.</string>
-    <string name="calendar_permission_not_granted">Sorry deze functie werkt niet. Etar heeft kalender lees- en schrijfbevoegdheden nodig om juist te kunnen werken</string>
+    <string name="user_rejected_calendar_write_permission">Seshat heeft lees en schrijf bevoegdheden nodig om juist te kunnen werken. Probeer het svp nog een keer.</string>
+    <string name="calendar_permission_not_granted">Sorry deze functie werkt niet. Seshat heeft kalender lees- en schrijfbevoegdheden nodig om juist te kunnen werken</string>
     <string name="visibility_confidential">Vertrouwelijk</string>
     <string name="zero_minutes">0 minuten</string>
     <string name="fifteen_minutes">15 minuten</string>
@@ -294,7 +294,7 @@
     <string name="preferences_calendar_account">%1$s account</string>
     <string name="changelog">Wijzigingslogboek</string>
     <string name="offline_account_name">Offline Agenda</string>
-    <string name="preferences_menu_about">Over Etar</string>
+    <string name="preferences_menu_about">Over Seshat</string>
     <string name="preferences_list_add_remote_etesync">EteSync agenda toevoegen</string>
     <string name="preferences_list_add_remote">CalDAV agenda toevoegen</string>
     <string name="preferences_list_calendar_summary_invisible">Afspraken worden niet weergegeven</string>

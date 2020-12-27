@@ -22,7 +22,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.widget.Button;
 
-import ws.xsoh.etar.R;
+import org.qrck.seshat.R;
 
 /**
  * A helper class for editing the response to an invitation when the invitation

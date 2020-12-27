@@ -8,7 +8,7 @@ import android.content.res.Resources;
 import android.os.Build;
 import androidx.annotation.NonNull;
 
-import ws.xsoh.etar.R;
+import org.qrck.seshat.R;
 
 /**
  * Created by Gitsaibot on 01.07.16.

@@ -5,5 +5,5 @@ Besonderheiten:
 - Material design.
 - Frei, quelloffen und ohne Werbung.
 
-Bugs, Fehler & Feedback: https://github.com/Etar-Group/Etar-Calendar/issues
-Quellcode: https://github.com/Etar-Group/Etar-Calendar
+Bugs, Fehler & Feedback: https://github.com/quarck/Seshat-Calendar/issues
+Quellcode: https://github.com/quarck/Seshat-Calendar

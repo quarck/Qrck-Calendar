@@ -332,8 +332,8 @@
         <item quantity="other">Am <xliff:g id="event_count">%d</xliff:g> digwyddiad</item>
     </plurals>
     <string name="acessibility_recurrence_choose_end_date_description">newid y ddydiad diwedd</string>
-    <string name="user_rejected_calendar_write_permission">Mae ar Etar angen caniatâd darllen ac ysgrifennu calendr i weithio\'n gywir. Rho gynnig arall arni.</string>
-    <string name="calendar_permission_not_granted">Yn anffodus, ni all y nodwedd hon gweithio. Mae ar Etar angen caniatâd darllen ac ysgrifennu calendr i weithio\'n gywir.</string>
+    <string name="user_rejected_calendar_write_permission">Mae ar Seshat angen caniatâd darllen ac ysgrifennu calendr i weithio\'n gywir. Rho gynnig arall arni.</string>
+    <string name="calendar_permission_not_granted">Yn anffodus, ni all y nodwedd hon gweithio. Mae ar Seshat angen caniatâd darllen ac ysgrifennu calendr i weithio\'n gywir.</string>
     <string name="visibility_default">Rhagosodiad</string>
     <string name="visibility_confidential">Cyfrinachol</string>
     <string name="visibility_private">Preifat</string>

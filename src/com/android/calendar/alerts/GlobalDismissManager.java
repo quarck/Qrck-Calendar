@@ -48,7 +48,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import ws.xsoh.etar.R;
+import org.qrck.seshat.R;
 
 /**
  * Utilities for managing notification dismissal across devices.

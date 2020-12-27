@@ -253,7 +253,7 @@
     <string name="preferences_days_per_week_dialog">每周天数</string>
     <string name="preferences_default_event_duration_title">默认事件持续时间</string>
     <string name="preferences_issues">报告问题</string>
-    <string name="user_rejected_calendar_write_permission">Etar 需要日历读取和写入权限才能正常工作。请重试。</string>
+    <string name="user_rejected_calendar_write_permission">Seshat 需要日历读取和写入权限才能正常工作。请重试。</string>
     <string name="calendar_permission_not_granted">需要授予被拒绝的权限，在系统设置中允许这些权限以编辑事件</string>
     <string name="visibility_confidential">秘密</string>
     <string name="zero_minutes">0 分钟</string>
@@ -312,9 +312,9 @@
     <string name="preferences_calendar_delete_message">您确实要删除此日历吗？</string>
     <string name="preferences_calendar_delete_delete">删除日历</string>
     <string name="preferences_calendar_delete_cancel">取消</string>
-    <string name="preferences_menu_about">关于 Etar</string>
+    <string name="preferences_menu_about">关于 Seshat</string>
     <string name="offline_account_name">离线日历</string>
-    <string name="app_copyright">© 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Portions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Portions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="authors">作者</string>
     <string name="changelog">更新日志</string>
     <string name="license">许可证</string>

@@ -171,7 +171,7 @@ android {
         targetSdkVersion 30
         versionCode 26
         versionName "1.0.24"
-        applicationId "ws.xsoh.etar"
+        applicationId "org.qrck.seshat"
     }
 
     useLibrary 'org.apache.http.legacy'

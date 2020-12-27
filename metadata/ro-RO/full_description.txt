@@ -7,5 +7,5 @@ Caracteristici:
 - Gratuit, open source și fără reclame.
 - Suportă partajarea calendarului prin ics și importarea/exportarea pe sdcard.
 
-Probleme & Feedback: https://github.com/Etar-Group/Etar-Calendar/issues
-Codul sursă: https://github.com/Etar-Group/Etar-Calendar
+Probleme & Feedback: https://github.com/quarck/Seshat-Calendar/issues
+Codul sursă: https://github.com/quarck/Seshat-Calendar

@@ -290,7 +290,7 @@
     <string name="preferences_days_per_week_dialog">ימים בשבוע</string>
     <string name="preferences_default_event_duration_title">משך אירוע כבררת מחדל</string>
     <string name="preferences_issues">דיווח על תקלות</string>
-    <string name="user_rejected_calendar_write_permission">ל־Etar נדרשות הרשאות קריאה וכתיבה כדי לפעול כראוי. נא לנסות שוב.</string>
+    <string name="user_rejected_calendar_write_permission">ל־Seshat נדרשות הרשאות קריאה וכתיבה כדי לפעול כראוי. נא לנסות שוב.</string>
     <string name="calendar_permission_not_granted">ההרשאות הנדרשות נדחו, יש להפעיל אותם מהגדרות היישומון כדי לערוך אירועים</string>
     <string name="visibility_confidential">חסוי</string>
     <string name="zero_minutes">0 דקות</string>
@@ -331,7 +331,7 @@
     <string name="foreground_notification_channel_name">סנכרון התראות</string>
     <string name="maximum_number_of_lines">מספר שורות מרבי באירוע</string>
     <string name="foreground_notification_channel_description">נדרשות התראות בחזית לטובת סנכרון התרעות פנימי.</string>
-    <string name="app_copyright">© 2015-&lt;xliff:g xmlns:xliff=\"urn:oasis:names:tc:xliff:document:1.2\"&gt;%1$s&lt;/xliff:g&gt; מיזם Etar. חלקים מהמיזם © 2005-&lt;xliff:g xmlns:xliff=\"urn:oasis:names:tc:xliff:document:1.2\"&gt;%1$s&lt;/xliff:g&gt; מיזם הקוד הפתוח של Android.<xliff:g>%1$s</xliff:g> The Etar Project. Portions \u00a9 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-&lt;xliff:g xmlns:xliff=\"urn:oasis:names:tc:xliff:document:1.2\"&gt;%1$s&lt;/xliff:g&gt; מיזם Etar. חלקים מהמיזם © 2005-&lt;xliff:g xmlns:xliff=\"urn:oasis:names:tc:xliff:document:1.2\"&gt;%1$s&lt;/xliff:g&gt; מיזם הקוד הפתוח של Android.<xliff:g>%1$s</xliff:g> The Etar Project. Portions \u00a9 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="preferences_list_add_offline">הוספת לוח שנה בלתי מקוון</string>
     <string name="preferences_list_add_remote_etesync">הוספת לוח שנה EteSync</string>
     <string name="preferences_list_add_remote">הוספת לוח שנה CalDAV</string>
@@ -358,7 +358,7 @@
     <string name="preferences_list_add_offline_error_empty">נא למלא שם ללוח השנה!</string>
     <string name="preferences_list_add_offline_title">הוספת לוח שנה בלתי מקוון</string>
     <string name="offline_account_name">לוח שנה בלתי מקוון</string>
-    <string name="preferences_menu_about">על אודות Etar</string>
+    <string name="preferences_menu_about">על אודות Seshat</string>
     <string name="preferences_calendar_account_local">לוח שנה בלתי מקוון</string>
     <string name="preferences_calendar_account">חשבון %1$s</string>
     <string name="preferences_calendar_no_display_name">לוח שנה ללא שם</string>

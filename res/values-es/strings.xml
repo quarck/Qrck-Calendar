@@ -234,7 +234,7 @@
     <string name="acessibility_recurrence_choose_end_date_description" msgid="5899029840837836711">"cambiar fecha de finalización"</string>
     <string name="no_map">No hay app de mapas instalado</string>
     <string name="error_generating_ics">Problemas encontrados al compartir evento</string>
-    <string name="user_rejected_calendar_write_permission">Etar requiere permisos para leer y escribir en el calendario para que funcione adecuadamente. Por favor intenté de nuevo.</string>
+    <string name="user_rejected_calendar_write_permission">Seshat requiere permisos para leer y escribir en el calendario para que funcione adecuadamente. Por favor intenté de nuevo.</string>
     <string name="cal_export_event_sdcard_title">Exporta a tarjeta SD</string>
     <string name="cal_export_succ_msg">Evento exportado satisfactoriamente: %1$s</string>
     <string name="cal_import_error_msg">Importando a calendario falló</string>
@@ -312,7 +312,7 @@
     <string name="preferences_calendar_delete_message">¿Realmente quieres borrar este calendario\?</string>
     <string name="preferences_calendar_delete_delete">Borrar calendario</string>
     <string name="preferences_calendar_delete_cancel">Cancelar</string>
-    <string name="preferences_menu_about">Acerca de Etar</string>
+    <string name="preferences_menu_about">Acerca de Seshat</string>
     <string name="offline_account_name">Calendario fuera de línea</string>
     <string name="preferences_calendar_color_warning_message">El cambio de color se puede revertir cuando se sincronice el calendario de nuevo.
 \n
@@ -321,7 +321,7 @@
     <string name="changelog">Registro de cambios</string>
     <string name="license">Licencia</string>
     <string name="source_code">Fuente</string>
-    <string name="app_copyright">© 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Porciones © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Porciones © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="preferences_calendar_no_display_name">Calendario sin nombre</string>
     <string name="preferences_calendar_configure_account">Configurar calendario en %1$s</string>
     <string name="preferences_calendar_number_of_events">%1$d eventos</string>
