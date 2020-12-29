@@ -25,6 +25,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.android.calendar.Utils
 import org.qrck.seshat.R
 import com.github.quarck.calnotify.Settings
 import com.github.quarck.calnotify.notification.NotificationChannelManager
@@ -94,22 +95,6 @@ class MainActivitySettingsFragment : Fragment() {
                 }
 
 
-                header(R.string.misc_settings)
-
-                val daysOfWeek: Array<String> = context.resources.getStringArray(R.array.days_of_week_entries)
-                val daysOfWeekValues: Array<Int> = context.resources.getIntArray(R.array.days_of_week_values).toTypedArray()
-
-                list(
-                        R.string.first_day_of_week,
-                        R.string.first_day_of_week_summary,
-                        daysOfWeek,
-                        daysOfWeekValues,
-                        settings.firstDayOfWeek,
-                        true
-                ) {
-                    _, value ->
-                    settings.firstDayOfWeek = value
-                }
 
             }
 

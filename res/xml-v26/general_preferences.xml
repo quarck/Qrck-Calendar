@@ -33,12 +33,6 @@
             app:entries="@array/pref_color_entries"
             app:entryValues="@array/pref_color_values"
             app:defaultValue="teal" />
-        <ListPreference
-            app:key="preferences_default_start"
-            app:defaultValue="-2"
-            app:title="@string/default_start_title"
-            app:entries="@array/default_start_entries"
-            app:entryValues="@array/default_start_values" />
         <Preference
             app:key="pref_view_details"
             app:title="@string/display_options"

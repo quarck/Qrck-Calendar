@@ -50,9 +50,9 @@ class Settings(context: Context) : PersistentStorageBase(context, "settings") {
         get() = defaultAllDayReminderTimeMinutes * 60L * 1000L
 
     // in the API format - 1 - Sun, 2 - Mon, etc.. crazy
-    var firstDayOfWeek: Int
-        get() = getInt(FIRST_DAY_OF_WEEK_KEY, Calendar.MONDAY)
-        set(value) = setInt(FIRST_DAY_OF_WEEK_KEY, value)
+//    var firstDayOfWeek: Int
+//        get() = getInt(FIRST_DAY_OF_WEEK_KEY, Calendar.MONDAY)
+//        set(value) = setInt(FIRST_DAY_OF_WEEK_KEY, value)
 
     var notifyOnEmailOnlyEvents: Boolean
         get() = getBoolean(NOTIFY_ON_EMAIL_ONLY_EVENTS_KEY, false)

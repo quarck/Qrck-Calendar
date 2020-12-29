@@ -104,9 +104,9 @@ public class CalendarController {
         mContext = context;
         mUpdateTimezone.run();
         mTime.setToNow();
-        mDetailViewType = ViewType.NOTIFICATIONS; /*Utils.getSharedPreference(mContext,
+        mDetailViewType = Utils.getSharedPreference(mContext,
                 GeneralPreferences.KEY_DETAILED_VIEW,
-                GeneralPreferences.DEFAULT_DETAILED_VIEW); */
+                GeneralPreferences.DEFAULT_DETAILED_VIEW);
     }
 
     /**

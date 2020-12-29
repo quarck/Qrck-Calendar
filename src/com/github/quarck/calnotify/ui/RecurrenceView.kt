@@ -11,6 +11,7 @@ import android.text.format.DateUtils
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
+import com.android.calendar.Utils
 import com.github.quarck.calnotify.Consts
 import org.qrck.seshat.R
 import com.github.quarck.calnotify.Settings
@@ -346,7 +347,7 @@ class RecurrenceView(
                 currentUntil.dayOfMonth
         )
 
-        val firstDayOfWeek = Settings(context).firstDayOfWeek
+        val firstDayOfWeek = Utils.getFirstDayOfWeekAsCalendarDay(context)
         if (firstDayOfWeek != -1) {
             dialog.datePicker.firstDayOfWeek = firstDayOfWeek
         }

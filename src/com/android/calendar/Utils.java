@@ -219,17 +219,19 @@ public class Utils {
             }
         }
 
-        // Check if the user wants the last view or the default startup view
-        int defaultStart = Integer.valueOf(prefs.getString(GeneralPreferences.KEY_DEFAULT_START,
-                GeneralPreferences.DEFAULT_DEFAULT_START));
-        if (defaultStart == -2) {
-            // Return the last view used
-            return prefs.getInt(
-                    GeneralPreferences.KEY_START_VIEW, GeneralPreferences.DEFAULT_START_VIEW);
-        } else {
-            // Return the default view
-            return defaultStart;
-        }
+        return ViewType.NOTIFICATIONS;
+//
+//        // Check if the user wants the last view or the default startup view
+//        int defaultStart = Integer.valueOf(prefs.getString(GeneralPreferences.KEY_DEFAULT_START,
+//                GeneralPreferences.DEFAULT_DEFAULT_START));
+//        if (defaultStart == -2) {
+//            // Return the last view used
+//            return prefs.getInt(
+//                    GeneralPreferences.KEY_START_VIEW, GeneralPreferences.DEFAULT_START_VIEW);
+//        } else {
+//            // Return the default view
+//            return defaultStart;
+//        }
     }
 
     /**
@@ -596,12 +598,7 @@ public class Utils {
         return MONDAY_BEFORE_JULIAN_EPOCH + week * 7;
     }
 
-    /**
-     * Get first day of week as android.text.format.Time constant.
-     *
-     * @return the first day of week in android.text.format.Time
-     */
-    public static int getFirstDayOfWeek(Context context) {
+    public static int getFirstDayOfWeekAsCalendarDay(Context context) {
         SharedPreferences prefs = GeneralPreferences.Companion.getSharedPreferences(context);
         String pref = prefs.getString(
                 GeneralPreferences.KEY_WEEK_START_DAY, GeneralPreferences.WEEK_START_DEFAULT);
@@ -612,6 +609,17 @@ public class Utils {
         } else {
             startDay = Integer.parseInt(pref);
         }
+
+        return startDay;
+    }
+
+    /**
+     * Get first day of week as android.text.format.Time constant.
+     *
+     * @return the first day of week in android.text.format.Time
+     */
+    public static int getFirstDayOfWeek(Context context) {
+        int startDay = getFirstDayOfWeekAsCalendarDay(context);
 
         if (startDay == Calendar.SATURDAY) {
             return Time.SATURDAY;

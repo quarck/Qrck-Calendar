@@ -37,6 +37,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import com.android.calendar.Utils
 import com.github.quarck.calnotify.Consts
 import org.qrck.seshat.R
 import com.github.quarck.calnotify.Settings
@@ -763,7 +764,7 @@ open class EditEventActivity : AppCompatActivity() {
                 from.dayOfMonth
         )
 
-        val firstDayOfWeek = Settings(this).firstDayOfWeek
+        val firstDayOfWeek = Utils.getFirstDayOfWeekAsCalendarDay(this)
         if (firstDayOfWeek != -1) {
             dialog.datePicker.firstDayOfWeek = firstDayOfWeek
         }
@@ -825,7 +826,7 @@ open class EditEventActivity : AppCompatActivity() {
                 to.month,
                 to.dayOfMonth
         )
-        val firstDayOfWeek = Settings(this).firstDayOfWeek
+        val firstDayOfWeek = Utils.getFirstDayOfWeekAsCalendarDay(this)
         if (firstDayOfWeek != -1) {
             dialog.datePicker.firstDayOfWeek = firstDayOfWeek
         }
@@ -868,7 +869,7 @@ open class EditEventActivity : AppCompatActivity() {
         inflater.inflate(R.menu.menu_recurrence_popup, popup.menu)
 
         val timeZone = originalEvent?.timeZone ?: TimeZone.getDefault().id
-        val weekStart = WeekDay.fromJavaCalendarDayOfWeek(Settings(this).firstDayOfWeek)
+        val weekStart = WeekDay.fromJavaCalendarDayOfWeek(Utils.getFirstDayOfWeekAsCalendarDay(this))
 
         if (originalEvent != null) {
             val item = popup.menu.findItem(R.id.repeats_does_not)
@@ -957,7 +958,7 @@ open class EditEventActivity : AppCompatActivity() {
 
         if (currentRecurrence == null)
             currentRecurrence = CalendarRecurrence.Weekly.createDefaultForDate(
-                    currentStartTime, tz, WeekDay.fromJavaCalendarDayOfWeek(settings.firstDayOfWeek))
+                    currentStartTime, tz, WeekDay.fromJavaCalendarDayOfWeek(Utils.getFirstDayOfWeekAsCalendarDay(this)))
 
         recurrenceView.setViewModel(RecurrenceViewModel(
                 currentStartTime,
