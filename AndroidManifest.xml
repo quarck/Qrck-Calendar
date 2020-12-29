@@ -292,19 +292,19 @@
             android:name="com.github.quarck.calnotify.ui.ViewEventActivity"
             android:label=""
             android:launchMode="singleTask"
-            android:parentActivityName="com.github.quarck.calnotify.ui.MainActivityNG"
+            android:parentActivityName="com.android.calendar.AllInOneActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.github.quarck.calnotify.ui.SnoozeAllActivity"
             android:label="@string/snooze_all"
-            android:parentActivityName="com.github.quarck.calnotify.ui.MainActivityNG"
+            android:parentActivityName="com.android.calendar.AllInOneActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.github.quarck.calnotify.prefs.CalendarsActivity"
             android:label="@string/title_calendars_activity"
-            android:parentActivityName="com.github.quarck.calnotify.ui.MainActivityNG"
+            android:parentActivityName="com.android.calendar.AllInOneActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -321,19 +321,19 @@
         <activity
             android:name="com.github.quarck.calnotify.ui.PrivacyPolicyActivity"
             android:label="@string/title_activity_privacy_policy"
-            android:parentActivityName="com.github.quarck.calnotify.ui.MainActivityNG"
+            android:parentActivityName="com.android.calendar.AllInOneActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.github.quarck.calnotify.ui.EditEventActivity"
             android:label="@string/empty"
-            android:parentActivityName="com.github.quarck.calnotify.ui.MainActivityNG"
+            android:parentActivityName="com.android.calendar.AllInOneActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.github.quarck.calnotify.ui.EditEventActivityTextReceiver"
             android:label="@string/create_event"
-            android:parentActivityName="com.github.quarck.calnotify.ui.MainActivityNG"
+            android:parentActivityName="com.android.calendar.AllInOneActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
