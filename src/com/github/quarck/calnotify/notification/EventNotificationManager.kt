@@ -29,7 +29,6 @@ import com.github.quarck.calnotify.calendar.*
 import com.github.quarck.calnotify.eventsstorage.EventsStorage
 import com.github.quarck.calnotify.utils.logs.DevLog
 import com.github.quarck.calnotify.utils.textutils.EventFormatter
-import com.github.quarck.calnotify.ui.MainActivityNG
 import com.github.quarck.calnotify.ui.ViewEventActivity
 import com.github.quarck.calnotify.utils.*
 import org.qrck.seshat.R
@@ -295,7 +294,7 @@ class EventNotificationManager {
         }
 
         // now build actual notification and notify
-        val intent = Intent(context, MainActivityNG::class.java)
+        val intent = Intent(context, com.android.calendar.AllInOneActivity::class.java)
         val pendingIntent = pendingActivityIntent(context, intent, MAIN_ACTIVITY_NUM_NOTIFICATIONS_COLLAPSED_CODE, clearTop = true)
 
         val numEvents = events.size

@@ -53,9 +53,6 @@ import com.android.calendar.settings.SettingsActivity;
 import com.android.calendar.settings.GeneralPreferences;
 import com.android.calendar.settings.SettingsActivityKt;
 import com.android.calendar.settings.ViewDetailsPreferences;
-import com.github.quarck.calnotify.ui.MainActivityFinishedEventsFragment;
-import com.github.quarck.calnotify.ui.MainActivityHomeFragment;
-import com.github.quarck.calnotify.ui.MainActivityUpcomingEventsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 

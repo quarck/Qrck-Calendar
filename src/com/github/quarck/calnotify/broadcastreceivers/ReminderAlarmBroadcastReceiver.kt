@@ -29,7 +29,6 @@ import com.github.quarck.calnotify.globalState
 import com.github.quarck.calnotify.utils.logs.DevLog
 //import com.github.quarck.calnotify.utils.logs.Logger
 import com.github.quarck.calnotify.persistentState
-import com.github.quarck.calnotify.ui.MainActivityNG
 import com.github.quarck.calnotify.utils.alarmManager
 import com.github.quarck.calnotify.utils.powerManager
 import com.github.quarck.calnotify.utils.setExactAndAlarm
@@ -87,7 +86,7 @@ open class ReminderAlarmGenericBroadcastReceiver : BroadcastReceiver() {
                         nextFireAt,
                         ReminderAlarmBroadcastReceiver::class.java, // ignored on KitKat and below
                         ReminderExactAlarmBroadcastReceiver::class.java,
-                        MainActivityNG::class.java)
+                        com.android.calendar.AllInOneActivity::class.java)
             }
 
             if (shouldFire) {

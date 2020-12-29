@@ -83,14 +83,6 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
 
         emptyView = root.findViewById(R.id.empty_view)
 
-        this.activity?.let { act ->
-            root.findViewById<FloatingActionButton>(R.id.action_btn_add_event).setOnClickListener {
-                act.startActivity(
-                        Intent(act, EditEventActivity::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                )
-            }
-        }
-
         return root
 
     }
