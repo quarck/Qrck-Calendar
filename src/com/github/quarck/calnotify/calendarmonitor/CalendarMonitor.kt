@@ -19,6 +19,7 @@
 
 package com.github.quarck.calnotify.calendarmonitor
 
+import android.content.ContentProviderResult
 import android.content.Context
 import android.content.Intent
 import com.github.quarck.calnotify.Consts
@@ -151,6 +152,14 @@ class CalendarMonitor(val calendarProvider: CalendarProvider) {
         }
 
         ApplicationController.afterCalendarEventFired(context)
+    }
+
+    fun onEventEditedByUs(context: Context, results: Array<ContentProviderResult>) {
+        for (result in results) {
+            if (result.uri != null) {
+
+            }
+        }
     }
 
     fun onEventEditedByUs(context: Context, eventId: Long) {

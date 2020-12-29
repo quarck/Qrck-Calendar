@@ -820,6 +820,8 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
     public void onBackPressed() {
         if (mCurrentView == ViewType.EDIT || mBackToPreviousView) {
             mController.sendEvent(this, EventType.GO_TO, null, null, -1, mPreviousView);
+        } else if (mCurrentView != ViewType.NOTIFICATIONS) {
+            mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.NOTIFICATIONS);
         } else {
             super.onBackPressed();
         }

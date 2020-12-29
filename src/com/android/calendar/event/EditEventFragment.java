@@ -557,22 +557,30 @@ public class EditEventFragment extends Fragment implements EventHandler, OnColor
     }
 
     @Override
+    public void onDetach() {
+        Activity act = getActivity();
+        if (act !=null && (
+                ContextCompat.checkSelfPermission(EditEventFragment.this.getActivity(),
+                        Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED)) {
+            act.finish();
+        }
+        super.onDetach();
+    }
+
+    @Override
     public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
         Activity act = getActivity();
         if (mSaveOnDetach && act != null && !mIsReadOnly && !act.isChangingConfigurations()
                 && mView.prepareForSave()) {
             mOnDone.setDoneCode(Utils.DONE_SAVE);
             mOnDone.run();
         }
-        if (act !=null && (Build.VERSION.SDK_INT < 23 ||
-                    ContextCompat.checkSelfPermission(EditEventFragment.this.getActivity(),
-                        Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED))
-            act.finish();
-        super.onPause();
-    }
 
-    @Override
-    public void onDestroy() {
         if (mView != null) {
             mView.setModel(null);
         }
@@ -921,7 +929,7 @@ public class EditEventFragment extends Fragment implements EventHandler, OnColor
                     }
                 }
                 Toast.makeText(mActivity, stringResource, Toast.LENGTH_SHORT).show();
-                ApplicationController.getCalendarMonitor().onEventEditedByUs(mActivity, mModel.mId);
+                //ApplicationController.getCalendarMonitor().onEventEditedByUs(mActivity, mModel.mId);
             } else if ((mCode & Utils.DONE_SAVE) != 0 && mModel != null && isEmptyNewEvent()) {
                 Toast.makeText(mActivity, R.string.empty_event, Toast.LENGTH_SHORT).show();
             }
