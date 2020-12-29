@@ -19,30 +19,43 @@
 
 package com.github.quarck.calnotify.ui
 
-import android.app.AlertDialog
-import android.content.Intent
-import android.os.Bundle
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import android.view.View
-import android.widget.*
-import com.github.quarck.calnotify.app.*
-import com.github.quarck.calnotify.calendar.*
-import com.github.quarck.calnotify.eventsstorage.EventsStorage
 //import com.github.quarck.calnotify.utils.logs.Logger
-import com.github.quarck.calnotify.utils.maps.MapsIntents
-import com.github.quarck.calnotify.utils.textutils.EventFormatter
-import com.github.quarck.calnotify.utils.*
-import com.github.quarck.calnotify.*
-import com.github.quarck.calnotify.utils.logs.DevLog
-import com.github.quarck.calnotify.permissions.PermissionsManager
+import android.app.AlertDialog
+import android.content.ContentUris
+import android.content.Intent
 import android.content.res.ColorStateList
-import androidx.core.content.ContextCompat
+import android.os.Bundle
+import android.provider.CalendarContract
+import android.provider.CalendarContract.Events
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
+import android.widget.PopupMenu
+import android.widget.RelativeLayout
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import com.android.calendar.CalendarController
+import com.android.calendar.DeleteEventHelper
+import com.github.quarck.calnotify.Consts
+import com.github.quarck.calnotify.Settings
+import com.github.quarck.calnotify.app.CalNotifyController
+import com.github.quarck.calnotify.app.SnoozeResult
+import com.github.quarck.calnotify.app.SnoozeType
+import com.github.quarck.calnotify.app.toast
+import com.github.quarck.calnotify.calendar.*
 import com.github.quarck.calnotify.calendarmonitor.CalendarMonitor
 import com.github.quarck.calnotify.calendarmonitor.CalendarReloadManager
+import com.github.quarck.calnotify.eventsstorage.EventsStorage
+import com.github.quarck.calnotify.permissions.PermissionsManager
+import com.github.quarck.calnotify.utils.DateTimeUtils
+import com.github.quarck.calnotify.utils.adjustCalendarColor
+import com.github.quarck.calnotify.utils.logs.DevLog
+import com.github.quarck.calnotify.utils.maps.MapsIntents
+import com.github.quarck.calnotify.utils.textutils.EventFormatter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.qrck.seshat.R
 
 // TODO: add repeating rule and calendar name somewhere on the snooze activity
@@ -134,7 +147,7 @@ open class ViewEventActivity : AppCompatActivity() {
             var calEvent = CalendarProvider.getEventAlertsForInstanceAt(this, instanceStartTime, eventId)
                     .firstOrNull { alertTime == 0L || it.alertTime == alertTime }
             if (calEvent == null) {
-                calEvent = CalendarProvider.getInstancesInRange(this, instanceStartTime, instanceStartTime+100L, eventId)
+                calEvent = CalendarProvider.getInstancesInRange(this, instanceStartTime, instanceStartTime + 100L, eventId)
                         .firstOrNull()
             }
             if (calEvent == null) {
@@ -299,7 +312,7 @@ open class ViewEventActivity : AppCompatActivity() {
 
         val fabColorStateList =  ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled), intArrayOf(android.R.attr.state_pressed)),
-                intArrayOf(event.color.adjustCalendarColor(false),  event.color.adjustCalendarColor(true)))
+                intArrayOf(event.color.adjustCalendarColor(false), event.color.adjustCalendarColor(true)))
 
         fabMoveButton.backgroundTintList = fabColorStateList
 
@@ -390,8 +403,7 @@ open class ViewEventActivity : AppCompatActivity() {
             popup.menu.findItem(R.id.action_move_copy_next_month_30d)?.isVisible = false
         }
 
-        popup.setOnMenuItemClickListener {
-            item ->
+        popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_move_next_day, R.id.action_move_copy_next_day -> {
                     reschedule(addTime = 1 * Consts.DAY_IN_SECONDS * 1000L)
@@ -435,47 +447,30 @@ open class ViewEventActivity : AppCompatActivity() {
 //
 
     private fun confirmAndEdit() {
-        if (!event.isRepeating) {
-            val intent = Intent(this, EditEventActivity::class.java)
-                    .putExtra(EditEventActivity.EVENT_ID, event.eventId)
-                    .putExtra(EditEventActivity.INSTANCE_START, event.instanceStartTime)
-                    .putExtra(EditEventActivity.INSTANCE_END, event.instanceEndTime)
-            startActivity(intent)
-            finish()
-        } else {
-            AlertDialog.Builder(this)
-                    .setMessage(getString(R.string.edit_series_question))
-                    .setCancelable(true)
-                    .setPositiveButton(R.string.yes) { _, _ ->
-                        val intent = Intent(this, EditEventActivity::class.java)
-                                .putExtra(EditEventActivity.EVENT_ID, event.eventId)
-                                .putExtra(EditEventActivity.INSTANCE_START, event.instanceStartTime)
-                                .putExtra(EditEventActivity.INSTANCE_END, event.instanceEndTime)
-                        startActivity(intent)
-                        finish()
-                    }
-                    .setNegativeButton(R.string.cancel) { _, _ ->
-                    }
-                    .create()
-                    .show()
-        }
+        val uri = ContentUris.withAppendedId(Events.CONTENT_URI, event.eventId)
+        val intent = Intent(Intent.ACTION_EDIT, uri)
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, event.instanceStartTime)
+        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.instanceEndTime)
+        intent.setClass(this, com.android.calendar.event.EditEventActivity::class.java)
+        intent.putExtra(CalendarController.EVENT_EDIT_ON_LAUNCH, true)
+        startActivity(intent)
+        finish()
     }
 
     private fun confirmAndDelete() {
-        AlertDialog.Builder(this)
-                .setMessage(getString(if (event.isRepeating) R.string.delete_recurring_event else R.string.delete_event_question))
-                .setCancelable(true)
-                .setPositiveButton(R.string.yes) { _, _ ->
-                    CalendarProvider.deleteEvent(this, event.eventId)
-                    if (!viewForFutureEvent && event.alertTime != 0L) {
-                        CalNotifyController.dismissEvent(this, EventFinishType.DeletedInTheApp, event)
-                    }
-                    finish()
-                }
-                .setNegativeButton(R.string.cancel) { _, _ ->
-                }
-                .create()
-                .show()
+
+        if (calendar.isReadOnly) {
+            return
+        }
+        val mDeleteHelper = DeleteEventHelper(this, this, true);
+        mDeleteHelper.setDeleteNotificationListener {}
+        mDeleteHelper.setOnDismissListener{}
+        mDeleteHelper.delete(event.instanceStartTime, event.instanceEndTime, event.eventId, -1) {
+            if (!viewForFutureEvent && event.alertTime != 0L) {
+                CalNotifyController.dismissEvent(this, EventFinishType.DeletedInTheApp, event)
+            }
+            finish()
+        }
     }
 
     private fun reschedule(addTime: Long) {
