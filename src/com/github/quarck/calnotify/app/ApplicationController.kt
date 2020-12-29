@@ -63,6 +63,7 @@ object ApplicationController  {
 
     private val tagsManager: TagsManager by lazy { TagsManager() }
 
+    @JvmStatic
     val CalendarMonitor: CalendarMonitor
         get() = calendarMonitorInternal
 
