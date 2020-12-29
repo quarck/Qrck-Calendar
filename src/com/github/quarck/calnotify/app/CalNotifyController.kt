@@ -36,7 +36,7 @@ import com.github.quarck.calnotify.calendarmonitor.*
 import com.github.quarck.calnotify.utils.detailed
 
 
-object ApplicationController  {
+object CalNotifyController  {
 
     private const val LOG_TAG = "App"
 

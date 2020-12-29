@@ -23,7 +23,7 @@ import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.github.quarck.calnotify.app.ApplicationController
+import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.utils.logs.DevLog
 //import com.github.quarck.calnotify.utils.logs.Logger
 
@@ -33,7 +33,7 @@ open class TimeSetBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         DevLog.info(LOG_TAG, "onReceive")
         if (context != null)
-            ApplicationController.onTimeChanged(context)
+            CalNotifyController.onTimeChanged(context)
     }
 
     companion object {

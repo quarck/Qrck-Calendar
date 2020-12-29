@@ -22,7 +22,7 @@ package com.github.quarck.calnotify.calendarmonitor
 import android.app.IntentService
 import android.content.Context
 import android.content.Intent
-import com.github.quarck.calnotify.app.ApplicationController
+import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.utils.logs.DevLog
 import com.github.quarck.calnotify.utils.detailed
 import android.app.job.JobParameters
@@ -59,7 +59,7 @@ class CalendarMonitorIntentService : IntentService("CalendarMonitorIntentService
                 sleep(QUICK_RESCAN_SLEEP_BEFORE)
                 startDelay -= QUICK_RESCAN_SLEEP_BEFORE
 
-                ApplicationController.onCalendarRescanForRescheduledFromService(
+                CalNotifyController.onCalendarRescanForRescheduledFromService(
                         this,
                         userActionUntil
                 )
@@ -75,7 +75,7 @@ class CalendarMonitorIntentService : IntentService("CalendarMonitorIntentService
 
         if (shouldReloadCalendar) {
             try  {
-                ApplicationController.onCalendarReloadFromService(
+                CalNotifyController.onCalendarReloadFromService(
                         this,
                         userActionUntil
                 )
@@ -86,7 +86,7 @@ class CalendarMonitorIntentService : IntentService("CalendarMonitorIntentService
         }
 
         try {
-            ApplicationController.CalendarMonitor.onRescanFromService(this)
+            CalNotifyController.CalendarMonitor.onRescanFromService(this)
         }
         catch (ex: Exception) {
             DevLog.error(LOG_TAG, "Exception while re-scanning calendar: ${ex.detailed}")
@@ -142,7 +142,7 @@ class CalendarMonitorOneTimeJobService : JobService()  {
         DevLog.info(LOG_TAG, "onStartJob ")
 
         try  {
-            ApplicationController.onCalendarRescanForRescheduledFromService(
+            CalNotifyController.onCalendarRescanForRescheduledFromService(
                     this,
                     0
             )
@@ -152,14 +152,14 @@ class CalendarMonitorOneTimeJobService : JobService()  {
         }
 
         try  {
-            ApplicationController.onCalendarReloadFromService(this, 0)
+            CalNotifyController.onCalendarReloadFromService(this, 0)
         }
         catch (ex: Exception) {
             DevLog.error(LOG_TAG, "Exception while rescanning calendar: ${ex.detailed}")
         }
 
         try {
-            ApplicationController.CalendarMonitor.onRescanFromService(this)
+            CalNotifyController.CalendarMonitor.onRescanFromService(this)
         }
         catch (ex: Exception) {
             DevLog.error(LOG_TAG, "Exception while re-scanning calendar: ${ex.detailed}")
@@ -208,7 +208,7 @@ class CalendarMonitorPeriodicJobService : JobService()  {
         DevLog.info(LOG_TAG, "onStartJob ")
 
         try  {
-            ApplicationController.onCalendarRescanForRescheduledFromService(
+            CalNotifyController.onCalendarRescanForRescheduledFromService(
                     this,
                     0
             )
@@ -218,14 +218,14 @@ class CalendarMonitorPeriodicJobService : JobService()  {
         }
 
         try  {
-            ApplicationController.onCalendarReloadFromService(this, 0)
+            CalNotifyController.onCalendarReloadFromService(this, 0)
         }
         catch (ex: Exception) {
             DevLog.error(LOG_TAG, "Exception while rescanning calendar: ${ex.detailed}")
         }
 
         try {
-            ApplicationController.CalendarMonitor.onRescanFromService(this)
+            CalNotifyController.CalendarMonitor.onRescanFromService(this)
         }
         catch (ex: Exception) {
             DevLog.error(LOG_TAG, "Exception while re-scanning calendar: ${ex.detailed}")

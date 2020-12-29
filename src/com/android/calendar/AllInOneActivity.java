@@ -100,7 +100,7 @@ import org.qrck.seshat.R;
 import org.qrck.seshat.databinding.AllInOneMaterialBinding;
 import org.qrck.seshat.databinding.DateRangeTitleBinding;
 
-import com.github.quarck.calnotify.app.ApplicationController;
+import com.github.quarck.calnotify.app.CalNotifyController;
 
 import static android.provider.CalendarContract.Attendees.ATTENDEE_STATUS;
 import static android.provider.CalendarContract.EXTRA_EVENT_ALL_DAY;
@@ -393,7 +393,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
     public void onStart()
     {
         super.onStart();
-        ApplicationController.onMainActivityStarted(this);
+        CalNotifyController.onMainActivityStarted(this);
     }
 
     private void checkAppPermissions() {

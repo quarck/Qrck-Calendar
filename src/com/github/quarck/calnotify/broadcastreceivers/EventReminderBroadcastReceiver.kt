@@ -23,7 +23,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.github.quarck.calnotify.app.ApplicationController
+import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.utils.logs.DevLog
 //import com.github.quarck.calnotify.utils.logs.Logger
 
@@ -38,7 +38,7 @@ open class EventReminderBroadcastReceiver : BroadcastReceiver() {
 
         DevLog.info(LOG_TAG, "Event reminder received, ${intent.data}, ${intent.action}");
 
-        ApplicationController.CalendarMonitor.onProviderReminderBroadcast(context, intent)
+        CalNotifyController.CalendarMonitor.onProviderReminderBroadcast(context, intent)
     }
 
     companion object {

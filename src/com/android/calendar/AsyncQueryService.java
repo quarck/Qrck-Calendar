@@ -30,7 +30,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.android.calendar.AsyncQueryServiceHelper.OperationInfo;
-import com.github.quarck.calnotify.app.ApplicationController;
+import com.github.quarck.calnotify.app.CalNotifyController;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -339,7 +339,7 @@ public class AsyncQueryService extends Handler {
             Log.d(TAG, "########## default onBatchComplete");
         }
 
-        ApplicationController.getCalendarMonitor().onEventEditedByUs(mContext, results);
+        CalNotifyController.getCalendarMonitor().onEventEditedByUs(mContext, results);
     }
 
     @Override

@@ -21,7 +21,7 @@ package com.github.quarck.calnotify.calendar
 
 import android.content.Context
 import com.github.quarck.calnotify.Consts
-import com.github.quarck.calnotify.app.ApplicationController
+import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.utils.logs.DevLog
 import com.github.quarck.calnotify.permissions.PermissionsManager
 
@@ -40,7 +40,7 @@ class CalendarEditor(val provider: CalendarProvider) {
 
         if (eventId != -1L) {
             DevLog.info(LOG_TAG, "Created new event, id $eventId")
-            ApplicationController.CalendarMonitor.onEventEditedByUs(context, eventId);
+            CalNotifyController.CalendarMonitor.onEventEditedByUs(context, eventId);
         }
         else {
             DevLog.info(LOG_TAG, "Failed to create a new event")
@@ -99,7 +99,7 @@ class CalendarEditor(val provider: CalendarProvider) {
             DevLog.info(LOG_TAG, "Adding move request into DB: move: ${event.eventId} ${oldDetails.startTime} / ${oldDetails.endTime} -> $newStartTime / $newEndTime")
 
             if (event.eventId != -1L) {
-                ApplicationController.CalendarMonitor.onEventEditedByUs(context, event.eventId);
+                CalNotifyController.CalendarMonitor.onEventEditedByUs(context, event.eventId);
             }
 
             return event.copy(
@@ -193,7 +193,7 @@ class CalendarEditor(val provider: CalendarProvider) {
             val newEvent = provider.getEvent(context, eventToEdit.eventId)
 
             if (newEvent != null) {
-                ApplicationController.onCalendarEventMovedWithinApp(
+                CalNotifyController.onCalendarEventMovedWithinApp(
                         context,
                         eventToEdit,
                         newEvent
@@ -202,7 +202,7 @@ class CalendarEditor(val provider: CalendarProvider) {
         }
 
         if (eventToEdit.eventId != -1L) {
-            ApplicationController.CalendarMonitor.onEventEditedByUs(context, eventToEdit.eventId);
+            CalNotifyController.CalendarMonitor.onEventEditedByUs(context, eventToEdit.eventId);
         }
 
         return ret

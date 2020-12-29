@@ -26,12 +26,10 @@ import android.os.Bundle
 import android.provider.CalendarContract
 import android.view.View
 import android.widget.EditText
-import android.widget.TextView
-import android.widget.ToggleButton
 import com.github.quarck.calnotify.Consts
 import org.qrck.seshat.R
 import com.github.quarck.calnotify.Settings
-import com.github.quarck.calnotify.app.ApplicationController
+import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.calendar.EventAlertRecord
 import com.github.quarck.calnotify.calendar.EventDisplayStatus
 import com.github.quarck.calnotify.calendarmonitor.CalendarMonitorStorage
@@ -141,10 +139,10 @@ class TestActivity : Activity() {
                 displayStatus = EventDisplayStatus.Hidden,
                 timeZone = "UTC"
         )
-        ApplicationController.postEventNotifications(this, listOf(event))
-        ApplicationController.registerNewEvent(this, event);
+        CalNotifyController.postEventNotifications(this, listOf(event))
+        CalNotifyController.registerNewEvent(this, event);
 
-        ApplicationController.afterCalendarEventFired(this)
+        CalNotifyController.afterCalendarEventFired(this)
     }
 
     @Suppress("unused", "UNUSED_PARAMETER")
@@ -210,9 +208,9 @@ class TestActivity : Activity() {
 
         cnt++;
 
-        ApplicationController.registerNewEvent(this, event)
-        ApplicationController.postEventNotifications(this, listOf(event))
-        ApplicationController.afterCalendarEventFired(this)
+        CalNotifyController.registerNewEvent(this, event)
+        CalNotifyController.postEventNotifications(this, listOf(event))
+        CalNotifyController.afterCalendarEventFired(this)
     }
 
 

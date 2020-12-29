@@ -24,7 +24,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.PowerManager
 import com.github.quarck.calnotify.Consts
-import com.github.quarck.calnotify.app.ApplicationController
+import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.globalState
 import com.github.quarck.calnotify.utils.logs.DevLog
 //import com.github.quarck.calnotify.utils.logs.Logger
@@ -46,7 +46,7 @@ open class ReminderAlarmGenericBroadcastReceiver : BroadcastReceiver() {
 
         context.globalState?.lastTimerBroadcastReceived = System.currentTimeMillis()
 
-        if (!ApplicationController.hasActiveEventsToRemind(context)) {
+        if (!CalNotifyController.hasActiveEventsToRemind(context)) {
             DevLog.info(LOG_TAG, "Reminder broadcast alarm received: no active requests")
             return
         }
@@ -103,7 +103,7 @@ open class ReminderAlarmGenericBroadcastReceiver : BroadcastReceiver() {
             currentTime: Long
     ) {
         DevLog.info(LOG_TAG, "Firing reminder, current time ${System.currentTimeMillis()}")
-        ApplicationController.fireEventReminder(context);
+        CalNotifyController.fireEventReminder(context);
     }
 
     companion object {

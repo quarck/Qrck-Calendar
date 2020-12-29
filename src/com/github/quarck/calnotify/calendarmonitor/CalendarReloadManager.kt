@@ -21,7 +21,7 @@ package com.github.quarck.calnotify.calendarmonitor
 
 import android.content.Context
 import com.github.quarck.calnotify.Consts
-import com.github.quarck.calnotify.app.ApplicationController
+import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.calendar.*
 import com.github.quarck.calnotify.eventsstorage.EventWithNewInstanceTime
 import com.github.quarck.calnotify.eventsstorage.EventsStorage
@@ -103,7 +103,7 @@ object CalendarReloadManager  {
         if (!eventsMovedBy3rdParty.isEmpty()) {
             changedDetected = true
 
-            ApplicationController.removeEventAlertsForEventsMovedIntoTheFutureBy3rdParty(
+            CalNotifyController.removeEventAlertsForEventsMovedIntoTheFutureBy3rdParty(
                     context,
                     db,
                     eventsMovedBy3rdParty.map { it.event }
@@ -211,7 +211,7 @@ object CalendarReloadManager  {
         if (!movedEventsToRemove.isEmpty()) {
             changedDetected = true
 
-            ApplicationController.removeEventAlertsForEventsMovedIntoTheFutureBy3rdParty(
+            CalNotifyController.removeEventAlertsForEventsMovedIntoTheFutureBy3rdParty(
                     context,
                     db,
                     movedEventsToRemove

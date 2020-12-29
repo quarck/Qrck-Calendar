@@ -30,7 +30,7 @@ import androidx.core.content.ContextCompat
 import com.github.quarck.calnotify.Consts
 import org.qrck.seshat.R
 import com.github.quarck.calnotify.Settings
-import com.github.quarck.calnotify.app.ApplicationController
+import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.app.toast
 import com.github.quarck.calnotify.utils.logs.DevLog
 import com.github.quarck.calnotify.utils.textutils.EventFormatter
@@ -195,7 +195,7 @@ open class SnoozeAllActivity : AppCompatActivity() {
 
                     DevLog.debug(LOG_TAG, "Snoozing (change=$snoozeAllIsChange) all requests, snoozeDelay=${snoozeDelay / 1000L}")
 
-                    val result = ApplicationController.snoozeAllEvents(this, snoozeDelay, snoozeAllIsChange, false);
+                    val result = CalNotifyController.snoozeAllEvents(this, snoozeDelay, snoozeAllIsChange, false);
                     result?.toast(this)
                     finish()
                 }

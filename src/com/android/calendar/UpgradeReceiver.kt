@@ -19,7 +19,7 @@ import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.github.quarck.calnotify.app.ApplicationController
+import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.utils.logs.DevLog
 
 @SuppressLint("UnsafeProtectedBroadcastReceiver")
@@ -27,7 +27,7 @@ class UpgradeReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
         DevLog.debug("UpgradeReceiver", "onReceive");
         if (context != null)
-            ApplicationController.onAppUpdated(context)
+            CalNotifyController.onAppUpdated(context)
     }
 }
 
@@ -36,6 +36,6 @@ class RebootReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
         DevLog.debug("RebootReceiver", "onReceive");
         if (context != null)
-            ApplicationController.onBootComplete(context)
+            CalNotifyController.onBootComplete(context)
     }
 }

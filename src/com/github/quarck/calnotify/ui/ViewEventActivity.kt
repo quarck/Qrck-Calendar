@@ -21,7 +21,6 @@ package com.github.quarck.calnotify.ui
 
 import android.app.AlertDialog
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.appcompat.app.AppCompatActivity
@@ -40,9 +39,7 @@ import com.github.quarck.calnotify.utils.logs.DevLog
 import com.github.quarck.calnotify.permissions.PermissionsManager
 import android.content.res.ColorStateList
 import androidx.core.content.ContextCompat
-import android.text.method.ScrollingMovementMethod
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
 import com.github.quarck.calnotify.calendarmonitor.CalendarMonitor
 import com.github.quarck.calnotify.calendarmonitor.CalendarReloadManager
@@ -359,17 +356,17 @@ open class ViewEventActivity : AppCompatActivity() {
             }
 
             R.id.action_dismiss -> {
-                ApplicationController.dismissEvent(this, EventFinishType.ManuallyInTheApp, event)
+                CalNotifyController.dismissEvent(this, EventFinishType.ManuallyInTheApp, event)
                 finish()
             }
 
             R.id.action_mark_done -> {
-                ApplicationController.dismissFutureEvent(this, MonitorDataPair.fromEventAlertRecord(event))
+                CalNotifyController.dismissFutureEvent(this, MonitorDataPair.fromEventAlertRecord(event))
                 finish()
             }
 
             R.id.action_mark_not_done -> {
-                ApplicationController.restoreEvent(this, event)
+                CalNotifyController.restoreEvent(this, event)
                 finish()
             }
         }
@@ -417,7 +414,7 @@ open class ViewEventActivity : AppCompatActivity() {
     private fun snoozeEvent(snoozeDelay: Long) {
         DevLog.debug(LOG_TAG, "Snoozing event id ${event.eventId}, snoozeDelay=${snoozeDelay / 1000L}")
 
-        val result = ApplicationController.snoozeEvent(this, event.eventId, event.instanceStartTime, snoozeDelay);
+        val result = CalNotifyController.snoozeEvent(this, event.eventId, event.instanceStartTime, snoozeDelay);
         result?.toast(this)
         finish()
     }
@@ -471,7 +468,7 @@ open class ViewEventActivity : AppCompatActivity() {
                 .setPositiveButton(R.string.yes) { _, _ ->
                     CalendarProvider.deleteEvent(this, event.eventId)
                     if (!viewForFutureEvent && event.alertTime != 0L) {
-                        ApplicationController.dismissEvent(this, EventFinishType.DeletedInTheApp, event)
+                        CalNotifyController.dismissEvent(this, EventFinishType.DeletedInTheApp, event)
                     }
                     finish()
                 }
@@ -486,7 +483,7 @@ open class ViewEventActivity : AppCompatActivity() {
         DevLog.info(LOG_TAG, "Moving event ${event.eventId} by ${addTime / 1000L} seconds, isRepeating = ${event.isRepeating}");
 
         if (!event.isRepeating) {
-            val moved = ApplicationController.moveEvent(this, event, addTime)
+            val moved = CalNotifyController.moveEvent(this, event, addTime)
 
             if (moved != null) {
                 SnoozeResult(SnoozeType.Moved, event.startTime).toast(this) // Show
@@ -496,7 +493,7 @@ open class ViewEventActivity : AppCompatActivity() {
             }
         }
         else {
-            val moved = ApplicationController.moveAsCopy(this, calendar, event, addTime)
+            val moved = CalNotifyController.moveAsCopy(this, calendar, event, addTime)
             if (moved != null) {
                 SnoozeResult(SnoozeType.Moved, event.startTime).toast(this) // Show
                 finish() // terminate ourselves

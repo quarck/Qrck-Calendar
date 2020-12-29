@@ -13,14 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.android.calendar.CalendarController
 import com.github.quarck.calnotify.Consts
-import com.github.quarck.calnotify.app.ApplicationController
+import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.calendar.EventAlertRecord
 import com.github.quarck.calnotify.calendar.EventFinishType
 import com.github.quarck.calnotify.eventsstorage.EventsStorage
 import com.github.quarck.calnotify.eventsstorage.FinishedEventsStorage
 import com.github.quarck.calnotify.ui.*
 import com.github.quarck.calnotify.utils.logs.DevLog
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.*
 import org.qrck.seshat.R
 
@@ -97,7 +96,7 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
 
         context?.let { ctx ->
             scope.launch(Dispatchers.Default) {
-                ApplicationController.onMainActivityResumed(ctx)
+                CalNotifyController.onMainActivityResumed(ctx)
             }
         }
 
@@ -234,7 +233,7 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
 
         this.context?.let { ctx ->
             DevLog.info(LOG_TAG, "onItemRemoved: Removing event id ${event.eventId} from DB and dismissing notification id ${event.notificationId}")
-            ApplicationController.dismissEvent(ctx, EventFinishType.ManuallyInTheApp, event)
+            CalNotifyController.dismissEvent(ctx, EventFinishType.ManuallyInTheApp, event)
             lastEventDismissalScrollPosition = adapter?.scrollPosition
             onNumEventsUpdated()
         }
@@ -247,7 +246,7 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
     override fun onItemRestored(event: EventAlertRecord) {
         this.context?.let { ctx ->
             DevLog.info(LOG_TAG, "onItemRestored, eventId=${event.eventId}")
-            ApplicationController.restoreEvent(ctx, event)
+            CalNotifyController.restoreEvent(ctx, event)
             onNumEventsUpdated()
         }
     }

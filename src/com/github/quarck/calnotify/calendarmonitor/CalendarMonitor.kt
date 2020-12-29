@@ -23,7 +23,7 @@ import android.content.ContentProviderResult
 import android.content.Context
 import android.content.Intent
 import com.github.quarck.calnotify.Consts
-import com.github.quarck.calnotify.app.ApplicationController
+import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.broadcastreceivers.ManualEventAlarmBroadcastReceiver
 import com.github.quarck.calnotify.broadcastreceivers.ManualEventExactAlarmBroadcastReceiver
 import com.github.quarck.calnotify.calendar.*
@@ -74,7 +74,7 @@ class CalendarMonitor(val calendarProvider: CalendarProvider) {
                 val scanFrom = scanTo - Consts.MANUAL_SCAN_WINDOW - 2 * Consts.ALARM_THRESHOLD
                 DevLog.info(LOG_TAG, "onAlarmBroadcast: time for the next manual fire, re-scanning range $scanFrom-$scanTo")
                 if (manualFireEventsInRangeWithoutHousekeeping(context, from = scanFrom, to = scanTo)) {
-                    ApplicationController.afterCalendarEventFired(context)
+                    CalNotifyController.afterCalendarEventFired(context)
                 }
             }
         }
@@ -122,7 +122,7 @@ class CalendarMonitor(val calendarProvider: CalendarProvider) {
 
                 if (event.isCancelledOrDeclined) {
                     eventsToSilentlyDrop.add(event)
-                } else if (ApplicationController.registerNewEvent(context, event)) {
+                } else if (CalNotifyController.registerNewEvent(context, event)) {
                     eventsToPost.add(event)
                 }
             }
@@ -133,7 +133,7 @@ class CalendarMonitor(val calendarProvider: CalendarProvider) {
         }
 
         try {
-            ApplicationController.postEventNotifications(context, eventsToPost)
+            CalNotifyController.postEventNotifications(context, eventsToPost)
 
             for (event in eventsToSilentlyDrop) {
                 setAlertWasHandled(context, event, createdByUs = false)
@@ -151,7 +151,7 @@ class CalendarMonitor(val calendarProvider: CalendarProvider) {
             DevLog.error(LOG_TAG, "Exception while posting notifications: ${ex.detailed}")
         }
 
-        ApplicationController.afterCalendarEventFired(context)
+        CalNotifyController.afterCalendarEventFired(context)
     }
 
     fun onEventEditedByUs(context: Context, results: Array<ContentProviderResult>) {
@@ -192,7 +192,7 @@ class CalendarMonitor(val calendarProvider: CalendarProvider) {
         }
 
         if (firedAnything)
-            ApplicationController.afterCalendarEventFired(context)
+            CalNotifyController.afterCalendarEventFired(context)
     }
 
     fun onRescanFromService(context: Context) {
@@ -220,7 +220,7 @@ class CalendarMonitor(val calendarProvider: CalendarProvider) {
         }
 
         if (firedAnything)
-            ApplicationController.afterCalendarEventFired(context)
+            CalNotifyController.afterCalendarEventFired(context)
     }
 
     private fun setOrCancelAlarm(context: Context, time: Long) {
@@ -311,7 +311,7 @@ class CalendarMonitor(val calendarProvider: CalendarProvider) {
             fired = true
 
             try {
-                ApplicationController.postEventNotifications(context, firedAlerts.map { it.eventEntry })
+                CalNotifyController.postEventNotifications(context, firedAlerts.map { it.eventEntry })
             }
             catch (ex: Exception) {
                 DevLog.error(LOG_TAG, "Got exception while posting notifications: ${ex.detailed}")
@@ -473,7 +473,7 @@ class CalendarMonitor(val calendarProvider: CalendarProvider) {
 
 //        val pairsToAdd = pairs.filter { (_, event) ->  !event.isCancelledOrDeclined  }
 
-        return ApplicationController.registerNewEvents(context, pairs)
+        return CalNotifyController.registerNewEvents(context, pairs)
     }
 
 

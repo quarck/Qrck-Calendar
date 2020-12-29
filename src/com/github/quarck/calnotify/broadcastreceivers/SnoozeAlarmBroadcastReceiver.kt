@@ -22,19 +22,19 @@ package com.github.quarck.calnotify.broadcastreceivers
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.github.quarck.calnotify.app.ApplicationController
+import com.github.quarck.calnotify.app.CalNotifyController
 
 open class SnoozeAlarmBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context != null)
-            ApplicationController.onEventAlarm(context)
+            CalNotifyController.onEventAlarm(context)
     }
 }
 
 open class SnoozeExactAlarmBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context != null)
-            ApplicationController.onEventAlarm(context)
+            CalNotifyController.onEventAlarm(context)
     }
 }
 
