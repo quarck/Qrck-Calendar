@@ -878,6 +878,15 @@ public class Utils {
                 PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
     }
 
+    public static void trySync(Context context) {
+        Bundle extras = new Bundle();
+        extras.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        ContentResolver.requestSync(
+                null /* no account */,
+                Calendars.CONTENT_URI.getAuthority(),
+                extras);
+    }
+
     /**
      * Converts a list of events to a list of segments to draw. Assumes list is
      * ordered by start time of the events. The function processes events for a

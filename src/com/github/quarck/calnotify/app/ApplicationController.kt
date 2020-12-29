@@ -20,6 +20,7 @@
 package com.github.quarck.calnotify.app
 
 import android.content.Context
+import com.android.calendar.Utils
 import com.github.quarck.calnotify.Consts
 import com.github.quarck.calnotify.Settings
 import com.github.quarck.calnotify.calendar.*
@@ -99,13 +100,16 @@ object ApplicationController  {
     fun onAppUpdated(context: Context) {
         DevLog.info(LOG_TAG, "Application updated")
         onPostHybernation(context)
+        Utils.trySyncAndDisableUpgradeReceiver(context)
     }
 
     fun onBootComplete(context: Context) {
         DevLog.info(LOG_TAG, "OS boot is complete")
         onPostHybernation(context)
+        Utils.trySync(context)
     }
 
+    @JvmStatic
     fun onCalendarChanged(context: Context) {
         DevLog.info(LOG_TAG, "onCalendarChanged")
         CalendarMonitorOneTimeJobService.schedule(context, 2000)

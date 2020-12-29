@@ -218,19 +218,6 @@
             android:theme="@android:style/Theme.Holo.Dialog" />
 
         <receiver android:name="com.android.calendar.alerts.AlertReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.EVENT_REMINDER" />
-                <action android:name="android.intent.action.TIME_SET" />
-                <data android:scheme="content" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.LOCALE_CHANGED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.PROVIDER_CHANGED"/>
-                <data android:scheme="content"/>
-                <data android:host="com.android.calendar"/>
-            </intent-filter>
         </receiver>
 
         <receiver android:name="com.android.calendar.alerts.GlobalDismissManager"
@@ -238,11 +225,21 @@
 
         <receiver android:name="com.android.calendar.UpgradeReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.android.calendar.RebootReceiver"
+            android:enabled="true"
+            android:exported="true"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" /> <!-- HTC -->
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" /> <!-- OLD HTC -->
+                <action android:name="android.intent.action.REBOOT" /> <!-- MIUI -->
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 
@@ -366,27 +363,6 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service android:name="com.github.quarck.calnotify.notification.NotificationActionMarkDoneService" />
 
-        <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.AppUpdatedBroadcastReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-            </intent-filter>
-        </receiver>
-        <receiver
-            android:name="com.github.quarck.calnotify.broadcastreceivers.BootCompleteBroadcastReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
-                <!-- Well, HTC -->
-                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
-                <!-- Well, OLD HTC -->
-                <action android:name="android.intent.action.REBOOT" />
-                <!-- Well, MIUI -->
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </receiver>
         <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.EventReminderBroadcastReceiver">
             <intent-filter android:priority="2147483647">
                 <action android:name="android.intent.action.EVENT_REMINDER" />
@@ -419,16 +395,21 @@
                 <data android:host="com.android.calendar" />
             </intent-filter>
         </receiver>
+
         <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.SnoozeAlarmBroadcastReceiver" />
         <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.ReminderAlarmBroadcastReceiver" />
         <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.ManualEventAlarmBroadcastReceiver" />
         <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.SnoozeExactAlarmBroadcastReceiver" />
         <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.ReminderExactAlarmBroadcastReceiver" />
         <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.ManualEventExactAlarmBroadcastReceiver" />
+
         <receiver android:name="com.github.quarck.calnotify.broadcastreceivers.TimeSetBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.TIME_SET" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
             </intent-filter>
         </receiver>
 
