@@ -524,6 +524,7 @@ object ApplicationController  {
 
     fun fireEventReminder(context: Context) = notificationManager.fireEventReminder(context)
 
+    @JvmStatic
     fun onMainActivityStarted(context: Context?) {
         if (context != null)
             CalendarMonitorPeriodicJobService.schedule(context)

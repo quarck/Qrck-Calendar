@@ -24,10 +24,12 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.Service;
 import android.content.AsyncQueryHandler;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -41,16 +43,23 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Attendees;
 import android.provider.CalendarContract.Events;
 
+import com.android.calendar.notifications.NotificationsFragment;
 import com.android.calendar.settings.SettingsActivity;
 import com.android.calendar.settings.GeneralPreferences;
 import com.android.calendar.settings.SettingsActivityKt;
 import com.android.calendar.settings.ViewDetailsPreferences;
+import com.github.quarck.calnotify.ui.MainActivityFinishedEventsFragment;
+import com.github.quarck.calnotify.ui.MainActivityHomeFragment;
+import com.github.quarck.calnotify.ui.MainActivityUpcomingEventsFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
@@ -89,9 +98,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.qrck.seshat.BuildConfig;
 import org.qrck.seshat.R;
 import org.qrck.seshat.databinding.AllInOneMaterialBinding;
 import org.qrck.seshat.databinding.DateRangeTitleBinding;
+
+import com.github.quarck.calnotify.app.ApplicationController;
 
 import static android.provider.CalendarContract.Attendees.ATTENDEE_STATUS;
 import static android.provider.CalendarContract.EXTRA_EVENT_ALL_DAY;
@@ -381,23 +393,55 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         mContentResolver = getContentResolver();
     }
 
+    public void onStart()
+    {
+        super.onStart();
+        ApplicationController.onMainActivityStarted(this);
+    }
+
     private void checkAppPermissions() {
         // Here, thisActivity is the current activity
-        if (Build.VERSION.SDK_INT >= 23 && (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_CALENDAR)
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR)
                 != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_CALENDAR)
+            ContextCompat.checkSelfPermission(this,  Manifest.permission.READ_CALENDAR)
                 != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED)) {
+            ContextCompat.checkSelfPermission(this,  Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
 
             // No explanation needed, we can request the permission.
-
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     PERMISSIONS_REQUEST_WRITE_CALENDAR);
+        } else {
+
+            PowerManager pm = (PowerManager)getSystemService(Service.POWER_SERVICE);
+
+            if (!pm.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID)) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                        .setTitle(getString(R.string.battery_optimisation_title))
+                        .setMessage(getString(R.string.battery_optimisation_details))
+                        .setPositiveButton(R.string.you_can_do_it, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent()
+                                        .setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+                                        .setData(Uri.parse("package:" + BuildConfig.APPLICATION_ID));
+                                startActivity(intent);
+                            }
+                        })
+                        .setNeutralButton(R.string.you_can_do_it_later, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        });
+
+//                            .setNegativeButton(getString(R.string.you_cannot_do_it)) {
+//                    _, _ ->
+//                            settings.doNotShowBatteryOptimisationWarning = true
+//                }
+                builder.create().show();
+            }
         }
     }
 
@@ -442,6 +486,9 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                     break;
                 case ViewType.MONTH:
                     titleResource = R.string.month_view;
+                    break;
+                case ViewType.NOTIFICATIONS:
+                    titleResource = R.string.active_events;
                     break;
                 case ViewType.WEEK:
                 default:
@@ -931,6 +978,11 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
     public boolean onNavigationItemSelected(MenuItem item) {
         final int itemId = item.getItemId();
         switch (itemId) {
+            case R.id.nav_notifications:
+                if (mCurrentView != ViewType.NOTIFICATIONS) {
+                    mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.NOTIFICATIONS);
+                }
+                break;
             case R.id.day_menu_item:
                 if (mCurrentView != ViewType.DAY) {
                     mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.DAY);
@@ -957,6 +1009,14 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             case R.id.action_about:
                 Intent intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);
+                break;
+
+            case R.id.nav_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                break;
+
+            case R.id.nav_settings:
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
         }
         mDrawerLayout.closeDrawers();
@@ -1033,6 +1093,15 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         Fragment frag = null;
         Fragment secFrag = null;
         switch (viewType) {
+
+            case ViewType.NOTIFICATIONS:
+                mNavigationView.getMenu().findItem(R.id.nav_notifications).setChecked(true);
+                frag = new NotificationsFragment();
+                if (mIsTabletConfig) {
+                    mToolbar.setTitle(R.string.active_events);
+                }
+                break;
+
             case ViewType.AGENDA:
                 mNavigationView.getMenu().findItem(R.id.agenda_menu_item).setChecked(true);
                 frag = new AgendaFragment(timeMillis, false);
@@ -1250,7 +1319,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             if (mShowCalendarControls) {
                 int animationSize = (mOrientation == Configuration.ORIENTATION_LANDSCAPE) ?
                         mControlsAnimateWidth : mControlsAnimateHeight;
-                boolean noControlsView = event.viewType == ViewType.MONTH || event.viewType == ViewType.AGENDA;
+                boolean noControlsView = event.viewType == ViewType.MONTH || event.viewType == ViewType.AGENDA || event.viewType == ViewType.NOTIFICATIONS;
                 if (mControlsMenu != null) {
                     mControlsMenu.setVisible(!noControlsView);
                     mControlsMenu.setEnabled(!noControlsView);

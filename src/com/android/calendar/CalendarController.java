@@ -104,9 +104,9 @@ public class CalendarController {
         mContext = context;
         mUpdateTimezone.run();
         mTime.setToNow();
-        mDetailViewType = Utils.getSharedPreference(mContext,
+        mDetailViewType = ViewType.NOTIFICATIONS; /*Utils.getSharedPreference(mContext,
                 GeneralPreferences.KEY_DETAILED_VIEW,
-                GeneralPreferences.DEFAULT_DETAILED_VIEW);
+                GeneralPreferences.DEFAULT_DETAILED_VIEW); */
     }
 
     /**
@@ -283,7 +283,9 @@ public class CalendarController {
         } else if (event.viewType != ViewType.EDIT) {
             mViewType = event.viewType;
 
-            if (event.viewType == ViewType.AGENDA || event.viewType == ViewType.DAY
+            if (event.viewType == ViewType.AGENDA
+                    || event.viewType == ViewType.DAY
+                    || event.viewType == ViewType.NOTIFICATIONS
                     || (Utils.getAllowWeekForDetailView() && event.viewType == ViewType.WEEK)) {
                 mDetailViewType = mViewType;
             }
@@ -735,7 +737,8 @@ public class CalendarController {
         final int WEEK = 3;
         final int MONTH = 4;
         final int EDIT = 5;
-        final int MAX_VALUE = 5;
+        final int NOTIFICATIONS = 6;
+        final int MAX_VALUE = 6;
     }
 
     public interface EventHandler {

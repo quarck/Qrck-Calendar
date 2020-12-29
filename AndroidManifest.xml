@@ -292,17 +292,6 @@
         <!-- CN Light original activities and receivers -->
 
         <activity
-            android:name="com.github.quarck.calnotify.ui.MainActivityNG"
-            android:label="@string/main_activity_title"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name="com.github.quarck.calnotify.ui.ViewEventActivity"
             android:label=""
             android:launchMode="singleTask"

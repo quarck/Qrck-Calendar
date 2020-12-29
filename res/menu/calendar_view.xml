@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+
     <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_notifications"
+            android:icon="@drawable/ic_view_agenda_white_24dp"
+            android:title="@string/menu_home" />
+        <item
+            android:id="@+id/agenda_menu_item"
+            android:icon="@drawable/ic_menu_agenda_view"
+            android:title="@string/agenda_view" />
+
         <item
             android:id="@+id/day_menu_item"
             android:checked="true"
@@ -14,14 +24,10 @@
             android:id="@+id/month_menu_item"
             android:icon="@drawable/ic_menu_month_view"
             android:title="@string/month_view" />
-
-        <item
-            android:id="@+id/agenda_menu_item"
-            android:icon="@drawable/ic_menu_agenda_view"
-            android:title="@string/agenda_view" />
-
     </group>
-    <group android:id="@+id/navigation_subheader" android:checkableBehavior="none">
+
+    <group android:id="@+id/navigation_subheader"
+        android:checkableBehavior="none">
         <item
             android:id="@+id/action_settings"
             android:alphabeticShortcut="s"
@@ -32,6 +38,20 @@
             android:id="@+id/action_about"
             android:icon="@drawable/ic_info"
             android:title="@string/preferences_menu_about" />
-
     </group>
+
+
+    <group android:id="@+id/group_about_n_settings"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@android:drawable/ic_menu_preferences"
+            android:title="@string/settings" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@android:drawable/ic_menu_help"
+            android:title="@string/menu_about" />
+    </group>
+
+
 </menu>

@@ -98,6 +98,10 @@ public class CalendarToolbarHandler {
                 mToolbar.setSubtitle(buildDayOfWeek());
                 mToolbar.setTitle(buildFullDate());
                 break;
+            case CalendarController.ViewType.NOTIFICATIONS:
+                mToolbar.setSubtitle(buildDayOfWeek());
+                mToolbar.setTitle(buildFullDate());
+                break;
         }
     }
 

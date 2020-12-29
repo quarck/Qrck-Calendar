@@ -57,6 +57,7 @@ public class CalendarViewAdapter extends BaseAdapter {
     // Defines the types of view returned by this spinner
     private static final int BUTTON_VIEW_TYPE = 0;
     private final String[] mButtonNames;           // Text on buttons
+    private final String mNotificationsButtonName;
     private final LayoutInflater mInflater;
     private final Context mContext;
     private final Formatter mFormatter;
@@ -101,6 +102,7 @@ public class CalendarViewAdapter extends BaseAdapter {
 
         // Initialize
         mButtonNames = context.getResources().getStringArray(R.array.buttons_list);
+        mNotificationsButtonName = context.getResources().getString(R.string.active_events);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mStringBuilder = new StringBuilder(50);
         mFormatter = new Formatter(mStringBuilder, Locale.getDefault());
@@ -239,6 +241,12 @@ public class CalendarViewAdapter extends BaseAdapter {
                     weekDay.setText(buildDayOfWeek());
                     date.setText(buildFullDate());
                     break;
+                case ViewType.NOTIFICATIONS:
+                    weekDay.setVisibility(View.VISIBLE);
+                    lunarInfo.setVisibility(View.GONE);
+                    weekDay.setText(buildDayOfWeek());
+                    date.setText(buildFullDate());
+                    break;
                 default:
                     v = null;
                     break;
@@ -267,6 +275,9 @@ public class CalendarViewAdapter extends BaseAdapter {
                     break;
                 case ViewType.AGENDA:
                     title.setText(mButtonNames [AGENDA_BUTTON_INDEX]);
+                    break;
+                case ViewType.NOTIFICATIONS:
+                    title.setText(mNotificationsButtonName);
                     break;
                 default:
                     v = null;

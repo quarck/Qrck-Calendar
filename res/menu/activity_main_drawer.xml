@@ -5,7 +5,7 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
+            android:id="@+id/nav_notifications"
             android:icon="@drawable/ic_view_agenda_white_24dp"
             android:title="@string/menu_home" />
         <item
@@ -13,10 +13,6 @@
             android:icon="@drawable/ic_inbox_white_24dp"
             android:title="@string/menu_upcoming" />
 
-        <item
-            android:id="@+id/nav_calendar"
-            android:icon="@drawable/ic_date_range_white_24dp"
-            android:title="@string/menu_calendar" />
     </group>
 
     <group android:id="@+id/group_notification_log"
