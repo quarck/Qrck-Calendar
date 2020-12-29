@@ -87,6 +87,10 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
         app:key="preferences_notification"
         app:title="@string/preferences_alerts_title" />
 
+    <Preference
+        app:key="preferences_notification_alarm"
+        app:title="@string/preferences_alarm_alerts_title" />
+
     <CheckBoxPreference
         app:key="preferences_alerts_popup"
         app:layout="?android:attr/preferenceLayoutChild"

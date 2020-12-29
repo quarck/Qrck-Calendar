@@ -67,6 +67,7 @@ class GeneralPreferences : PreferenceFragmentCompat(),
 
     // >= 26
     private lateinit var notificationPref: Preference
+    private lateinit var alarmNotificationPref: Preference
 
     // < 26
     private lateinit var alertPref: CheckBoxPreference
@@ -112,6 +113,7 @@ class GeneralPreferences : PreferenceFragmentCompat(),
 
         if (Utils.isOreoOrLater()) {
             notificationPref = preferenceScreen.findPreference(KEY_NOTIFICATION)!!
+            alarmNotificationPref = preferenceScreen.findPreference(KEY_NOTIFICATION_ALARM)!!
         } else {
             alertPref = preferenceScreen.findPreference(KEY_ALERTS)!!
             vibratePref = preferenceScreen.findPreference(KEY_ALERTS_VIBRATE)!!
@@ -401,6 +403,10 @@ class GeneralPreferences : PreferenceFragmentCompat(),
                 showNotificationChannel()
                 return true
             }
+            KEY_NOTIFICATION_ALARM -> {
+                showAlarmNotificationChannel()
+                return true
+            }
             KEY_OTHER_COPY_DB -> {
                 showDbCopy()
                 return true
@@ -426,11 +432,12 @@ class GeneralPreferences : PreferenceFragmentCompat(),
 
     @TargetApi(Build.VERSION_CODES.O)
     private fun showNotificationChannel() {
-        val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
-            putExtra(Settings.EXTRA_CHANNEL_ID, "alert_channel_01")
-            putExtra(Settings.EXTRA_APP_PACKAGE, activity!!.packageName)
-        }
-        startActivity(intent)
+        com.github.quarck.calnotify.notification.NotificationChannelManager.launchChannelSettings(activity!!, false)
+    }
+
+    @TargetApi(Build.VERSION_CODES.O)
+    private fun showAlarmNotificationChannel() {
+        com.github.quarck.calnotify.notification.NotificationChannelManager.launchChannelSettings(activity!!, true)
     }
 
     /**
@@ -497,6 +504,7 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         const val KEY_ALERTS_CATEGORY = "preferences_alerts_category"
         const val KEY_ALERTS = "preferences_alerts"
         const val KEY_NOTIFICATION = "preferences_notification"
+        const val KEY_NOTIFICATION_ALARM = "preferences_notification_alarm"
         const val KEY_ALERTS_VIBRATE = "preferences_alerts_vibrate"
         const val KEY_ALERTS_RINGTONE = "preferences_alerts_ringtone"
         const val KEY_ALERTS_POPUP = "preferences_alerts_popup"

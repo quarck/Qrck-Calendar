@@ -269,5 +269,13 @@ object NotificationChannelManager {
         context.startActivity(intent)
     }
 
+    @JvmStatic
+    fun launchChannelSettings(context: Context, alarm: Boolean) {
+        if (alarm)
+            launchSystemSettingForChannel(context, SoundState.Alarm)
+        else
+            launchSystemSettingForChannel(context, SoundState.Normal)
+    }
+
     private const val LOG_TAG = "NotificationChannelManager"
 }
