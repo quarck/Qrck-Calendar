@@ -1007,14 +1007,6 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                 Intent intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);
                 break;
-
-            case R.id.nav_about:
-                startActivity(new Intent(this, AboutActivity.class));
-                break;
-
-            case R.id.nav_settings:
-                startActivity(new Intent(this, AboutActivity.class));
-                break;
         }
         mDrawerLayout.closeDrawers();
         return true;
