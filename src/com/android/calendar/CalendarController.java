@@ -285,7 +285,6 @@ public class CalendarController {
 
             if (event.viewType == ViewType.AGENDA
                     || event.viewType == ViewType.DAY
-                    || event.viewType == ViewType.NOTIFICATIONS
                     || (Utils.getAllowWeekForDetailView() && event.viewType == ViewType.WEEK)) {
                 mDetailViewType = mViewType;
             }
