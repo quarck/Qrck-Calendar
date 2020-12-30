@@ -757,7 +757,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             mController.registerEventHandler(
                     R.id.calendar_list, (EventHandler) selectCalendarsFrag);
         }
-        if (!mShowCalendarControls || viewType == ViewType.EDIT) {
+        if (!mShowCalendarControls || viewType == ViewType.EDIT || viewType == ViewType.NOTIFICATIONS) {
             mMiniMonth.setVisibility(View.GONE);
             mCalendarsList.setVisibility(View.GONE);
         }
@@ -847,8 +847,16 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             getMenuInflater().inflate(extensionMenuRes, menu);
         }
 
+        boolean isNotificationsView = mController.getViewType() == ViewType.NOTIFICATIONS;
+
         MenuItem item = menu.findItem(R.id.action_import);
-        item.setVisible(ImportActivity.hasThingsToImport());
+        item.setVisible(ImportActivity.hasThingsToImport() && !isNotificationsView);
+
+        MenuItem goToItem = menu.findItem(R.id.action_goto);
+        goToItem.setVisible(!isNotificationsView);
+
+        MenuItem refreshItem = menu.findItem(R.id.action_refresh);
+        refreshItem.setVisible(!isNotificationsView);
 
         mSearchMenu = menu.findItem(R.id.action_search);
         mSearchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
@@ -881,11 +889,17 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
 
 
         MenuItem menuItem = menu.findItem(R.id.action_today);
+        if (!isNotificationsView) {
+            // replace the default top layer drawable of the today icon with a
+            // custom drawable that shows the day of the month of today
+            LayerDrawable icon = (LayerDrawable) menuItem.getIcon();
+            Utils.setTodayIcon(icon, this, mTimeZone);
+            menuItem.setVisible(true);
+        } else {
+            menuItem.setVisible(false);
+        }
 
-        // replace the default top layer drawable of the today icon with a
-        // custom drawable that shows the day of the month of today
-        LayerDrawable icon = (LayerDrawable) menuItem.getIcon();
-        Utils.setTodayIcon(icon, this, mTimeZone);
+
 
         return true;
     }
@@ -1141,7 +1155,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         // Show date only on tablet configurations in views different than Agenda
         if (!mIsTabletConfig) {
             mDateRange.setVisibility(View.GONE);
-        } else if (viewType != ViewType.AGENDA) {
+        } else if (viewType != ViewType.AGENDA && viewType != ViewType.NOTIFICATIONS) {
             mDateRange.setVisibility(View.VISIBLE);
         } else {
             mDateRange.setVisibility(View.GONE);

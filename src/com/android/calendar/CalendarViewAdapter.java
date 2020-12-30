@@ -219,6 +219,7 @@ public class CalendarViewAdapter extends BaseAdapter {
                         lunarInfo.setVisibility(View.GONE);
                     }
                     date.setText(buildFullDate());
+                    date.setVisibility(View.VISIBLE);
                     break;
                 case ViewType.WEEK:
                     lunarInfo.setVisibility(View.GONE);
@@ -229,21 +230,26 @@ public class CalendarViewAdapter extends BaseAdapter {
                         weekDay.setVisibility(View.GONE);
                     }
                     date.setText(buildMonthYearDate());
+                    date.setVisibility(View.VISIBLE);
                     break;
                 case ViewType.MONTH:
                     weekDay.setVisibility(View.GONE);
                     lunarInfo.setVisibility(View.GONE);
                     date.setText(buildMonthYearDate());
+                    date.setVisibility(View.VISIBLE);
                     break;
                 case ViewType.AGENDA:
                     weekDay.setVisibility(View.VISIBLE);
                     lunarInfo.setVisibility(View.GONE);
                     weekDay.setText(buildDayOfWeek());
                     date.setText(buildFullDate());
+                    date.setVisibility(View.VISIBLE);
                     break;
                 case ViewType.NOTIFICATIONS:
                     weekDay.setVisibility(View.GONE);
                     lunarInfo.setVisibility(View.GONE);
+                    date.setVisibility(View.GONE);
+                    date.setText("--");
                     //weekDay.setText(buildDayOfWeek());
                     //date.setText(buildFullDate());
                     break;
