@@ -51,6 +51,7 @@
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/CalendarTheme.WithoutActionBar"
+            android:label="@string/app_label"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

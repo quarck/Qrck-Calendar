@@ -14,7 +14,7 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- This is the app label used for alert notifications -->
-    <string name="standalone_app_label" translatable="false">Seshat</string>
+    <string name="standalone_app_label" translatable="false">Seshat Calendar</string>
     <!-- This is the label underneath the icon for Calendar -->
     <string name="app_label">Calendar</string>
 
@@ -534,10 +534,10 @@
     <string name="preferences_default_snooze_delay_default" translatable="false">5</string>
 
     <!-- About dialog strings -->
-    <string name="app_authors" translatable="false">Sergey Parshin, forked from The Etar Project</string>
+    <string name="app_authors" translatable="false">Sergey Parshin\nForked from The Etar Project</string>
     <string name="app_authors_url" translatable="false">https://github.com/quarck/Seshat-Calendar/graphs/contributors</string>
     <string name="app_changelog" translatable="false">https://github.com/quarck/Seshat-Calendar/releases</string>
-    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, \u00a9 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Portions \u00a9 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
+    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin\n\u00a9 2015-<xliff:g>%1$s</xliff:g> The Etar Project\n\u00a9 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="app_issues_url" translatable="false">https://github.com/quarck/Seshat-Calendar/issues</string>
     <string name="app_license" translatable="false">GPLv3</string>
     <string name="app_license_url" translatable="false">https://www.gnu.org/licenses/gpl-3.0.html</string>

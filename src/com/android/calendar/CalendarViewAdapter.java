@@ -242,10 +242,10 @@ public class CalendarViewAdapter extends BaseAdapter {
                     date.setText(buildFullDate());
                     break;
                 case ViewType.NOTIFICATIONS:
-                    weekDay.setVisibility(View.VISIBLE);
+                    weekDay.setVisibility(View.GONE);
                     lunarInfo.setVisibility(View.GONE);
-                    weekDay.setText(buildDayOfWeek());
-                    date.setText(buildFullDate());
+                    //weekDay.setText(buildDayOfWeek());
+                    //date.setText(buildFullDate());
                     break;
                 default:
                     v = null;
