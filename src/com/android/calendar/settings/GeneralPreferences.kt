@@ -539,7 +539,7 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         // Default preference values
         const val DEFAULT_DEFAULT_START = "-2"
         const val DEFAULT_START_VIEW = CalendarController.ViewType.WEEK
-        const val DEFAULT_DETAILED_VIEW = CalendarController.ViewType.AGENDA
+        const val DEFAULT_DETAILED_VIEW = CalendarController.ViewType.DAY
         const val DEFAULT_SHOW_WEEK_NUM = false
         // This should match the XML file.
         const val DEFAULT_RINGTONE = "content://settings/system/notification_sound"
