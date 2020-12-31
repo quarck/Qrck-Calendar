@@ -1,27 +1,27 @@
 package com.android.calendar.notifications
 
-import android.app.Fragment
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.format.DateUtils
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.android.calendar.CalendarController
 import com.github.quarck.calnotify.Consts
-import com.github.quarck.calnotify.app.CalNotifyController
-import com.github.quarck.calnotify.calendar.*
+import com.github.quarck.calnotify.calendar.CalendarProvider
+import com.github.quarck.calnotify.calendar.EventAlertRecord
+import com.github.quarck.calnotify.calendar.MonitorEventAlertEntry
+import com.github.quarck.calnotify.calendar.MonitorEventAlertEntryKey
 import com.github.quarck.calnotify.calendarmonitor.CalendarMonitor
-import com.github.quarck.calnotify.eventsstorage.EventsStorage
-import com.github.quarck.calnotify.eventsstorage.FinishedEventsStorage
-import com.github.quarck.calnotify.ui.*
+import com.github.quarck.calnotify.ui.ViewEventActivity
 import com.github.quarck.calnotify.utils.adjustCalendarColor
 import com.github.quarck.calnotify.utils.logs.DevLog
 import com.github.quarck.calnotify.utils.textutils.EventFormatter
@@ -30,12 +30,13 @@ import org.qrck.seshat.R
 
 data class UpcomingEventAlertRecordWrap(
         val isToday: Boolean,
-        val event: EventAlertRecord?
+        val event: EventAlertRecord?,
+        val numItemsInGroup: Int? = null
 )
 
 class UpcomingEventListAdapter(
         val context: Context,
-        val cb: UpcomingNotificationsFragment
+        val cb: UpcomingNotificationsActivity
 ) : RecyclerView.Adapter<UpcomingEventListAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View)
@@ -43,7 +44,7 @@ class UpcomingEventListAdapter(
         //var eventId: Long = 0;
         var entry: UpcomingEventAlertRecordWrap? = null
 
-        var eventHolder: RelativeLayout? = itemView.findViewById<RelativeLayout>(R.id.card_view_main_holder)
+        var eventHolder: RelativeLayout = itemView.findViewById<RelativeLayout>(R.id.card_view_main_holder)
         var eventTitleText = itemView.findViewById<TextView>(R.id.card_view_event_name)
 
         var eventDateText = itemView.findViewById<TextView>(R.id.card_view_event_date)
@@ -52,19 +53,22 @@ class UpcomingEventListAdapter(
         var snoozedUntilText: TextView? = itemView.findViewById<TextView>(R.id.card_view_snoozed_until)
         val compactViewCalendarColor: View? = itemView.findViewById<View>(R.id.compact_view_calendar_color)
 
-        val headingLayout = itemView.findViewById<RelativeLayout>(R.id.event_card_heading_layout)
-        val headingText = itemView.findViewById<TextView>(R.id.event_view_heading_text)
+        val headingLayout: RelativeLayout = itemView.findViewById<RelativeLayout>(R.id.event_card_heading_layout)
+        val headingText: TextView = itemView.findViewById<TextView>(R.id.event_view_heading_text)
+
+        val undoLayout: RelativeLayout = itemView.findViewById(R.id.event_card_undo_layout)
+        val mainLayout: RelativeLayout = itemView.findViewById(R.id.compact_view_content_layout)
 
         var calendarColor: ColorDrawable = ColorDrawable(0)
 
         init {
-            eventHolder?.setOnClickListener{
+            eventHolder.setOnClickListener{
                 if (entry != null)
                     cb.onItemClick(eventTitleText, adapterPosition, entry!!);
             }
 
-            itemView.findViewById<RelativeLayout>(R.id.event_card_undo_layout).visibility = View.GONE
-            itemView.findViewById<RelativeLayout>(R.id.compact_view_content_layout).visibility = View.VISIBLE
+            undoLayout.visibility = View.GONE
+            mainLayout.visibility = View.VISIBLE
         }
     }
 
@@ -87,10 +91,12 @@ class UpcomingEventListAdapter(
         holder.entry = entry
 
         if (entry.event != null) {
+            holder.mainLayout.visibility = View.VISIBLE
             holder.headingLayout.visibility = View.GONE
-            holder.eventTitleText.text = cb.getItemTitle(entry) // entry.event.title
 
-            val time = cb.getItemMiddleLine(entry) // eventFormatter.formatDateTimeOneLine(entry.event)
+            holder.eventTitleText.text = cb.getItemTitle(entry)
+
+            val time = cb.getItemMiddleLine(entry)
             holder.eventDateText.text = time
             holder.eventTimeText.text = ""
 
@@ -103,7 +109,9 @@ class UpcomingEventListAdapter(
             holder.compactViewCalendarColor?.background = holder.calendarColor
         }
         else {
+            holder.mainLayout.visibility = View.GONE
             holder.headingLayout.visibility = View.VISIBLE
+
             holder.headingText.text = cb.getItemTitle(entry) // entry.event.title
         }
     }
@@ -123,61 +131,71 @@ class UpcomingEventListAdapter(
 }
 
 
-class UpcomingNotificationsFragment : Fragment(), CalendarController.EventHandler {
+class UpcomingNotificationsActivity : AppCompatActivity() {
     private val scope = MainScope()
 
     private lateinit var recyclerView: RecyclerView
 
-    private var adapter: UpcomingEventListAdapter? = null
+    private lateinit var adapter: UpcomingEventListAdapter
 
-    private var primaryColor: Int? = Consts.DEFAULT_CALENDAR_EVENT_COLOR
-    private var eventFormatter: EventFormatter? = null
+    private var primaryColor: Int = Consts.DEFAULT_CALENDAR_EVENT_COLOR
+    private lateinit var eventFormatter: EventFormatter
 
-    private var statusHandled: String? = null
-    private var eventReminderTimeFmt: String? = null
-    private var todayHeading: String? = null
-    private var otherDayHeading: String? = null
+    private lateinit var statusHandled: String
+    private lateinit var eventReminderTimeFmt: String
+
+    private lateinit var todayHeading: String
+    private lateinit var todayHeadingEmpty: String
+    private lateinit var otherDayHeading: String
+    private lateinit var otherDayheadingEmpty: String
+
     private var colorSkippedItemBotomLine: Int  = 0x7f3f3f3f
     private var colorNonSkippedItemBottomLine: Int = 0x7f7f7f7f
 
     private var monitorEntries = mapOf<MonitorEventAlertEntryKey, MonitorEventAlertEntry>()
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        val root = inflater.inflate(R.layout.fragment_upcoming, container, false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        DevLog.info(LOG_TAG, "onCreate")
 
-        this.context?.let {
-            ctx ->
-            primaryColor = ContextCompat.getColor(ctx, R.color.primary)
-            eventFormatter  = EventFormatter(ctx)
-            adapter = UpcomingEventListAdapter(ctx, this)
+        super.onCreate(savedInstanceState)
 
-            statusHandled = ctx.resources.getString(R.string.event_was_marked_as_finished)
-            eventReminderTimeFmt = ctx.resources.getString(R.string.reminder_at_fmt)
+        setContentView(R.layout.activity_upcoming)
 
-            colorSkippedItemBotomLine = ContextCompat.getColor(ctx, R.color.divider)
-            colorNonSkippedItemBottomLine = ContextCompat.getColor(ctx, R.color.secondary_text)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
-            todayHeading = ctx.resources.getString(R.string.today_semi)
-            otherDayHeading = ctx.resources.getString(R.string.tomorrow_and_following)
+        setSupportActionBar(findViewById<Toolbar?>(R.id.toolbar))
+        supportActionBar?.let{
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
+            it.setDisplayShowHomeEnabled(true)
         }
 
-        recyclerView = root.findViewById<RecyclerView>(R.id.list_events)
-        recyclerView.adapter = adapter
-        adapter?.recyclerView = recyclerView
-        recyclerView.isNestedScrollingEnabled = false
+        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.black)
 
-        return root
+        primaryColor = ContextCompat.getColor(this, R.color.primary)
+        eventFormatter  = EventFormatter(this)
+        adapter = UpcomingEventListAdapter(this, this)
+
+        statusHandled = this.resources.getString(R.string.event_was_marked_as_finished)
+        eventReminderTimeFmt = this.resources.getString(R.string.reminder_at_fmt)
+
+        colorSkippedItemBotomLine = ContextCompat.getColor(this, R.color.divider)
+        colorNonSkippedItemBottomLine = ContextCompat.getColor(this, R.color.secondary_text)
+
+        todayHeading = this.resources.getString(R.string.today_semi)
+        todayHeadingEmpty = this.resources.getString(R.string.no_more_today)
+        otherDayHeading = this.resources.getString(R.string.tomorrow_and_following)
+        otherDayheadingEmpty = this.resources.getString(R.string.no_more_other_days)
+
+        recyclerView = findViewById<RecyclerView>(R.id.list_events)
+        recyclerView.adapter = adapter
+        adapter.recyclerView = recyclerView
+        recyclerView.isNestedScrollingEnabled = false
     }
 
     override fun onResume() {
         DevLog.debug(LOG_TAG, "onResume")
         super.onResume()
-
-        val ctx: Context = this.activity ?: return
 
         scope.launch {
 
@@ -187,22 +205,27 @@ class UpcomingNotificationsFragment : Fragment(), CalendarController.EventHandle
             val merged = withContext(Dispatchers.IO) {
                 monitorEntries =
                         CalendarMonitor(CalendarProvider)
-                                .getAlertsForAlertRange(ctx, scanFrom = from, scanTo = to)
+                                .getAlertsForAlertRange(this@UpcomingNotificationsActivity, scanFrom = from, scanTo = to)
                                 .associateBy { it.key }
 
                 val events =
                         CalendarProvider
-                                .getEventAlertsForInstancesInRange(ctx, from, to)
+                                .getEventAlertsForInstancesInRange(this@UpcomingNotificationsActivity, from, to)
                                 .filter { it.alertTime >= from }
                                 .map { UpcomingEventAlertRecordWrap(false, it) }
                                 .sortedBy { it.event?.alertTime ?: 0L }
                                 .partition { isTodayAlert(it.event) }
 
-                listOf(UpcomingEventAlertRecordWrap(true, null)) + events.first +
-                        listOf(UpcomingEventAlertRecordWrap(false, null)) + events.second
+                val ret =
+                        listOf(UpcomingEventAlertRecordWrap(true, null, events.first.size)) +
+                        events.first +
+                        listOf(UpcomingEventAlertRecordWrap(false, null, events.second.size)) +
+                        events.second
+
+                ret
             }
 
-            adapter?.setEventsToDisplay(merged)
+            adapter.setEventsToDisplay(merged)
         }
 
     }
@@ -221,27 +244,33 @@ class UpcomingNotificationsFragment : Fragment(), CalendarController.EventHandle
     // TODO: add an option to view the event, not only to restore it
     fun onItemClick(v: View, position: Int, entry: UpcomingEventAlertRecordWrap) {
         val event = entry.event ?: return
-        this.context?.let {
-            ctx ->
-            startActivity(
-                    Intent(ctx, ViewEventActivity::class.java)
-                            .putExtra(Consts.INTENT_EVENT_ID_KEY, event.eventId)
-                            .putExtra(Consts.INTENT_INSTANCE_START_TIME_KEY, event.instanceStartTime)
-                            .putExtra(Consts.INTENT_ALERT_TIME, event.alertTime)
-                            .putExtra(Consts.INTENT_SNOOZE_FROM_MAIN_ACTIVITY, true)
-                            .putExtra(Consts.INTENT_VIEW_FUTURE_EVENT_EXTRA, true)
-                            .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-        }
+
+        startActivity(
+                Intent(this, ViewEventActivity::class.java)
+                        .putExtra(Consts.INTENT_EVENT_ID_KEY, event.eventId)
+                        .putExtra(Consts.INTENT_INSTANCE_START_TIME_KEY, event.instanceStartTime)
+                        .putExtra(Consts.INTENT_ALERT_TIME, event.alertTime)
+                        .putExtra(Consts.INTENT_SNOOZE_FROM_MAIN_ACTIVITY, true)
+                        .putExtra(Consts.INTENT_VIEW_FUTURE_EVENT_EXTRA, true)
+                        .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 
     fun getItemTitle(entry: UpcomingEventAlertRecordWrap): String {
         val event = entry.event
-        return event?.title ?: (if (entry.isToday) todayHeading else otherDayHeading) ?: ""
+        if (event != null)
+            return event.title
+
+        if (entry.isToday) {
+            return if (entry.numItemsInGroup ?: 0 > 0) todayHeading else todayHeadingEmpty
+        }
+        else {
+            return if (entry.numItemsInGroup ?: 0 > 0) otherDayHeading else otherDayheadingEmpty
+        }
     }
 
     fun getItemMiddleLine(entry: UpcomingEventAlertRecordWrap): String {
         val event = entry.event ?: return ""
-        return eventFormatter?.formatDateTimeOneLine(event) ?: "NULL"
+        return eventFormatter.formatDateTimeOneLine(event)
     }
 
     fun getItemBottomLine(entry: UpcomingEventAlertRecordWrap): Pair<String, Int> {
@@ -250,10 +279,10 @@ class UpcomingNotificationsFragment : Fragment(), CalendarController.EventHandle
 
         val monEntry = monitorEntries.get(event.monitorEntryKey)
         val wasHandled = monEntry?.wasHandled == true
-        val reminderLine = eventFormatter?.let { (eventReminderTimeFmt ?: "%s").format(it.formatTimePoint(event.alertTime, noWeekDay = true)) } ?: ""
+        val reminderLine = eventReminderTimeFmt.format(eventFormatter.formatTimePoint(event.alertTime, noWeekDay = true))
 
         return if (wasHandled)
-            Pair((statusHandled ?: "/SKIP/") + " " + reminderLine, colorSkippedItemBotomLine)
+            Pair("$statusHandled $reminderLine", colorSkippedItemBotomLine)
         else
             Pair(reminderLine, colorNonSkippedItemBottomLine)
     }
@@ -263,7 +292,7 @@ class UpcomingNotificationsFragment : Fragment(), CalendarController.EventHandle
         return if (event.color != 0)
             event.color.adjustCalendarColor()
         else
-            primaryColor ?: Consts.DEFAULT_CALENDAR_EVENT_COLOR
+            primaryColor
     }
 
 
@@ -271,25 +300,6 @@ class UpcomingNotificationsFragment : Fragment(), CalendarController.EventHandle
         super.onPause()
         DevLog.info(LOG_TAG, "onPause")
     }
-
-    override fun onDetach() {
-        super.onDetach()
-        DevLog.info(LOG_TAG, "onDetach")
-    }
-
-
-    override fun getSupportedEventTypes(): Long {
-        return CalendarController.EventType.EVENTS_CHANGED
-    }
-
-    override fun handleEvent(event: CalendarController.EventInfo) {
-        if (event.eventType == CalendarController.EventType.EVENTS_CHANGED) {
-            eventsChanged()
-        }
-    }
-    override fun eventsChanged() {
-    }
-
 
     companion object {
         private const val LOG_TAG = "UpcomingEventsFragment"

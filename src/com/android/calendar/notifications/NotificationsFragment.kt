@@ -126,10 +126,6 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
                     resources.getString(
                             if (adapter?.hasActiveEvents == true) R.string.snooze_all else R.string.change_all)
         }
-
-        if (Consts.DEV_MODE_ENABLED) {
-            menu.findItem(R.id.action_test_page)?.isVisible = true
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -141,12 +137,17 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
                                     .putExtra(Consts.INTENT_SNOOZE_ALL_IS_CHANGE, !(adapter?.hasActiveEvents
                                             ?: false))
                                     .putExtra(Consts.INTENT_SNOOZE_FROM_MAIN_ACTIVITY, true)
-                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                                    )
 
-                R.id.action_test_page ->
+                R.id.action_upcoming -> {
                     startActivity(
-                            Intent(ctx, TestActivity::class.java)
-                                    .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+                            Intent(ctx, UpcomingNotificationsActivity::class.java))
+                }
+
+                R.id.action_log -> {
+                    startActivity(
+                            Intent(ctx, NotificationsLogActivity::class.java))
+                }
             }
         }
 

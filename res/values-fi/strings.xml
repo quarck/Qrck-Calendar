@@ -326,7 +326,6 @@
     <string name="license">Lisenssi</string>
     <string name="changelog">Muutosloki</string>
     <string name="authors">Tekijät</string>
-    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Portions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="preferences_system_theme">Järjestelmän oletusasetus</string>
     <string name="foreground_notification_channel_description">Sisäisen hälytyksen synkronointiin tarvitaan tulosilmoitus.</string>
     <string name="foreground_notification_channel_name">Hälytyksen synkronointi</string>

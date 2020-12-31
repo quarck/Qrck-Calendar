@@ -333,7 +333,6 @@
     <string name="preferences_calendar_delete_cancel">Odustani</string>
     <string name="preferences_menu_about">Informacije</string>
     <string name="offline_account_name">Lokalni kalendar</string>
-    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015. – <xliff:g>%1$s</xliff:g>. The Etar Project. Dijelovi © 2005. – <xliff:g>%1$s</xliff:g>. The Android Open Source Project.</string>
     <string name="authors">Autori</string>
     <string name="changelog">Zapis promjena</string>
     <string name="license">Licenca</string>

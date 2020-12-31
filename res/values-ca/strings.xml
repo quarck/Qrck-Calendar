@@ -326,7 +326,6 @@
     <string name="license">Llicència</string>
     <string name="changelog">Registre de canvis</string>
     <string name="authors">Autors</string>
-    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Porcions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="preferences_list_add_remote_etesync">Afegeix un calendari EteSync</string>
     <string name="seven_days">7 dies</string>
     <string name="six_days">6 dies</string>

@@ -1,32 +1,35 @@
 package com.android.calendar.notifications
 
-import android.app.Fragment
-import android.content.BroadcastReceiver
+import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
-import android.content.IntentFilter
+import android.net.Uri
 import android.os.Bundle
-import android.view.*
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.PopupMenu
+import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.android.calendar.CalendarController
 import com.github.quarck.calnotify.Consts
 import com.github.quarck.calnotify.app.CalNotifyController
-import com.github.quarck.calnotify.calendar.EventAlertRecord
 import com.github.quarck.calnotify.calendar.EventFinishType
 import com.github.quarck.calnotify.calendar.FinishedEventAlertRecord
-import com.github.quarck.calnotify.eventsstorage.EventsStorage
 import com.github.quarck.calnotify.eventsstorage.FinishedEventsStorage
-import com.github.quarck.calnotify.ui.*
+import com.github.quarck.calnotify.ui.SimpleEventListAdapter
+import com.github.quarck.calnotify.ui.SimpleEventListCallback
 import com.github.quarck.calnotify.utils.adjustCalendarColor
 import com.github.quarck.calnotify.utils.logs.DevLog
 import com.github.quarck.calnotify.utils.textutils.EventFormatter
 import com.github.quarck.calnotify.utils.textutils.dateToStr
 import kotlinx.coroutines.*
+import org.qrck.seshat.BuildConfig
 import org.qrck.seshat.R
 
 
@@ -49,7 +52,7 @@ fun FinishedEventAlertRecord.formatReason(ctx: Context): String =
         }
 
 
-class NotificationsLogFragment : Fragment(), CalendarController.EventHandler, SimpleEventListCallback<FinishedEventAlertRecord> {
+class NotificationsLogActivity : AppCompatActivity(), SimpleEventListCallback<FinishedEventAlertRecord> {
     // TODO: Rename and change types of parameters
 
     private val scope = MainScope()
@@ -63,44 +66,46 @@ class NotificationsLogFragment : Fragment(), CalendarController.EventHandler, Si
 
     private var bottomLineColor: Int = 0x7f3f3f3f
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        DevLog.info(LOG_TAG, "onCreateView")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        DevLog.info(LOG_TAG, "onCreate")
 
-        val root = inflater.inflate(R.layout.fragment_finished, container, false)
+        super.onCreate(savedInstanceState)
 
-        this.context?.let {
-            ctx ->
-            primaryColor = ContextCompat.getColor(ctx, R.color.primary)
-            eventFormatter  = EventFormatter(ctx)
-            adapter =
-                    SimpleEventListAdapter(
-                            ctx,
-                            R.layout.event_card_compact,
-                            this)
+        setContentView(R.layout.activity_finished)
 
-            bottomLineColor = ContextCompat.getColor(ctx, R.color.divider)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+        setSupportActionBar(findViewById<Toolbar?>(R.id.toolbar))
+        supportActionBar?.let{
+            it.setDisplayHomeAsUpEnabled(true)
+            it.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
+            it.setDisplayShowHomeEnabled(true)
         }
 
-        recyclerView = root.findViewById<RecyclerView>(R.id.list_events)
+        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.black)
+
+        primaryColor = ContextCompat.getColor(this, R.color.primary)
+        eventFormatter  = EventFormatter(this)
+        adapter =
+                SimpleEventListAdapter(
+                        this,
+                        R.layout.event_card_compact,
+                        this)
+
+        bottomLineColor = ContextCompat.getColor(this, R.color.divider)
+
+        recyclerView = findViewById<RecyclerView>(R.id.list_events)
         recyclerView.adapter = adapter;
         adapter?.recyclerView = recyclerView
-
-        return root
     }
 
     override fun onResume() {
         DevLog.debug(LOG_TAG, "onResume")
         super.onResume()
 
-        val ctx = this.activity ?: return
-
         scope.launch {
             val events = withContext(Dispatchers.IO) {
-                FinishedEventsStorage(ctx).use { db ->
+                FinishedEventsStorage(this@NotificationsLogActivity).use { db ->
                     db.events.sortedByDescending { it.finishTime }.toMutableList()
                 }
             }
@@ -113,40 +118,34 @@ class NotificationsLogFragment : Fragment(), CalendarController.EventHandler, Si
         super.onDestroy()
     }
 
-    // TODO: add an option to view the event, not only to restore it
     override fun onItemClick(v: View, position: Int, entry: FinishedEventAlertRecord) {
 
-        this.context?.let {
-            ctx ->
+        val popup = PopupMenu(this, v)
+        val inflater = popup.menuInflater
 
-            val popup = PopupMenu(ctx, v)
-            val inflater = popup.menuInflater
+        inflater.inflate(R.menu.finished_event_popup, popup.menu)
 
-            inflater.inflate(R.menu.finished_event_popup, popup.menu)
+        popup.setOnMenuItemClickListener { item ->
 
-            popup.setOnMenuItemClickListener {
-                item ->
-
-                when (item.itemId) {
-                    R.id.action_mark_not_finished -> {
-                        CalNotifyController.restoreEvent(ctx, entry.event)
-                        adapter?.removeEntry(entry)
-                        true
-                    }
-                    else ->
-                        false
+            when (item.itemId) {
+                R.id.action_mark_not_finished -> {
+                    CalNotifyController.restoreEvent(this, entry.event)
+                    adapter?.removeEntry(entry)
+                    true
                 }
+                else ->
+                    false
             }
-
-            popup.show()
         }
+
+        popup.show()
     }
 
     override fun getItemTitle(entry: FinishedEventAlertRecord): String =  entry.event.title
 
     override fun getItemMiddleLine(entry: FinishedEventAlertRecord): String = eventFormatter?.formatDateTimeOneLine(entry.event) ?: "_NO_FORMATTER_"
 
-    override fun getItemBottomLine(entry: FinishedEventAlertRecord): Pair<String, Int> = Pair(context?.let{ entry.formatReason(it) } ?: "_NO_CONTEXT_", bottomLineColor)
+    override fun getItemBottomLine(entry: FinishedEventAlertRecord): Pair<String, Int> = Pair(entry.formatReason(this), bottomLineColor)
 
     override fun getItemColor(entry: FinishedEventAlertRecord): Int =
             if (entry.event.color != 0)
@@ -161,23 +160,47 @@ class NotificationsLogFragment : Fragment(), CalendarController.EventHandler, Si
         DevLog.info(LOG_TAG, "onPause")
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        DevLog.info(LOG_TAG, "onDetach")
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_log_activity, menu)
+        return true
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-    override fun getSupportedEventTypes(): Long {
-        return CalendarController.EventType.EVENTS_CHANGED
+        when (item.itemId) {
+            R.id.action_clear_log -> {
+                confirmAndClearLog()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
-    override fun handleEvent(event: CalendarController.EventInfo) {
-        if (event.eventType == CalendarController.EventType.EVENTS_CHANGED) {
-            eventsChanged()
+    private fun confirmAndClearLog() {
+        val builder = AlertDialog.Builder(this)
+                .setTitle(getString(R.string.clear_log_confirmation))
+                .setMessage(getString(R.string.no_undo))
+                .setPositiveButton(R.string.yes) { dialog, which ->
+                    doClearLog()
+                }
+                .setNegativeButton(getString(R.string.cancel)) { dialog: DialogInterface?, which: Int -> }
+
+        builder.create().show()
+    }
+
+    private fun doClearLog() {
+        scope.launch {
+            val events = withContext(Dispatchers.IO) {
+                CalNotifyController.clearLog(this@NotificationsLogActivity)
+
+                FinishedEventsStorage(this@NotificationsLogActivity).use { db ->
+                    db.events.toMutableList()
+                }
+            }
+            adapter?.setEventsToDisplay(events)
         }
     }
-    override fun eventsChanged() {
-    }
+
 
     companion object {
         private const val LOG_TAG = "FinishedEventsFragment"

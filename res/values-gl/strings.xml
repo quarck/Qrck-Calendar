@@ -133,7 +133,6 @@
     <string name="license">Licenza</string>
     <string name="changelog">Rexistro de cambios</string>
     <string name="authors">Autores</string>
-    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-&lt;xliff:g xmlns:xliff=\"urn:oasis:names:tc:xliff:document:1.2\"&gt;%1$s&lt;/xliff:g&gt; The Etar Project. Portions © 2005-&lt;xliff:g xmlns:xliff=\"urn:oasis:names:tc:xliff:document:1.2\"&gt;%1$s&lt;/xliff:g&gt; The Android Open Source Project.</string>
     <string name="preferences_default_snooze_delay_dialog">Atraso predefinido para adiar</string>
     <string name="preferences_default_snooze_delay_title">Tempo para adiar predefinido</string>
     <string name="snooze_delay_dialog_title">Definir tempo para adiar</string>

@@ -294,19 +294,29 @@
             android:label=""
             android:launchMode="singleTask"
             android:parentActivityName="com.android.calendar.AllInOneActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.github.quarck.calnotify.ui.SnoozeAllActivity"
             android:label="@string/snooze_all"
             android:parentActivityName="com.android.calendar.AllInOneActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name="com.android.calendar.notifications.NotificationsLogActivity"
+            android:label="@string/notification_log"
+            android:parentActivityName="com.android.calendar.AllInOneActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="com.android.calendar.notifications.UpcomingNotificationsActivity"
+            android:label="@string/upcoming_events"
+            android:parentActivityName="com.android.calendar.AllInOneActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+
         <activity
             android:name="com.github.quarck.calnotify.prefs.CalendarsActivity"
             android:label="@string/title_calendars_activity"
             android:parentActivityName="com.android.calendar.AllInOneActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="com.github.quarck.calnotify.prefs.CalendarsActivity" />
@@ -323,8 +333,8 @@
             android:name="com.github.quarck.calnotify.ui.PrivacyPolicyActivity"
             android:label="@string/title_activity_privacy_policy"
             android:parentActivityName="com.android.calendar.AllInOneActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name="com.github.quarck.calnotify.ui.EditEventActivity"
             android:label="@string/empty"

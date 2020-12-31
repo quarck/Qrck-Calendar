@@ -7,13 +7,13 @@
     android:id="@+id/card_view_main_holder"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="@dimen/compact_view_layout_height"
     android:background="@color/true_black_as_night">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/compact_view_layout_height"
         android:id="@+id/compact_view_content_layout"
+        android:visibility="visible"
         >
 
         <View
@@ -161,7 +161,7 @@
     <RelativeLayout
         android:id="@+id/event_card_heading_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/compact_view_layout_height"
+        android:layout_height="48dp"
         android:background="@color/true_black_as_night"
         android:visibility="gone"
         >
@@ -170,7 +170,7 @@
             android:id="@+id/event_view_heading_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/primary_text"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"

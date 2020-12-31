@@ -534,10 +534,10 @@
     <string name="preferences_default_snooze_delay_default" translatable="false">5</string>
 
     <!-- About dialog strings -->
-    <string name="app_authors" translatable="false">Sergey Parshin\nForked from The Etar Project</string>
+    <string name="app_authors" translatable="false">Sergey Parshin\n(forked from The Etar Project)</string>
     <string name="app_authors_url" translatable="false">https://github.com/quarck/Seshat-Calendar/graphs/contributors</string>
     <string name="app_changelog" translatable="false">https://github.com/quarck/Seshat-Calendar/releases</string>
-    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin\n\u00a9 2015-<xliff:g>%1$s</xliff:g> The Etar Project\n\u00a9 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
+    <string name="app_copyright_updated" translatable="false">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin\n\u00a9 2015-<xliff:g>%1$s</xliff:g> The Etar Project\n\u00a9 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project</string>
     <string name="app_issues_url" translatable="false">https://github.com/quarck/Seshat-Calendar/issues</string>
     <string name="app_license" translatable="false">GPLv3</string>
     <string name="app_license_url" translatable="false">https://www.gnu.org/licenses/gpl-3.0.html</string>
@@ -1090,11 +1090,16 @@
     <string name="delete_recurring_event">Delete the recurring series?</string>
     <string name="edit_series_question">Edit the recurring series?\nOn save this will delete the old series and create new</string>
     <string name="can_only_edit_the_whole_series">ERROR: can only edit the whole series!</string>
-    <string name="today_semi">Upcoming today:</string>
-    <string name="tomorrow_and_following">On other days:</string>
+    <string name="today_semi">Today:</string>
+    <string name="no_more_today">Nothing for today</string>
+    <string name="tomorrow_and_following">Tomorrow+:</string>
+    <string name="no_more_other_days">Nothing for tomorrow</string>
     <string name="new_evt">New Evt.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="clear_log">Clear Log</string>
+    <string name="clear_log_confirmation">Clear log entries?</string>
+    <string name="no_undo">No undo available for this action</string>
 
 
 </resources>

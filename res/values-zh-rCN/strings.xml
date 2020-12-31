@@ -314,7 +314,6 @@
     <string name="preferences_calendar_delete_cancel">取消</string>
     <string name="preferences_menu_about">关于 Seshat</string>
     <string name="offline_account_name">离线日历</string>
-    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-<xliff:g>%1$s</xliff:g> The Etar Project. Portions © 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="authors">作者</string>
     <string name="changelog">更新日志</string>
     <string name="license">许可证</string>

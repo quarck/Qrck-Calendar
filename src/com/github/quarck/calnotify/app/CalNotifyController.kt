@@ -723,4 +723,11 @@ object CalNotifyController  {
 
         return moved
     }
+
+    fun clearLog(context: Context) {
+        FinishedEventsStorage(context).use {
+            db ->
+            db.clearHistory()
+        }
+    }
 }

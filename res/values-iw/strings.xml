@@ -331,7 +331,6 @@
     <string name="foreground_notification_channel_name">סנכרון התראות</string>
     <string name="maximum_number_of_lines">מספר שורות מרבי באירוע</string>
     <string name="foreground_notification_channel_description">נדרשות התראות בחזית לטובת סנכרון התרעות פנימי.</string>
-    <string name="app_copyright">\u00a9 2020-<xliff:g>%1$s</xliff:g> Sergey Parshin, © 2015-&lt;xliff:g xmlns:xliff=\"urn:oasis:names:tc:xliff:document:1.2\"&gt;%1$s&lt;/xliff:g&gt; מיזם Etar. חלקים מהמיזם © 2005-&lt;xliff:g xmlns:xliff=\"urn:oasis:names:tc:xliff:document:1.2\"&gt;%1$s&lt;/xliff:g&gt; מיזם הקוד הפתוח של Android.<xliff:g>%1$s</xliff:g> The Etar Project. Portions \u00a9 2005-<xliff:g>%1$s</xliff:g> The Android Open Source Project.</string>
     <string name="preferences_list_add_offline">הוספת לוח שנה בלתי מקוון</string>
     <string name="preferences_list_add_remote_etesync">הוספת לוח שנה EteSync</string>
     <string name="preferences_list_add_remote">הוספת לוח שנה CalDAV</string>

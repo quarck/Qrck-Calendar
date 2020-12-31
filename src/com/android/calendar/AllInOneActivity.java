@@ -20,6 +20,7 @@ import android.Manifest;
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -95,6 +96,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.jetbrains.annotations.NotNull;
 import org.qrck.seshat.BuildConfig;
 import org.qrck.seshat.R;
 import org.qrck.seshat.databinding.AllInOneMaterialBinding;
@@ -410,57 +412,42 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                     new String[]{Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     PERMISSIONS_REQUEST_WRITE_CALENDAR);
         } else {
-
             PowerManager pm = (PowerManager)getSystemService(Service.POWER_SERVICE);
 
             if (!pm.isIgnoringBatteryOptimizations(BuildConfig.APPLICATION_ID)) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                        .setTitle(getString(R.string.battery_optimisation_title))
-                        .setMessage(getString(R.string.battery_optimisation_details))
-                        .setPositiveButton(R.string.you_can_do_it, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                com.github.quarck.calnotify.Settings cnSettings = new com.github.quarck.calnotify.Settings(this);
+
+                if (!cnSettings.getDoNotShowBatteryOptimisationWarning()) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                            .setTitle(getString(R.string.battery_optimisation_title))
+                            .setMessage(getString(R.string.battery_optimisation_details))
+                            .setPositiveButton(R.string.you_can_do_it, (dialog, which) -> {
+                                @SuppressLint("BatteryLife")
                                 Intent intent = new Intent()
                                         .setAction(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
                                         .setData(Uri.parse("package:" + BuildConfig.APPLICATION_ID));
                                 startActivity(intent);
-                            }
-                        })
-                        .setNeutralButton(R.string.you_can_do_it_later, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        });
+                            })
+                            .setNeutralButton(R.string.you_can_do_it_later, (dialog, which) -> { })
+                            .setNegativeButton(getString(R.string.you_cannot_do_it), (dialog, which) ->
+                                    cnSettings.setDoNotShowBatteryOptimisationWarning(true));
 
-//                            .setNegativeButton(getString(R.string.you_cannot_do_it)) {
-//                    _, _ ->
-//                            settings.doNotShowBatteryOptimisationWarning = true
-//                }
-                builder.create().show();
+                    builder.create().show();
+                }
             }
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_WRITE_CALENDAR: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay!
-
-                } else {
-                    Toast.makeText(getApplicationContext(), R.string.user_rejected_calendar_write_permission, Toast.LENGTH_LONG).show();
-                }
-                return;
+    public void onRequestPermissionsResult(int requestCode, @NotNull String[] permissions, @NotNull int[] grantResults) {
+        if (requestCode == PERMISSIONS_REQUEST_WRITE_CALENDAR) {// If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0  && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // permission was granted, yay!
+            } else {
+                Toast.makeText(getApplicationContext(), R.string.user_rejected_calendar_write_permission, Toast.LENGTH_LONG).show();
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
+            return;
         }
 
         // Clean up cached ics and vcs files - in case onDestroy() didn't run the last time

@@ -28,11 +28,4 @@
         android:visible="true"
         />
 
-    <item
-        android:id="@+id/action_test_page"
-        android:orderInCategory="10000"
-        app:showAsAction="never"
-        android:title="Dev page"
-        android:visible="false"
-        tools:ignore="HardcodedText" />
 </menu>
