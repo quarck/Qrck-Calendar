@@ -22,6 +22,7 @@ package com.github.quarck.calnotify.calendarmonitor
 import android.content.ContentProviderResult
 import android.content.Context
 import android.content.Intent
+import android.provider.CalendarContract
 import com.github.quarck.calnotify.Consts
 import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.broadcastreceivers.ManualEventAlarmBroadcastReceiver
@@ -155,9 +156,18 @@ class CalendarMonitor(val calendarProvider: CalendarProvider) {
     }
 
     fun onEventEditedByUs(context: Context, results: Array<ContentProviderResult>) {
+        val calUri = CalendarContract.Events.CONTENT_URI.toString()
+
         for (result in results) {
             if (result.uri != null) {
+                if (!result.uri.toString().startsWith(calUri, ignoreCase = true))
+                    continue
 
+                val eventId = result.uri?.lastPathSegment?.toLong() ?: -1L
+                if (eventId > 0) {
+                    onEventEditedByUs(context, eventId)
+                }
+                break
             }
         }
     }

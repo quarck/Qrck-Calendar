@@ -736,7 +736,9 @@ public class CalendarController {
         final int MONTH = 4;
         final int EDIT = 5;
         final int NOTIFICATIONS = 6;
-        final int MAX_VALUE = 6;
+        final int NOTIFICATIONS_LOG = 7;
+        final int NOTIFICATIONS_UPCOMING = 8;
+        final int MAX_VALUE = 8;
     }
 
     public interface EventHandler {

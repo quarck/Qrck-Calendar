@@ -487,6 +487,12 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                 case ViewType.NOTIFICATIONS:
                     titleResource = R.string.active_events;
                     break;
+                case ViewType.NOTIFICATIONS_LOG:
+                    titleResource = R.string.notification_log;
+                    break;
+                case ViewType.NOTIFICATIONS_UPCOMING:
+                    titleResource = R.string.upcoming_events;
+                    break;
                 case ViewType.WEEK:
                 default:
                     titleResource = R.string.week_view;
@@ -523,18 +529,29 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Create new Event
-                Time t = new Time();
-                t.set(mController.getTime());
-                t.second = 0;
-                if (t.minute > 30) {
-                    t.hour++;
-                    t.minute = 0;
-                } else if (t.minute > 0 && t.minute < 30) {
-                    t.minute = 30;
+                if (mCurrentView == ViewType.NOTIFICATIONS ||
+                        mCurrentView == ViewType.NOTIFICATIONS_LOG ||
+                        mCurrentView == ViewType.NOTIFICATIONS_UPCOMING) {
+
+                    long currentTime = System.currentTimeMillis();
+                    long currentTimeRoundedUp = currentTime + 15 * 60 * 1000 - (currentTime % (15 * 60 * 1000));
+
+                    mController.sendEventRelatedEvent(
+                            this, EventType.CREATE_EVENT, -1, currentTimeRoundedUp, 0, 0, 0, -1);
+                } else {
+                    //Create new Event
+                    Time t = new Time();
+                    t.set(mController.getTime());
+                    t.second = 0;
+                    if (t.minute > 30) {
+                        t.hour++;
+                        t.minute = 0;
+                    } else if (t.minute > 0 && t.minute < 30) {
+                        t.minute = 30;
+                    }
+                    mController.sendEventRelatedEvent(
+                            this, EventType.CREATE_EVENT, -1, t.toMillis(true), 0, 0, 0, -1);
                 }
-                mController.sendEventRelatedEvent(
-                        this, EventType.CREATE_EVENT, -1, t.toMillis(true), 0, 0, 0, -1);
             }
         });
     }
@@ -757,7 +774,9 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             mController.registerEventHandler(
                     R.id.calendar_list, (EventHandler) selectCalendarsFrag);
         }
-        if (!mShowCalendarControls || viewType == ViewType.EDIT || viewType == ViewType.NOTIFICATIONS) {
+        if (!mShowCalendarControls || viewType == ViewType.EDIT
+                || viewType == ViewType.NOTIFICATIONS || viewType == ViewType.NOTIFICATIONS_LOG
+                || viewType == ViewType.NOTIFICATIONS_UPCOMING) {
             mMiniMonth.setVisibility(View.GONE);
             mCalendarsList.setVisibility(View.GONE);
         }
@@ -847,7 +866,10 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             getMenuInflater().inflate(extensionMenuRes, menu);
         }
 
-        boolean isNotificationsView = mController.getViewType() == ViewType.NOTIFICATIONS;
+        boolean isNotificationsView =
+                        (mController.getViewType() == ViewType.NOTIFICATIONS)||
+                        (mController.getViewType() == ViewType.NOTIFICATIONS_LOG)||
+                        (mController.getViewType() == ViewType.NOTIFICATIONS_UPCOMING);
 
         MenuItem item = menu.findItem(R.id.action_import);
         item.setVisible(ImportActivity.hasThingsToImport() && !isNotificationsView);
@@ -1324,7 +1346,9 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             if (mShowCalendarControls) {
                 int animationSize = (mOrientation == Configuration.ORIENTATION_LANDSCAPE) ?
                         mControlsAnimateWidth : mControlsAnimateHeight;
-                boolean noControlsView = event.viewType == ViewType.MONTH || event.viewType == ViewType.AGENDA || event.viewType == ViewType.NOTIFICATIONS;
+                boolean noControlsView = event.viewType == ViewType.MONTH || event.viewType == ViewType.AGENDA
+                        || event.viewType == ViewType.NOTIFICATIONS|| event.viewType == ViewType.NOTIFICATIONS_UPCOMING
+                        || event.viewType == ViewType.NOTIFICATIONS_LOG;
                 if (mControlsMenu != null) {
                     mControlsMenu.setVisible(!noControlsView);
                     mControlsMenu.setEnabled(!noControlsView);

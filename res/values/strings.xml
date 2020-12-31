@@ -1039,7 +1039,7 @@
 
     <string name="menu_home">Notifications</string>
     <string name="menu_upcoming">Upcoming</string>
-    <string name="menu_finished">Notification Log</string>
+    <string name="notification_log">Notification Log</string>
     <string name="active_events">Notifications</string>
     <string name="upcoming_events">Upcoming Notifications</string>
     <string name="finished_events">Notification Log</string>

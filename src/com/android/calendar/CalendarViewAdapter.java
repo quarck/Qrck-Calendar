@@ -58,6 +58,8 @@ public class CalendarViewAdapter extends BaseAdapter {
     private static final int BUTTON_VIEW_TYPE = 0;
     private final String[] mButtonNames;           // Text on buttons
     private final String mNotificationsButtonName;
+    private final String mNotificationsLogButtonName;
+    private final String mNotificationsUpcomingButtonName;
     private final LayoutInflater mInflater;
     private final Context mContext;
     private final Formatter mFormatter;
@@ -103,6 +105,8 @@ public class CalendarViewAdapter extends BaseAdapter {
         // Initialize
         mButtonNames = context.getResources().getStringArray(R.array.buttons_list);
         mNotificationsButtonName = context.getResources().getString(R.string.active_events);
+        mNotificationsLogButtonName = context.getResources().getString(R.string.notification_log);
+        mNotificationsUpcomingButtonName = context.getResources().getString(R.string.upcoming_events);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mStringBuilder = new StringBuilder(50);
         mFormatter = new Formatter(mStringBuilder, Locale.getDefault());
@@ -246,10 +250,12 @@ public class CalendarViewAdapter extends BaseAdapter {
                     date.setVisibility(View.VISIBLE);
                     break;
                 case ViewType.NOTIFICATIONS:
+                case ViewType.NOTIFICATIONS_LOG:
+                case ViewType.NOTIFICATIONS_UPCOMING:
                     weekDay.setVisibility(View.GONE);
                     lunarInfo.setVisibility(View.GONE);
                     date.setVisibility(View.GONE);
-                    date.setText("--");
+                    date.setText("");
                     //weekDay.setText(buildDayOfWeek());
                     //date.setText(buildFullDate());
                     break;
@@ -284,6 +290,12 @@ public class CalendarViewAdapter extends BaseAdapter {
                     break;
                 case ViewType.NOTIFICATIONS:
                     title.setText(mNotificationsButtonName);
+                    break;
+                case ViewType.NOTIFICATIONS_LOG:
+                    title.setText(mNotificationsLogButtonName);
+                    break;
+                case ViewType.NOTIFICATIONS_UPCOMING:
+                    title.setText(mNotificationsUpcomingButtonName);
                     break;
                 default:
                     v = null;

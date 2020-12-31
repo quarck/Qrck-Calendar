@@ -99,6 +99,8 @@ public class CalendarToolbarHandler {
                 mToolbar.setTitle(buildFullDate());
                 break;
             case CalendarController.ViewType.NOTIFICATIONS:
+            case CalendarController.ViewType.NOTIFICATIONS_LOG:
+            case CalendarController.ViewType.NOTIFICATIONS_UPCOMING:
                 mToolbar.setSubtitle("");
                 mToolbar.setTitle(mContext.getString(R.string.active_events));
                 break;

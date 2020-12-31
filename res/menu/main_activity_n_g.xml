@@ -11,6 +11,24 @@
         android:title="@string/snooze_all" />
 
     <item
+        android:id="@+id/action_upcoming"
+        android:orderInCategory="100"
+        app:showAsAction="ifRoom"
+        android:title="@string/menu_upcoming"
+        android:icon="@drawable/ic_inbox_white_24dp"
+        android:visible="true"
+        />
+
+    <item
+        android:id="@+id/action_log"
+        android:orderInCategory="110"
+        app:showAsAction="ifRoom"
+        android:title="@string/notification_log"
+        android:icon="@drawable/ic_done_all_white_24dp"
+        android:visible="true"
+        />
+
+    <item
         android:id="@+id/action_test_page"
         android:orderInCategory="10000"
         app:showAsAction="never"

@@ -71,6 +71,7 @@ import com.android.calendar.DeleteEventHelper;
 import com.android.calendar.Utils;
 import com.android.colorpicker.ColorPickerSwatch.OnColorSelectedListener;
 import com.android.colorpicker.HsvColorComparator;
+import com.github.quarck.calnotify.app.CalNotifyController;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -954,6 +955,9 @@ public class EditEventFragment extends Fragment implements EventHandler, OnColor
                     }
                 }
                 Toast.makeText(mActivity, stringResource, Toast.LENGTH_SHORT).show();
+                if (mModel.mId > 0) {
+                    CalNotifyController.getCalendarMonitor().onEventEditedByUs(getActivity(), mModel.mId);
+                }
             } else if ((mCode & Utils.DONE_SAVE) != 0 && mModel != null && isEmptyNewEvent()) {
                 Toast.makeText(mActivity, R.string.empty_event, Toast.LENGTH_SHORT).show();
             }
