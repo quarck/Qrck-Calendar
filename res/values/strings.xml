@@ -861,6 +861,7 @@
     </string-array>
 
     <string name="title_calendars_activity">Handled Calendars</string>
+    <string name="title_calendars_activity_sub">Enable/Disable notifications for specific calendar</string>
 
 
     <string name="before_event">before</string>

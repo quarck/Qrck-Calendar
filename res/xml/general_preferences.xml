@@ -24,8 +24,8 @@
             app:entryValues="@array/pref_theme_values"
             app:defaultValue="light" />
         <SwitchPreference
-            app:key="pref_pure_black_night_mode"
             app:defaultValue="false"
+            app:key="pref_pure_black_night_mode"
             app:title="@string/preferences_pure_black_night_mode" />
         <Preference
             app:key="pref_color"
@@ -83,29 +83,29 @@
     <PreferenceCategory
         app:key="preferences_alerts_category"
         app:title="@string/preferences_reminder_title">
-        <CheckBoxPreference
-            app:key="preferences_alerts"
-            app:defaultValue="true"
+        <Preference
+            app:key="preferences_notification"
             app:title="@string/preferences_alerts_title" />
 
         <Preference
-            app:key="preferences_alerts_ringtone"
-            app:title="@string/preferences_alerts_ringtone_title"
-            app:defaultValue="content://settings/system/notification_sound"
-            app:dependency="preferences_alerts" />
+            app:key="preferences_notification_alarm"
+            app:title="@string/preferences_alarm_alerts_title" />
 
-        <CheckBoxPreference
-            app:layout="?android:attr/preferenceLayoutChild"
-            app:key="preferences_alerts_vibrate"
-            app:title="@string/preferences_alerts_vibrateWhen_title"
-            app:defaultValue="false"
-            app:dependency="preferences_alerts" />
+        <PreferenceScreen
+            android:key="preferences_handled_calendars"
+            android:title="@string/title_calendars_activity"
+            android:summary="@string/title_calendars_activity_sub"
+            >
+            <intent
+                android:action="com.github.quarck.calnotify.prefs.CalendarsActivity"/>
+
+        </PreferenceScreen>
+
 
         <CheckBoxPreference
             app:key="preferences_alerts_popup"
             app:defaultValue="false"
-            app:title="@string/preferences_alerts_popup_title"
-            app:dependency="preferences_alerts" />
+            app:title="@string/preferences_alerts_popup_title" />
 
         <CheckBoxPreference
             app:key="preferences_custom_snooze_delay"
@@ -134,7 +134,7 @@
             app:fragment="com.android.calendar.settings.QuickResponsePreferences"
             app:title="@string/quick_response_settings"
             app:summary="@string/quick_response_settings_summary" />
-     </PreferenceCategory>
+    </PreferenceCategory>
     <PreferenceCategory
         app:key="preferences_experimental_category"
         app:title="@string/preferences_experimental_category">

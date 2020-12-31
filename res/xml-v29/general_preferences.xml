@@ -91,6 +91,16 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
         app:key="preferences_notification_alarm"
         app:title="@string/preferences_alarm_alerts_title" />
 
+    <PreferenceScreen
+        android:key="preferences_handled_calendars"
+        android:title="@string/title_calendars_activity"
+        android:summary="@string/title_calendars_activity_sub"
+        >
+        <intent
+            android:action="com.github.quarck.calnotify.prefs.CalendarsActivity"/>
+
+    </PreferenceScreen>
+
     <CheckBoxPreference
         app:key="preferences_alerts_popup"
         app:layout="?android:attr/preferenceLayoutChild"
