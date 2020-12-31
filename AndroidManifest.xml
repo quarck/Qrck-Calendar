@@ -218,9 +218,6 @@
             android:launchMode="singleInstance"
             android:theme="@android:style/Theme.Holo.Dialog" />
 
-        <receiver android:name="com.android.calendar.alerts.AlertReceiver">
-        </receiver>
-
         <receiver android:name="com.android.calendar.alerts.GlobalDismissManager"
                   android:exported="false" />
 
