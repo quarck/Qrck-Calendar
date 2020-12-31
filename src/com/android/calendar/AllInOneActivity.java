@@ -271,9 +271,6 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         // This needs to be created before setContentView
         mController = CalendarController.getInstance(this);
 
-        // Create notification channel
-        AlertService.createChannels(this);
-
         // Check and ask for most needed permissions
         checkAppPermissions();
 

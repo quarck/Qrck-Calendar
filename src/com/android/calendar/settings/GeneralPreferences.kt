@@ -39,7 +39,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.preference.*
 import com.android.calendar.*
-import com.android.calendar.alerts.AlertReceiver
 import com.android.calendar.event.EventViewUtils
 import com.android.timezonepicker.TimeZoneInfo
 import com.android.timezonepicker.TimeZonePickerUtils
@@ -59,8 +58,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
     private lateinit var defaultEventDurationPref: ListPreference
     private lateinit var useHomeTzPref: CheckBoxPreference
     private lateinit var homeTzPref: Preference
-    private lateinit var popupPref: CheckBoxPreference
-    private lateinit var snoozeDelayPref: ListPreference
     private lateinit var defaultReminderPref: ListPreference
     private lateinit var copyDbPref: Preference
     private lateinit var skipRemindersPref: ListPreference
@@ -70,10 +67,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
     private lateinit var alarmNotificationPref: Preference
 
     // < 26
-    private lateinit var alertPref: CheckBoxPreference
-    private lateinit var ringtonePref: Preference
-    private lateinit var vibratePref: CheckBoxPreference
-
     private lateinit var tzPickerUtils: TimeZonePickerUtils
     private var timeZoneId: String? = null
 
@@ -102,8 +95,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         defaultEventDurationPref = preferenceScreen.findPreference(KEY_DEFAULT_EVENT_DURATION)!!
         useHomeTzPref = preferenceScreen.findPreference(KEY_HOME_TZ_ENABLED)!!
         homeTzPref = preferenceScreen.findPreference(KEY_HOME_TZ)!!
-        popupPref = preferenceScreen.findPreference(KEY_ALERTS_POPUP)!!
-        snoozeDelayPref = preferenceScreen.findPreference(KEY_DEFAULT_SNOOZE_DELAY)!!
         defaultReminderPref = preferenceScreen.findPreference(KEY_DEFAULT_REMINDER)!!
         copyDbPref = preferenceScreen.findPreference(KEY_OTHER_COPY_DB)!!
         skipRemindersPref = preferenceScreen.findPreference(KEY_OTHER_REMINDERS_RESPONDED)!!
@@ -111,37 +102,14 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         val prefs = CalendarUtils.getSharedPreferences(activity!!,
                 Utils.SHARED_PREFS_NAME)
 
-        if (Utils.isOreoOrLater()) {
-            notificationPref = preferenceScreen.findPreference(KEY_NOTIFICATION)!!
-            alarmNotificationPref = preferenceScreen.findPreference(KEY_NOTIFICATION_ALARM)!!
-        } else {
-            alertPref = preferenceScreen.findPreference(KEY_ALERTS)!!
-            vibratePref = preferenceScreen.findPreference(KEY_ALERTS_VIBRATE)!!
-            val vibrator = activity!!.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            if (!vibrator.hasVibrator()) {
-                val alertGroup = preferenceScreen
-                        .findPreference<PreferenceCategory>(KEY_ALERTS_CATEGORY)!!
-                alertGroup.removePreference(vibratePref)
-            }
-            ringtonePref = preferenceScreen.findPreference(KEY_ALERTS_RINGTONE)!!
-            val ringtoneUriString = Utils.getRingtonePreference(activity)
+        notificationPref = preferenceScreen.findPreference(KEY_NOTIFICATION)!!
+        alarmNotificationPref = preferenceScreen.findPreference(KEY_NOTIFICATION_ALARM)!!
 
-            // Set the ringtoneUri to the backup-able shared pref only so that
-            // the Ringtone dialog will open up with the correct value.
-            val editor = prefs.edit()
-            editor.putString(KEY_ALERTS_RINGTONE, ringtoneUriString).apply()
-
-            val ringtoneDisplayString = getRingtoneTitleFromUri(activity!!, ringtoneUriString)
-            ringtonePref.summary = ringtoneDisplayString ?: ""
-        }
-
-        buildSnoozeDelayEntries()
         defaultEventDurationPref.summary = defaultEventDurationPref.entry
         themePref.summary = themePref.entry
         weekStartPref.summary = weekStartPref.entry
         dayWeekPref.summary = dayWeekPref.entry
         defaultReminderPref.summary = defaultReminderPref.entry
-        snoozeDelayPref.summary = snoozeDelayPref.entry
 
         // This triggers an asynchronous call to the provider to refresh the data in shared pref
         timeZoneId = Utils.getTimeZone(activity, null)
@@ -252,12 +220,8 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         defaultEventDurationPref.onPreferenceChangeListener = listener
         useHomeTzPref.onPreferenceChangeListener = listener
         homeTzPref.onPreferenceChangeListener = listener
-        snoozeDelayPref.onPreferenceChangeListener = listener
         defaultReminderPref.onPreferenceChangeListener = listener
         skipRemindersPref.onPreferenceChangeListener = listener
-        if (!Utils.isOreoOrLater()) {
-            vibratePref.onPreferenceChangeListener = listener
-        }
     }
 
     override fun onStop() {
@@ -271,16 +235,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         BackupManager.dataChanged(a.packageName)
 
         when (key) {
-            KEY_ALERTS -> {
-                val intent = Intent()
-                intent.setClass(a, AlertReceiver::class.java)
-                if (alertPref.isChecked) {
-                    intent.action = AlertReceiver.ACTION_DISMISS_OLD_REMINDERS
-                } else {
-                    intent.action = AlertReceiver.EVENT_REMINDER_APP_ACTION
-                }
-                a.sendBroadcast(intent)
-            }
             KEY_THEME_PREF -> {
                 Utils.sendUpdateWidgetIntent(a)
                 a.recreate()
@@ -298,15 +252,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
     }
 
     override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
-        if (!Utils.isOreoOrLater()) {
-            when (preference) {
-                vibratePref -> {
-                    vibratePref.isChecked = newValue as Boolean
-                    return true
-                }
-            }
-        }
-
         when (preference) {
             useHomeTzPref -> {
                 val useHomeTz = newValue as Boolean
@@ -345,10 +290,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
                 defaultReminderPref.value = newValue as String
                 defaultReminderPref.summary = defaultReminderPref.entry
             }
-            snoozeDelayPref -> {
-                snoozeDelayPref.value = newValue as String
-                snoozeDelayPref.summary = snoozeDelayPref.entry
-            }
             skipRemindersPref -> {
                 updateSkipRemindersSummary(newValue as String)
             }
@@ -357,28 +298,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
             }
         }
         return false
-    }
-
-    private fun getRingtoneTitleFromUri(context: Context, uri: String): String? {
-        if (TextUtils.isEmpty(uri)) {
-            return null
-        }
-
-        val ring = RingtoneManager.getRingtone(activity, Uri.parse(uri))
-        return ring?.getTitle(context)
-    }
-
-    private fun buildSnoozeDelayEntries() {
-        val values = snoozeDelayPref.entryValues
-        val count = values.size
-        val entries = arrayOfNulls<CharSequence>(count)
-
-        for (i in 0 until count) {
-            val value = Integer.parseInt(values[i].toString())
-            entries[i] = EventViewUtils.constructReminderLabel(activity!!, value, false)
-        }
-
-        snoozeDelayPref.entries = entries
     }
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
@@ -393,10 +312,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
             }
             KEY_CLEAR_SEARCH_HISTORY -> {
                 clearSearchHistory()
-                return true
-            }
-            KEY_ALERTS_RINGTONE -> {
-                showRingtoneManager()
                 return true
             }
             KEY_NOTIFICATION -> {
@@ -440,47 +355,8 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         com.github.quarck.calnotify.notification.NotificationChannelManager.launchChannelSettings(activity!!, true)
     }
 
-    /**
-     * AndroidX does not include the RingtonePreference
-     * This code is based on https://issuetracker.google.com/issues/37057453#comment3
-     */
-    private fun showRingtoneManager() {
-        val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
-            putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
-            putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
-            putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
-            putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_NOTIFICATION_URI)
-        }
-
-        val existingValue = Utils.getRingtonePreference(activity)
-        if (existingValue != null) {
-            if (existingValue.isEmpty()) {
-                // Select "Silent"
-                val empty: Uri? = null
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, empty)
-            } else {
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(existingValue))
-            }
-        } else {
-            // No ringtone has been selected, set to the default
-            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Settings.System.DEFAULT_NOTIFICATION_URI)
-        }
-
-        startActivityForResult(intent, REQUEST_CODE_ALERT_RINGTONE)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == REQUEST_CODE_ALERT_RINGTONE && data != null) {
-            val ringtone = data.getParcelableExtra<Uri>(RingtoneManager.EXTRA_RINGTONE_PICKED_URI)
-            // ringtone is null when "Silent" was selected
-            val ringtoneString = ringtone?.toString() ?: ""
-
-            Utils.setRingtonePreference(activity, ringtoneString)
-            val ringtoneDisplayString = getRingtoneTitleFromUri(activity!!, ringtoneString)
-            ringtonePref.summary = ringtoneDisplayString ?: ""
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
-        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     override fun onTimeZoneSet(tzi: TimeZoneInfo) {
@@ -502,19 +378,13 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         const val KEY_MDAYS_PER_WEEK = "preferences_mdays_per_week"
         const val KEY_CLEAR_SEARCH_HISTORY = "preferences_clear_search_history"
         const val KEY_ALERTS_CATEGORY = "preferences_alerts_category"
-        const val KEY_ALERTS = "preferences_alerts"
         const val KEY_NOTIFICATION = "preferences_notification"
         const val KEY_NOTIFICATION_ALARM = "preferences_notification_alarm"
-        const val KEY_ALERTS_VIBRATE = "preferences_alerts_vibrate"
-        const val KEY_ALERTS_RINGTONE = "preferences_alerts_ringtone"
-        const val KEY_ALERTS_POPUP = "preferences_alerts_popup"
         const val KEY_SHOW_CONTROLS = "KEY_SHOW_CONTROLS"
         const val KEY_DEFAULT_REMINDER = "preferences_default_reminder"
         const val NO_REMINDER = -1
         const val NO_REMINDER_STRING = "-1"
         const val REMINDER_DEFAULT_TIME = 10 // in minutes
-        const val KEY_USE_CUSTOM_SNOOZE_DELAY = "preferences_custom_snooze_delay"
-        const val KEY_DEFAULT_SNOOZE_DELAY = "preferences_default_snooze_delay"
         const val SNOOZE_DELAY_DEFAULT_TIME = 5 // in minutes
         const val KEY_DEFAULT_CELL_HEIGHT = "preferences_default_cell_height"
         const val KEY_VERSION = "preferences_version"

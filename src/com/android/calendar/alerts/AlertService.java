@@ -173,16 +173,6 @@ public class AlertService extends Service {
         }
 
 
-        if (!prefs.getBoolean(GeneralPreferences.KEY_ALERTS, true) && !Utils.isOreoOrLater()) {
-            if (DEBUG) {
-                Log.d(TAG, "alert preference is OFF");
-            }
-
-            // If we shouldn't be showing notifications cancel any existing ones
-            // and return.
-            nm.cancelAll();
-            return true;
-        }
 
         // Sync CalendarAlerts with global dismiss cache before query it
         GlobalDismissManager.syncReceiverDismissCache(context);
@@ -289,8 +279,6 @@ public class AlertService extends Service {
 
             // Add options for a quiet update.
             addNotificationOptions(notification, true, expiredDigestTitle,
-                    notificationPrefs.getDefaultVibrate(),
-                    notificationPrefs.getRingtoneAndSilence(),
                     false); /* Do not show the LED for the expired events. */
 
             if (DEBUG) {
@@ -704,19 +692,16 @@ public class AlertService extends Service {
         String tickerText = getTickerText(info.eventName, info.location);
         NotificationWrapper notification = AlertReceiver.makeExpandingNotification(context,
                 info.eventName, summaryText, info.description, info.startMillis,
-                info.endMillis, info.eventId, notificationId, prefs.getDoPopup(), priorityVal);
+                info.endMillis, info.eventId, notificationId, false, priorityVal);
 
         boolean quietUpdate = true;
-        String ringtone = NotificationPrefs.EMPTY_RINGTONE;
         if (info.newAlert) {
             quietUpdate = prefs.quietUpdate;
 
             // If we've already played a ringtone, don't play any more sounds so only
             // 1 sound per group of notifications.
-            ringtone = prefs.getRingtoneAndSilence();
         }
         addNotificationOptions(notification, quietUpdate, tickerText,
-                prefs.getDefaultVibrate(), ringtone,
                 true); /* Show the LED for these non-expired events */
 
         // Post the notification.
@@ -725,7 +710,6 @@ public class AlertService extends Service {
         if (DEBUG) {
             Log.d(TAG, "Posting individual alarm notification, eventId:" + info.eventId
                     + ", notificationId:" + notificationId
-                    + (TextUtils.isEmpty(ringtone) ? ", quiet" : ", LOUD")
                     + (highPriority ? ", high-priority" : ""));
         }
     }
@@ -739,7 +723,7 @@ public class AlertService extends Service {
     }
 
     private static void addNotificationOptions(NotificationWrapper nw, boolean quietUpdate,
-            String tickerText, boolean defaultVibrate, String reminderRingtone,
+            String tickerText,
             boolean showLights) {
         Notification notification = nw.mNotification;
 
@@ -754,19 +738,6 @@ public class AlertService extends Service {
             if (!TextUtils.isEmpty(tickerText)) {
                 notification.tickerText = tickerText;
             }
-
-            // Generate either a pop-up dialog, status bar notification, or
-            // neither. Pop-up dialog and status bar notification may include a
-            // sound, an alert, or both. A status bar notification also includes
-            // a toast.
-            if (defaultVibrate) {
-                notification.defaults |= Notification.DEFAULT_VIBRATE;
-            }
-
-            // Possibly generate a sound. If 'Silent' is chosen, the ringtone
-            // string will be empty.
-            notification.sound = TextUtils.isEmpty(reminderRingtone) ? null : Uri
-                    .parse(reminderRingtone);
         }
     }
 
@@ -1070,37 +1041,6 @@ public class AlertService extends Service {
             this.context = context;
             this.prefs = prefs;
             this.quietUpdate = quietUpdate;
-        }
-
-        private boolean getDoPopup() {
-            if (doPopup < 0) {
-                if (prefs.getBoolean(GeneralPreferences.KEY_ALERTS_POPUP, false)) {
-                    doPopup = 1;
-                } else {
-                    doPopup = 0;
-                }
-            }
-            return doPopup == 1;
-        }
-
-        private boolean getDefaultVibrate() {
-            if (defaultVibrate < 0) {
-                defaultVibrate = Utils.getDefaultVibrate(context, prefs) ? 1 : 0;
-            }
-            return defaultVibrate == 1;
-        }
-
-        private String getRingtoneAndSilence() {
-            if (ringtone == null) {
-                if (quietUpdate) {
-                    ringtone = EMPTY_RINGTONE;
-                } else {
-                    ringtone = Utils.getRingtonePreference(context);
-                }
-            }
-            String retVal = ringtone;
-            ringtone = EMPTY_RINGTONE;
-            return retVal;
         }
     }
 

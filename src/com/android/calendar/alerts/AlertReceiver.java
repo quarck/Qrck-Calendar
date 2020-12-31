@@ -119,29 +119,6 @@ public class AlertReceiver extends BroadcastReceiver {
     }
 
     /**
-     * Start the service to process the current event notifications, acquiring
-     * the wake lock before returning to ensure that the service will run.
-     */
-    public static void beginStartingService(Context context, Intent intent) {
-        synchronized (mStartingServiceSync) {
-            if (mStartingService == null) {
-                PowerManager pm =
-                    (PowerManager)context.getSystemService(Context.POWER_SERVICE);
-                mStartingService = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                        "Seshat:StartingAlertService");
-                mStartingService.setReferenceCounted(false);
-            }
-            mStartingService.acquire();
-            if (Utils.isOreoOrLater()) {
-                context.startForegroundService(intent);
-            } else {
-                context.startService(intent);
-            }
-
-        }
-    }
-
-    /**
      * Called back by the service when it has finished processing notifications,
      * releasing the wake lock if the service is now stopping.
      */
@@ -202,13 +179,8 @@ public class AlertReceiver extends BroadcastReceiver {
         ContentUris.appendId(builder, startMillis);
         intent.setData(builder.build());
 
-        if (Utils.useCustomSnoozeDelay(context)) {
-            intent.setClass(context, SnoozeDelayActivity.class);
-            return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        } else {
-            intent.setClass(context, SnoozeAlarmsService.class);
-            return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        }
+        intent.setClass(context, SnoozeAlarmsService.class);
+        return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
     private static PendingIntent createAlertActivityIntent(Context context) {
@@ -820,18 +792,6 @@ public class AlertReceiver extends BroadcastReceiver {
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(i);
             }
-        } else {
-            Intent i = new Intent();
-            i.setClass(context, AlertService.class);
-            i.putExtras(intent);
-            i.putExtra("action", intent.getAction());
-            Uri uri = intent.getData();
-
-
-            if (uri != null) {
-                i.putExtra("uri", uri.toString());
-            }
-            beginStartingService(context, i);
         }
     }
 

@@ -41,11 +41,6 @@ public class CalendarBackupAgent extends BackupAgentHelper
     public void onRestore(BackupDataInput data, int appVersionCode, ParcelFileDescriptor newState)
             throws IOException {
         // See Utils.getRingtonePreference for more info
-        final Editor editor = getSharedPreferences(
-                GeneralPreferences.SHARED_PREFS_NAME_NO_BACKUP, Context.MODE_PRIVATE).edit();
-        editor.putString(GeneralPreferences.KEY_ALERTS_RINGTONE,
-                GeneralPreferences.DEFAULT_RINGTONE).commit();
-
         super.onRestore(data, appVersionCode, newState);
     }
 }

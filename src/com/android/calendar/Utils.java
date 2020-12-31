@@ -310,13 +310,6 @@ public class Utils {
         return mTZUtils.formatDateRange(context, startMillis, endMillis, flags);
     }
 
-    public static boolean getDefaultVibrate(Context context, SharedPreferences prefs) {
-        boolean vibrate;
-        vibrate = prefs.getBoolean(GeneralPreferences.KEY_ALERTS_VIBRATE,
-                    false);
-        return vibrate;
-    }
-
     public static String[] getSharedPreference(Context context, String key, String[] defaultValue) {
         SharedPreferences prefs = GeneralPreferences.Companion.getSharedPreferences(context);
         Set<String> ss = prefs.getStringSet(key, null);
@@ -381,40 +374,6 @@ public class Utils {
         prefs.edit().remove(key).apply();
     }
 
-    // The backed up ring tone preference should not used because it is a device
-    // specific Uri. The preference now lives in a separate non-backed-up
-    // shared_pref file (SHARED_PREFS_NAME_NO_BACKUP). The preference in the old
-    // backed-up shared_pref file (SHARED_PREFS_NAME) is used only to control the
-    // default value when the ringtone dialog opens up.
-    //
-    // At backup manager "restore" time (which should happen before launcher
-    // comes up for the first time), the value will be set/reset to default
-    // ringtone.
-    public static String getRingtonePreference(Context context) {
-        SharedPreferences prefs = context.getSharedPreferences(
-                GeneralPreferences.SHARED_PREFS_NAME_NO_BACKUP, Context.MODE_PRIVATE);
-        String ringtone = prefs.getString(GeneralPreferences.KEY_ALERTS_RINGTONE, null);
-
-        // If it hasn't been populated yet, that means new code is running for
-        // the first time and restore hasn't happened. Migrate value from
-        // backed-up shared_pref to non-shared_pref.
-        if (ringtone == null) {
-            // Read from the old place with a default of DEFAULT_RINGTONE
-            ringtone = getSharedPreference(context, GeneralPreferences.KEY_ALERTS_RINGTONE,
-                    GeneralPreferences.DEFAULT_RINGTONE);
-
-            // Write it to the new place
-            setRingtonePreference(context, ringtone);
-        }
-
-        return ringtone;
-    }
-
-    public static void setRingtonePreference(Context context, String value) {
-        SharedPreferences prefs = context.getSharedPreferences(
-                GeneralPreferences.SHARED_PREFS_NAME_NO_BACKUP, Context.MODE_PRIVATE);
-        prefs.edit().putString(GeneralPreferences.KEY_ALERTS_RINGTONE, value).apply();
-    }
 
     /**
      * Save default agenda/day/week/month view for next time
@@ -702,21 +661,6 @@ public class Utils {
     public static int getMDaysPerWeek(Context context) {
         final SharedPreferences prefs = GeneralPreferences.Companion.getSharedPreferences(context);
         return Integer.valueOf(prefs.getString(GeneralPreferences.KEY_MDAYS_PER_WEEK, "7"));
-    }
-
-    public static boolean useCustomSnoozeDelay(Context context) {
-        final SharedPreferences prefs = GeneralPreferences.Companion.getSharedPreferences(context);
-        return prefs.getBoolean(GeneralPreferences.KEY_USE_CUSTOM_SNOOZE_DELAY, false);
-    }
-
-    public static long getDefaultSnoozeDelayMs(Context context) {
-        final SharedPreferences prefs = GeneralPreferences.Companion.getSharedPreferences(context);
-        final String value = prefs.getString(GeneralPreferences.KEY_DEFAULT_SNOOZE_DELAY, null);
-        final long intValue = value != null
-                ? Long.valueOf(value)
-                : GeneralPreferences.SNOOZE_DELAY_DEFAULT_TIME;
-
-        return intValue * 60L * 1000L; // min -> ms
     }
 
     /**

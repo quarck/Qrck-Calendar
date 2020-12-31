@@ -101,26 +101,6 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
 
     </PreferenceScreen>
 
-    <CheckBoxPreference
-        app:key="preferences_alerts_popup"
-        app:layout="?android:attr/preferenceLayoutChild"
-        app:defaultValue="false"
-        app:title="@string/preferences_alerts_popup_title" />
-
-    <CheckBoxPreference
-        app:key="preferences_custom_snooze_delay"
-        app:defaultValue="false"
-        app:title="@string/preferences_alerts_custom_snooze_delay_title"
-        app:summaryOn="@string/preferences_alerts_custom_snooze_delay_summary_on"
-        app:summaryOff="@string/preferences_alerts_custom_snooze_delay_summary_off" />
-
-    <ListPreference
-        app:key="preferences_default_snooze_delay"
-        app:defaultValue="@string/preferences_default_snooze_delay_default"
-        app:entryValues="@array/preferences_default_snooze_delay_values"
-        app:title="@string/preferences_default_snooze_delay_title"
-        app:dialogTitle="@string/preferences_default_snooze_delay_dialog" />
-
     <ListPreference
         app:key="preferences_default_reminder"
         app:defaultValue="@string/preferences_default_reminder_default"
@@ -134,6 +114,8 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
         app:fragment="com.android.calendar.settings.QuickResponsePreferences"
         app:title="@string/quick_response_settings"
         app:summary="@string/quick_response_settings_summary" />
+
+
 </PreferenceCategory>
 <PreferenceCategory
     app:key="preferences_experimental_category"

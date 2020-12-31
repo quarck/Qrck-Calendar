@@ -59,8 +59,7 @@ public class SnoozeAlarmsService extends IntentService {
         long eventId = intent.getLongExtra(AlertUtils.EVENT_ID_KEY, -1);
         long eventStart = intent.getLongExtra(AlertUtils.EVENT_START_KEY, -1);
         long eventEnd = intent.getLongExtra(AlertUtils.EVENT_END_KEY, -1);
-        long snoozeDelay = intent.getLongExtra(AlertUtils.SNOOZE_DELAY_KEY,
-                Utils.getDefaultSnoozeDelayMs(this));
+        long snoozeDelay = intent.getLongExtra(AlertUtils.SNOOZE_DELAY_KEY, 1000000);
 
         // The ID reserved for the expired notification digest should never be passed in
         // here, so use that as a default.
@@ -76,7 +75,7 @@ public class SnoozeAlarmsService extends IntentService {
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 nm.cancel(notificationId);
             }
-            if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
+            if (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.WRITE_CALENDAR)
                     != PackageManager.PERMISSION_GRANTED) {
                 //If permission is not granted then just return.

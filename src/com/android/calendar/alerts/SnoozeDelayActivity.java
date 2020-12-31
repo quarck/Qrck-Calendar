@@ -54,7 +54,7 @@ public class SnoozeDelayActivity extends Activity implements
     protected void onPrepareDialog(int id, Dialog d) {
         if (id == DIALOG_DELAY) {
             TimePickerDialog tpd = (TimePickerDialog) d;
-            int delayMinutes = (int) (Utils.getDefaultSnoozeDelayMs(this) / (60L * 1000L));
+            int delayMinutes = 15;
             int hours = delayMinutes / 60;
             int minutes = delayMinutes % 60;
 
