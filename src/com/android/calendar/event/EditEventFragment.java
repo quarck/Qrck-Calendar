@@ -435,8 +435,7 @@ public class EditEventFragment extends Fragment implements EventHandler, OnColor
                 mOnDone.run();
             }
         } else if (itemId == R.id.action_cancel) {
-            mOnDone.setDoneCode(Utils.DONE_REVERT);
-            mOnDone.run();
+            onBackPressed();
         }
         return true;
     }
@@ -641,6 +640,33 @@ public class EditEventFragment extends Fragment implements EventHandler, OnColor
             mModel.setEventColor(color);
             mView.updateHeadlineColor(color);
         }
+    }
+
+    /*
+     * returns false true if we are allowed to exit
+    * */
+    public void onBackPressed() {
+
+        mView.prepareForSave();
+
+        if (isEmptyNewEvent()) {
+            mOnDone.setDoneCode(Utils.DONE_REVERT);
+            mOnDone.run();
+            return;
+        }
+
+        new AlertDialog.Builder(this.getActivity())
+                .setMessage(R.string.discard_new_event)
+                .setCancelable(false)
+                .setPositiveButton(R.string.yes, (dialog, which) -> {
+                    mOnDone.setDoneCode(Utils.DONE_REVERT);
+                    mOnDone.run();
+                })
+                .setNegativeButton(R.string.cancel, (dialog, which) -> {
+
+                })
+                .create()
+                .show();
     }
 
     private static class EventBundle implements Serializable {

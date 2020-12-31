@@ -176,4 +176,11 @@ public class EditEventActivity extends AbstractCalendarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (mEditFragment == null)
+            finish();
+        mEditFragment.onBackPressed();
+    }
 }
