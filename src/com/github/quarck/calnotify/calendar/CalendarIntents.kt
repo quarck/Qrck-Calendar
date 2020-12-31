@@ -23,6 +23,7 @@ import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
 import android.provider.CalendarContract
+import com.android.calendar.event.EditEventActivity
 import com.github.quarck.calnotify.utils.logs.DevLog
 //import com.github.quarck.calnotify.utils.logs.Logger
 
@@ -34,9 +35,7 @@ object CalendarIntents {
     private fun intentForAction(action: String, eventId: Long): Intent {
 
         val uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId);
-        val intent = Intent(action).setData(uri)
-
-        return intent
+        return Intent(action).setData(uri)
     }
 
     private fun intentForAction(action: String, event: EventAlertRecord): Intent {
@@ -61,12 +60,15 @@ object CalendarIntents {
         return intent
     }
 
-//    fun calendarViewIntent(event: EventAlertRecord)
-//            = intentForAction(Intent.ACTION_VIEW, event)
+    fun viewCalendarEvent(context: Context, event: EventAlertRecord) {
+        val intent = intentForAction(Intent.ACTION_VIEW, event)
+        intent.setClass(context, com.android.calendar.EventInfoActivity::class.java)
+        context.startActivity(intent)
+    }
 
-    fun viewCalendarEvent(context: Context, event: EventAlertRecord)
-            = context.startActivity(intentForAction(Intent.ACTION_VIEW, event))
-
-    fun viewCalendarEvent(context: Context, eventId: Long)
-            = context.startActivity(intentForAction(Intent.ACTION_VIEW, eventId))
+    fun viewCalendarEvent(context: Context, eventId: Long) {
+        val intent = intentForAction(Intent.ACTION_VIEW, eventId)
+        intent.setClass(context, com.android.calendar.EventInfoActivity::class.java)
+        context.startActivity(intent)
+    }
 }

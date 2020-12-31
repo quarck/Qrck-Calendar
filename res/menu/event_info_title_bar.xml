@@ -35,13 +35,6 @@
         android:title="@string/edit_label"
         android:visible="false"
         app:showAsAction="always" />
-    <item android:id="@+id/info_action_export"
-        android:alphabeticShortcut="x"
-        android:title="@string/cal_export_event_sdcard_title"
-        android:icon="@drawable/ic_save_event"
-        android:enabled="true"
-        android:visible="true"
-        app:showAsAction="always"/>
     <item android:id="@+id/info_action_delete"
         android:alphabeticShortcut="d"
         android:enabled="false"

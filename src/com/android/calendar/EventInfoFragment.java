@@ -1103,9 +1103,10 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
             showEventColorPickerDialog();
         } else if (itemId == R.id.info_action_share_event) {
             shareEvent(ShareType.INTENT);
-        } else if (itemId == R.id.info_action_export) {
-            shareEvent(ShareType.SDCARD);
         }
+//        // else if (itemId == R.id.info_action_export) {
+//            shareEvent(ShareType.SDCARD);
+//        }
         return super.onOptionsItemSelected(item);
     }
 

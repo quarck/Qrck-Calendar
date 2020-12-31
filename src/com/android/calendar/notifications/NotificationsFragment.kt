@@ -117,7 +117,7 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, menuInflater)
         DevLog.info(LOG_TAG, "onCreateOptionsMenu")
-        menuInflater.inflate(R.menu.main_activity_n_g, menu)
+        menuInflater.inflate(R.menu.notifications_menu, menu)
 
         val menuItem = menu.findItem(R.id.action_snooze_all)
         if (menuItem != null) {
