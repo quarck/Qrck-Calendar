@@ -304,10 +304,12 @@
         <activity
             android:name="com.android.calendar.notifications.NotificationsLogActivity"
             android:label="@string/notification_log"
+            android:parentActivityName="com.android.calendar.AllInOneActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.android.calendar.notifications.UpcomingNotificationsActivity"
             android:label="@string/upcoming_events"
+            android:parentActivityName="com.android.calendar.AllInOneActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
 
