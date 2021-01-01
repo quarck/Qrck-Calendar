@@ -1,4 +1,3 @@
-![Seshat Calendar](metadata/en-US/images/featureGraphic.png)
 # Seshat Calendar
 Seshat (the ancient Egyptian goddess of wisdom, knowledge, and writing) is an open source material designed calendar made for everyone!
 Forked from The Etar Calendar.
@@ -50,14 +49,7 @@ an event to which calendar it should be added.
 - READ_CALENDAR & WRITE_CALENDAR  
 ->read and create calendar events
 
-## Contribute
-### Translations
-Interested in helping to translate Seshat? Contribute here: https://hosted.weblate.org/projects/Seshat-calendar/strings/
-
-##### Google Play app description:
-You can update/add your own language and all artwork files [here](metadata)
-
-### Build instructions
+## Build instructions
 Install and extract Android SDK command line tools.
 ```
 tools/bin/sdkmanager platform-tools
@@ -71,9 +63,9 @@ Copyright (c) 2005-2013, The Android Open Source Project
 
 Copyright (c) 2013, Dominik Schürmann
 
-Copyright (c) 2015-2020, The Seshat Project
+Copyright (c) 2015-2020, The Etar Project
 
-Copyright (c) 2020-, Sergey Parshin
+Copyright (c) 2020-2021, Sergey Parshin
 
 Licensed under the GPLv3: https://www.gnu.org/licenses/gpl-3.0.html
 Except where otherwise noted.
