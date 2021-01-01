@@ -32,7 +32,6 @@ import android.widget.RemoteViews;
 
 import com.android.calendar.AllInOneActivity;
 import com.android.calendar.DynamicTheme;
-import com.android.calendar.EventInfoActivity;
 import com.android.calendar.Utils;
 import com.github.quarck.calnotify.ui.ViewEventActivity;
 

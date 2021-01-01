@@ -327,7 +327,8 @@
                 android:minHeight="20dip"
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/accessibility_add_reminder"
-                style="@style/TextAppearance.EditEvent_LabelSmall" />
+                style="@style/TextAppearance.EditEvent_LabelSmall"
+                android:visibility="gone"/>
         </LinearLayout>
         </ScrollView>
     </RelativeLayout>

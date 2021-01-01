@@ -57,7 +57,6 @@ public class AgendaListView extends ListView implements OnItemClickListener {
             mTime.switchTimezone(mTimeZone);
         }
     };
-    private boolean mShowEventDetailsWithAgenda;
     private Handler mHandler = null;
     // runs every midnight and refreshes the view in order to update the past/present
     // separator
@@ -92,14 +91,12 @@ public class AgendaListView extends ListView implements OnItemClickListener {
         setOnItemClickListener(this);
         setVerticalScrollBarEnabled(false);
         mWindowAdapter = new AgendaWindowAdapter(context, this,
-                Utils.getConfigBool(context, R.bool.show_event_details_with_agenda));
+                false);
         mWindowAdapter.setSelectedInstanceId(-1/* TODO:instanceId */);
         setAdapter(mWindowAdapter);
         setCacheColorHint(context.getResources().getColor(R.color.agenda_item_not_selected));
         mDeleteEventHelper =
                 new DeleteEventHelper(context, null, false /* don't exit when done */);
-        mShowEventDetailsWithAgenda = Utils.getConfigBool(mContext,
-                R.bool.show_event_details_with_agenda);
         // Hide ListView dividers, they are done in the item views themselves
         setDivider(null);
         setDividerHeight(0);
@@ -178,8 +175,7 @@ public class AgendaListView extends ListView implements OnItemClickListener {
             // If events are shown to the side of the agenda list , do nothing
             // when the same event is selected , otherwise show the selected event.
 
-            if (item != null && (oldInstanceId != mWindowAdapter.getSelectedInstanceId() ||
-                    !mShowEventDetailsWithAgenda)) {
+            if (item != null) {
                 long startTime = item.begin;
                 long endTime = item.end;
                 // Holder in view holds the start of the specific part of a multi-day event ,
@@ -297,14 +293,12 @@ public class AgendaListView extends ListView implements OnItemClickListener {
         // mShowEventDetailsWithAgenda == true implies we have a sticky header. In that case
         // we may need to take the second visible position, since the first one maybe the one
         // under the sticky header.
-        if (mShowEventDetailsWithAgenda) {
-            View v = getFirstVisibleView ();
-            if (v != null) {
-                Rect r = new Rect ();
-                v.getLocalVisibleRect(r);
-                if (r.bottom - r.top <=  mWindowAdapter.getStickyHeaderHeight()) {
-                    position ++;
-                }
+        View v = getFirstVisibleView ();
+        if (v != null) {
+            Rect r = new Rect ();
+            v.getLocalVisibleRect(r);
+            if (r.bottom - r.top <=  mWindowAdapter.getStickyHeaderHeight()) {
+                position ++;
             }
         }
 

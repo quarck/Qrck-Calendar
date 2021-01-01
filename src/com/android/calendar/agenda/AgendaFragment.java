@@ -38,7 +38,6 @@ import com.android.calendar.CalendarController;
 import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
-import com.android.calendar.EventInfoFragment;
 import com.android.calendar.StickyHeaderListView;
 import com.android.calendar.Utils;
 import com.android.calendar.settings.GeneralPreferences;
@@ -69,9 +68,7 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
             mTime.switchTimezone(mTimeZone);
         }
     };
-    private boolean mShowEventDetailsWithAgenda;
     private CalendarController mController;
-    private EventInfoFragment mEventFragment;
     private String mQuery;
     private boolean mUsedForSearch = false;
     private boolean mIsTabletConfig;
@@ -119,8 +116,6 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         mController = CalendarController.getInstance(mActivity);
-        mShowEventDetailsWithAgenda =
-            Utils.getConfigBool(mActivity, R.bool.show_event_details_with_agenda);
         mIsTabletConfig =
             Utils.getConfigBool(mActivity, R.bool.tablet_config);
         if (icicle != null) {
@@ -153,9 +148,7 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
         }
 
         View eventView =  v.findViewById(R.id.agenda_event_info);
-        if (!mShowEventDetailsWithAgenda) {
-            eventView.setVisibility(View.GONE);
-        }
+        eventView.setVisibility(View.GONE);
 
         View topListView;
         // Set adapter & HeaderIndexer for StickyHeaderListView
@@ -188,18 +181,9 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
         // fragment to re-measure when the sticky header is replaced, calculate the weighted
         // size of each pane here and set it
 
-        if (!mShowEventDetailsWithAgenda) {
-            ViewGroup.LayoutParams params = topListView.getLayoutParams();
-            params.width = screenWidth;
-            topListView.setLayoutParams(params);
-        } else {
-            ViewGroup.LayoutParams listParams = topListView.getLayoutParams();
-            listParams.width = screenWidth * 4 / 10;
-            topListView.setLayoutParams(listParams);
-            ViewGroup.LayoutParams detailsParams = eventView.getLayoutParams();
-            detailsParams.width = screenWidth - listParams.width;
-            eventView.setLayoutParams(detailsParams);
-        }
+        ViewGroup.LayoutParams params = topListView.getLayoutParams();
+        params.width = screenWidth;
+        topListView.setLayoutParams(params);
         return v;
     }
 
@@ -241,32 +225,21 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
         if (mAgendaListView == null) {
             return;
         }
-        if (mShowEventDetailsWithAgenda) {
-            long timeToSave;
-            if (mLastHandledEventTime != null) {
-                timeToSave = mLastHandledEventTime.toMillis(true);
-                mTime.set(mLastHandledEventTime);
-            } else {
-                timeToSave =  System.currentTimeMillis();
-                mTime.set(timeToSave);
+
+        AgendaWindowAdapter.AgendaItem item = mAgendaListView.getFirstVisibleAgendaItem();
+        if (item != null) {
+            long firstVisibleTime = mAgendaListView.getFirstVisibleTime(item);
+            if (firstVisibleTime > 0) {
+                mTime.set(firstVisibleTime);
+                mController.setTime(firstVisibleTime);
+                outState.putLong(BUNDLE_KEY_RESTORE_TIME, firstVisibleTime);
             }
-            outState.putLong(BUNDLE_KEY_RESTORE_TIME, timeToSave);
-            mController.setTime(timeToSave);
-        } else {
-            AgendaWindowAdapter.AgendaItem item = mAgendaListView.getFirstVisibleAgendaItem();
-            if (item != null) {
-                long firstVisibleTime = mAgendaListView.getFirstVisibleTime(item);
-                if (firstVisibleTime > 0) {
-                    mTime.set(firstVisibleTime);
-                    mController.setTime(firstVisibleTime);
-                    outState.putLong(BUNDLE_KEY_RESTORE_TIME, firstVisibleTime);
-                }
-                // Tell AllInOne the event id of the first visible event in the list. The id will be
-                // used in the GOTO when AllInOne is restored so that Agenda Fragment can select a
-                // specific event and not just the time.
-                mLastShownEventId = item.id;
-            }
+            // Tell AllInOne the event id of the first visible event in the list. The id will be
+            // used in the GOTO when AllInOne is restored so that Agenda Fragment can select a
+            // specific event and not just the time.
+            mLastShownEventId = item.id;
         }
+
         if (DEBUG) {
             Log.v(TAG, "onSaveInstanceState " + mTime.toString());
         }
@@ -320,13 +293,11 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
             // later.
             return;
         }
-        mAgendaListView.goTo(mTime, event.id, mQuery, false,
-                ((event.extraLong & CalendarController.EXTRA_GOTO_TODAY) != 0 &&
-                        mShowEventDetailsWithAgenda) ? true : false);
+        mAgendaListView.goTo(mTime, event.id, mQuery, false, false);
         AgendaAdapter.ViewHolder vh = mAgendaListView.getSelectedViewHolder();
         // Make sure that on the first time the event info is shown to recreate it
         Log.d(TAG, "selected viewholder is null: " + (vh == null));
-        showEventInfo(event, vh != null ? vh.allDay : false, mForceReplace);
+        showEventInfo(event, vh != null && vh.allDay, mForceReplace);
         mForceReplace = false;
     }
 
@@ -385,48 +356,6 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
         }
 
         mLastShownEventId = event.id;
-
-        // Create a fragment to show the event to the side of the agenda list
-        if (mShowEventDetailsWithAgenda) {
-            FragmentManager fragmentManager = getFragmentManager();
-            if (fragmentManager == null) {
-                // Got a goto event before the fragment finished attaching,
-                // stash the event and handle it later.
-                mOnAttachedInfo = event;
-                mOnAttachAllDay = allDay;
-                return;
-            }
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-
-            if (allDay) {
-                event.startTime.timezone = Time.TIMEZONE_UTC;
-                event.endTime.timezone = Time.TIMEZONE_UTC;
-            }
-
-            if (DEBUG) {
-                Log.d(TAG, "***");
-                Log.d(TAG, "showEventInfo: start: " + new Date(event.startTime.toMillis(true)));
-                Log.d(TAG, "showEventInfo: end: " + new Date(event.endTime.toMillis(true)));
-                Log.d(TAG, "showEventInfo: all day: " + allDay);
-                Log.d(TAG, "***");
-            }
-
-            long startMillis = event.startTime.toMillis(true);
-            long endMillis = event.endTime.toMillis(true);
-            EventInfoFragment fOld =
-                    (EventInfoFragment)fragmentManager.findFragmentById(R.id.agenda_event_info);
-            if (fOld == null || replaceFragment || fOld.getStartMillis() != startMillis ||
-                    fOld.getEndMillis() != endMillis || fOld.getEventId() != event.id) {
-                mEventFragment = new EventInfoFragment(mActivity, event.id,
-                        startMillis, endMillis,
-                        Attendees.ATTENDEE_STATUS_NONE, false,
-                        EventInfoFragment.DIALOG_WINDOW_STYLE, null);
-                ft.replace(R.id.agenda_event_info, mEventFragment);
-                ft.commit();
-            } else {
-                fOld.reloadEvents();
-            }
-        }
     }
 
     // OnScrollListener implementation to update the date on the pull-down menu of the app

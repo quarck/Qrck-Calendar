@@ -42,6 +42,7 @@ import android.widget.Toast;
 
 import com.android.calendarcommon2.DateException;
 import com.android.calendarcommon2.Duration;
+import com.github.quarck.calnotify.ui.ViewEventActivity;
 
 import org.qrck.seshat.R;
 
@@ -234,7 +235,7 @@ public class GoogleCalendarUriIntentFilter extends Activity {
                             final Uri calendarUri = ContentUris.withAppendedId(
                                     Events.CONTENT_URI, eventId);
                             intent = new Intent(Intent.ACTION_VIEW, calendarUri);
-                            intent.setClass(this, EventInfoActivity.class);
+                            intent.setClass(this, ViewEventActivity.class);
                             intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startMillis);
                             intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endMillis);
                             if (attendeeStatus == Attendees.ATTENDEE_STATUS_NONE) {

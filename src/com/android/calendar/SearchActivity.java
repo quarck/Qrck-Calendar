@@ -62,7 +62,6 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
     private static final int HANDLER_KEY = 0;
    private static boolean mIsMultipane;
     // display event details to the side of the event list
-    private boolean mShowEventDetailsWithAgenda;
     private CalendarController mController;
     private final ContentObserver mObserver = new ContentObserver(new Handler()) {
         @Override
@@ -75,7 +74,6 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
             eventsChanged();
         }
     };
-    private EventInfoFragment mEventInfoFragment;
     private long mCurrentEventId = -1;
     private String mQuery;
     private SearchView mSearchView;
@@ -103,8 +101,6 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
         mHandler = new Handler();
 
         mIsMultipane = Utils.getConfigBool(this, R.bool.multiple_pane_config);
-        mShowEventDetailsWithAgenda =
-            Utils.getConfigBool(this, R.bool.show_event_details_with_agenda);
 
         SimpleFrameLayoutMaterialBinding binding = SimpleFrameLayoutMaterialBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -179,27 +175,15 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
     }
 
     private void showEventInfo(EventInfo event) {
-        if (mShowEventDetailsWithAgenda) {
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-
-            mEventInfoFragment = new EventInfoFragment(this, event.id,
-                    event.startTime.toMillis(false), event.endTime.toMillis(false),
-                    event.getResponse(), false, EventInfoFragment.DIALOG_WINDOW_STYLE,
-                    null /* No reminders to explicitly pass in. */);
-            ft.replace(R.id.agenda_event_info, mEventInfoFragment);
-            ft.commit();
-        } else {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            Uri eventUri = ContentUris.withAppendedId(Events.CONTENT_URI, event.id);
-            intent.setData(eventUri);
-            intent.setClass(this, ViewEventActivity.class);
-            intent.putExtra(EXTRA_EVENT_BEGIN_TIME,
-                    event.startTime != null ? event.startTime.toMillis(true) : -1);
-            intent.putExtra(
-                    EXTRA_EVENT_END_TIME, event.endTime != null ? event.endTime.toMillis(true) : -1);
-            startActivity(intent);
-        }
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri eventUri = ContentUris.withAppendedId(Events.CONTENT_URI, event.id);
+        intent.setData(eventUri);
+        intent.setClass(this, ViewEventActivity.class);
+        intent.putExtra(EXTRA_EVENT_BEGIN_TIME,
+                event.startTime != null ? event.startTime.toMillis(true) : -1);
+        intent.putExtra(
+                EXTRA_EVENT_END_TIME, event.endTime != null ? event.endTime.toMillis(true) : -1);
+        startActivity(intent);
         mCurrentEventId = event.id;
     }
 
@@ -228,15 +212,6 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
 
     private void deleteEvent(long eventId, long startMillis, long endMillis) {
         mDeleteEventHelper.delete(startMillis, endMillis, eventId, -1);
-        if (mIsMultipane && mEventInfoFragment != null
-                && eventId == mCurrentEventId) {
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction ft = fragmentManager.beginTransaction();
-            ft.remove(mEventInfoFragment);
-            ft.commit();
-            mEventInfoFragment = null;
-            mCurrentEventId = -1;
-        }
     }
 
     @Override

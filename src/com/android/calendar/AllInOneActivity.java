@@ -130,7 +130,6 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
     private static boolean mIsMultipane;
     private static boolean mIsTabletConfig;
     private static boolean mShowAgendaWithMonth;
-    private static boolean mShowEventDetailsWithAgenda;
     int mOrientation;
     BroadcastReceiver mCalIntentReceiver;
     private CalendarController mController;
@@ -190,8 +189,6 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
     private View mSecondaryPane;
     private String mTimeZone;
     private boolean mShowCalendarControls;
-    private boolean mShowEventInfoFullScreenAgenda;
-    private boolean mShowEventInfoFullScreen;
     private int mWeekNum;
     private int mCalendarControlsAnimationTime;
     private int mControlsAnimateWidth;
@@ -335,12 +332,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         mShowAgendaWithMonth = Utils.getConfigBool(this, R.bool.show_agenda_with_month);
         mShowCalendarControls =
                 Utils.getConfigBool(this, R.bool.show_calendar_controls);
-        mShowEventDetailsWithAgenda =
-                Utils.getConfigBool(this, R.bool.show_event_details_with_agenda);
-        mShowEventInfoFullScreenAgenda =
-                Utils.getConfigBool(this, R.bool.agenda_show_event_info_full_screen);
-        mShowEventInfoFullScreen =
-                Utils.getConfigBool(this, R.bool.show_event_info_full_screen);
+
         mCalendarControlsAnimationTime = res.getInteger(R.integer.calendar_controls_animation_time);
         Utils.setAllowWeekForDetailView(mIsMultipane);
 
@@ -1381,7 +1373,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             // do not create the event info fragment here, it will be created by the Agenda
             // fragment
 
-            if (mCurrentView == ViewType.AGENDA && mShowEventDetailsWithAgenda) {
+            if (mCurrentView == ViewType.AGENDA) {
                 if (event.startTime != null && event.endTime != null) {
                     // Event is all day , adjust the goto time to local time
                     if (event.isAllDay()) {
@@ -1405,38 +1397,19 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                             event.selectedTime, -1, ViewType.CURRENT);
                 }
                 int response = event.getResponse();
-                if ((mCurrentView == ViewType.AGENDA && mShowEventInfoFullScreenAgenda) ||
-                        ((mCurrentView == ViewType.DAY || (mCurrentView == ViewType.WEEK) ||
-                                mCurrentView == ViewType.MONTH) && mShowEventInfoFullScreen)){
-                    // start event info as activity
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    Uri eventUri = ContentUris.withAppendedId(Events.CONTENT_URI, event.id);
-                    intent.setData(eventUri);
-                    intent.setClass(this, ViewEventActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT |
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    intent.putExtra(EXTRA_EVENT_BEGIN_TIME, event.startTime.toMillis(false));
-                    intent.putExtra(EXTRA_EVENT_END_TIME, event.endTime.toMillis(false));
-                    intent.putExtra(ATTENDEE_STATUS, response);
-                    startActivity(intent);
-                } else {
-                    // start event info as a dialog
-                    EventInfoFragment fragment = new EventInfoFragment(this,
-                            event.id, event.startTime.toMillis(false),
-                            event.endTime.toMillis(false), response, true,
-                            EventInfoFragment.DIALOG_WINDOW_STYLE,
-                            null /* No reminders to explicitly pass in. */);
-                    fragment.setDialogParams(event.x, event.y, mActionBar.getHeight());
-                    FragmentManager fm = getFragmentManager();
-                    FragmentTransaction ft = fm.beginTransaction();
-                    // if we have an old popup replace it
-                    Fragment fOld = fm.findFragmentByTag(EVENT_INFO_FRAGMENT_TAG);
-                    if (fOld != null && fOld.isAdded()) {
-                        ft.remove(fOld);
-                    }
-                    ft.add(fragment, EVENT_INFO_FRAGMENT_TAG);
-                    ft.commit();
-                }
+
+                // start event info as activity
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Uri eventUri = ContentUris.withAppendedId(Events.CONTENT_URI, event.id);
+                intent.setData(eventUri);
+                intent.setClass(this, ViewEventActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT |
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.putExtra(EXTRA_EVENT_BEGIN_TIME, event.startTime.toMillis(false));
+                intent.putExtra(EXTRA_EVENT_END_TIME, event.endTime.toMillis(false));
+                intent.putExtra(ATTENDEE_STATUS, response);
+                startActivity(intent);
+
             }
             displayTime = event.startTime.toMillis(true);
         } else if (event.eventType == EventType.UPDATE_TITLE) {

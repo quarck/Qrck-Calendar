@@ -80,21 +80,6 @@
         <activity android:name="com.android.calendar.AboutActivity">
         </activity>
 
-        <activity android:name="com.android.calendar.EventInfoActivity"
-            android:parentActivityName="com.android.calendar.AllInOneActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.item/event" />
-            </intent-filter>
-            <meta-data android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.android.calendar.AllInOneActivity" />
-        </activity>
-
         <activity android:name="com.android.calendar.event.EditEventActivity"
             android:theme="@style/Base.CalendarAppThemeWithActionBar">
         </activity>
@@ -278,9 +263,22 @@
         <activity
             android:name="com.github.quarck.calnotify.ui.ViewEventActivity"
             android:label=""
-            android:launchMode="singleTask"
             android:parentActivityName="com.android.calendar.AllInOneActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/event" />
+            </intent-filter>
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.android.calendar.AllInOneActivity" />
+
+        </activity>
 
         <activity
             android:name="com.github.quarck.calnotify.ui.ViewEventActivityUpcoming"

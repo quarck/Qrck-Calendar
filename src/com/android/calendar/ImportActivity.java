@@ -248,7 +248,7 @@ public class ImportActivity extends Activity {
             if (!hasThingsToImport()) {
                 return null;
             }
-            File folder = EventInfoFragment.EXPORT_SDCARD_DIRECTORY;
+            File folder = EventInfoUtils.EXPORT_SDCARD_DIRECTORY;
             String[] result = null;
             if (folder.exists()) {
                 result = folder.list();
@@ -269,7 +269,7 @@ public class ImportActivity extends Activity {
                     .setItems(files, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             Intent i = new Intent(mActivity, ImportActivity.class);
-                            File f = new File(EventInfoFragment.EXPORT_SDCARD_DIRECTORY,
+                            File f = new File(EventInfoUtils.EXPORT_SDCARD_DIRECTORY,
                                     files[which]);
                             i.setData(Uri.fromFile(f));
                             mActivity.startActivity(i);
@@ -285,7 +285,7 @@ public class ImportActivity extends Activity {
     }
 
     public static boolean hasThingsToImport() {
-        File folder = EventInfoFragment.EXPORT_SDCARD_DIRECTORY;
+        File folder = EventInfoUtils.EXPORT_SDCARD_DIRECTORY;
         File[] files = folder.listFiles();
         return files != null && files.length > 0;
     }

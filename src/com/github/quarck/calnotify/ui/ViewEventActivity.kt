@@ -398,11 +398,6 @@ open class ViewEventActivity : AppCompatActivity() {
                 confirmAndDelete()
             }
 
-            R.id.action_open_in_calendar -> {
-                CalendarIntents.viewCalendarEvent(this, event)
-                finish()
-            }
-
             R.id.action_dismiss -> {
                 CalNotifyController.dismissEvent(this, EventFinishType.ManuallyInTheApp, event)
                 finish()

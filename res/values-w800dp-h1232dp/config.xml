@@ -15,13 +15,5 @@
     <!-- turn on/off the mini-calendar and calendar picker -->
     <!-- supported only for x-large devices  -->
     <bool name="show_calendar_controls">true</bool>
-    <!-- when on, shows the event next to the agenda list,
-         when off, shows the event on top of the agenda list after it was clicked. -->
-    <bool name="show_event_details_with_agenda">true</bool>
-    <!-- when on, event info launched from agenda view is shown in full screen, -->
-    <!-- when off, shown as a popup. -->
-    <bool name="agenda_show_event_info_full_screen">false</bool>
-    <!-- when on, event info launched from day/week/month view is shown in full screen, -->
-    <!-- when off, shown as a popup. -->
-    <bool name="show_event_info_full_screen">false</bool>
+
 </resources>

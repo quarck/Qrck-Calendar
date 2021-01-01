@@ -2016,9 +2016,9 @@ public class Utils {
         ArrayList<ReminderEntry> reminders = null;
 
         ArrayList<Integer> reminderMinutes = bundle.getIntegerArrayList(
-                        EventInfoFragment.BUNDLE_KEY_REMINDER_MINUTES);
+                        EventInfoUtils.BUNDLE_KEY_REMINDER_MINUTES);
         ArrayList<Integer> reminderMethods = bundle.getIntegerArrayList(
-                EventInfoFragment.BUNDLE_KEY_REMINDER_METHODS);
+                EventInfoUtils.BUNDLE_KEY_REMINDER_METHODS);
         if (reminderMinutes == null || reminderMethods == null) {
             if (reminderMinutes != null || reminderMethods != null) {
                 String nullList = (reminderMinutes == null?
