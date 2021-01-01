@@ -1,4 +1,3 @@
-![Seshat Calendar](metadata/en-US/images/featureGraphic.png)
 # Seshat Calendar
 Seshat (the ancient Egyptian goddess of wisdom, knowledge, and writing) is an open source material designed calendar made for everyone!
 Forked from The Etar Calendar.
