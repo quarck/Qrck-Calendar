@@ -21,8 +21,12 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentUris;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.provider.CalendarContract.Attendees;
 import android.text.format.Time;
 import android.util.Log;
@@ -41,10 +45,14 @@ import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.StickyHeaderListView;
 import com.android.calendar.Utils;
 import com.android.calendar.settings.GeneralPreferences;
+import com.github.quarck.calnotify.ui.ViewEventActivity;
 
 import java.util.Date;
 
 import org.qrck.seshat.R;
+
+import static android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME;
+import static android.provider.CalendarContract.EXTRA_EVENT_END_TIME;
 
 public class AgendaFragment extends Fragment implements CalendarController.EventHandler,
         OnScrollListener {
@@ -356,6 +364,16 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
         }
 
         mLastShownEventId = event.id;
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        Uri eventUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, event.id);
+        intent.setData(eventUri);
+        intent.setClass(getActivity(), ViewEventActivity.class);
+        intent.putExtra(EXTRA_EVENT_BEGIN_TIME,
+                event.startTime != null ? event.startTime.toMillis(true) : -1);
+        intent.putExtra(
+                EXTRA_EVENT_END_TIME, event.endTime != null ? event.endTime.toMillis(true) : -1);
+        startActivity(intent);
     }
 
     // OnScrollListener implementation to update the date on the pull-down menu of the app
