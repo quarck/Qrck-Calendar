@@ -1,5 +1,4 @@
 Caracteristici:
-- Vedere lunară.
 - Vedere săptămânală, zilnică sau agendă.
 - Folosește sincronizarea din Android. Este compatibil cu Google Calendar, Exchange, etc.
 - Design material.
