@@ -51,7 +51,7 @@ class GeneralPreferences : PreferenceFragmentCompat(),
 
     private lateinit var themePref: ListPreference
     private lateinit var colorPref: Preference
-    private lateinit var pureBlackNightModePref: SwitchPreference
+    private lateinit var pureBlackNightModePref: CheckBoxPreference
     private lateinit var hideDeclinedPref: CheckBoxPreference
     private lateinit var weekStartPref: ListPreference
     private lateinit var dayWeekPref: ListPreference
@@ -59,6 +59,9 @@ class GeneralPreferences : PreferenceFragmentCompat(),
     private lateinit var useHomeTzPref: CheckBoxPreference
     private lateinit var homeTzPref: Preference
     private lateinit var defaultReminderPref: ListPreference
+    private lateinit var defaultAllDayReminderPref: ListPreference
+    private lateinit var handleEmailOnlyEventsPref: CheckBoxPreference
+    private lateinit var handleEventsWithNoRemindersPref: CheckBoxPreference
     private lateinit var copyDbPref: Preference
     private lateinit var skipRemindersPref: ListPreference
 
@@ -96,6 +99,10 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         useHomeTzPref = preferenceScreen.findPreference(KEY_HOME_TZ_ENABLED)!!
         homeTzPref = preferenceScreen.findPreference(KEY_HOME_TZ)!!
         defaultReminderPref = preferenceScreen.findPreference(KEY_DEFAULT_REMINDER)!!
+        defaultAllDayReminderPref = preferenceScreen.findPreference(KEY_DEFAULT_ALL_DAY_REMINDER)!!
+        handleEmailOnlyEventsPref = preferenceScreen.findPreference(KEY_HANDLE_EMAIL_ONLY)!!
+        handleEventsWithNoRemindersPref = preferenceScreen.findPreference(KEY_HANDLE_EVENTS_WITH_NO_REMINDERS)!!
+
         copyDbPref = preferenceScreen.findPreference(KEY_OTHER_COPY_DB)!!
         skipRemindersPref = preferenceScreen.findPreference(KEY_OTHER_REMINDERS_RESPONDED)!!
 
@@ -110,6 +117,7 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         weekStartPref.summary = weekStartPref.entry
         dayWeekPref.summary = dayWeekPref.entry
         defaultReminderPref.summary = defaultReminderPref.entry
+        defaultAllDayReminderPref.summary = defaultAllDayReminderPref.entry
 
         // This triggers an asynchronous call to the provider to refresh the data in shared pref
         timeZoneId = Utils.getTimeZone(activity, null)
@@ -221,6 +229,9 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         useHomeTzPref.onPreferenceChangeListener = listener
         homeTzPref.onPreferenceChangeListener = listener
         defaultReminderPref.onPreferenceChangeListener = listener
+        defaultAllDayReminderPref.onPreferenceChangeListener = listener
+        handleEmailOnlyEventsPref.onPreferenceChangeListener = listener
+        handleEventsWithNoRemindersPref.onPreferenceChangeListener = listener
         skipRemindersPref.onPreferenceChangeListener = listener
     }
 
@@ -289,6 +300,10 @@ class GeneralPreferences : PreferenceFragmentCompat(),
             defaultReminderPref -> {
                 defaultReminderPref.value = newValue as String
                 defaultReminderPref.summary = defaultReminderPref.entry
+            }
+            defaultAllDayReminderPref -> {
+                defaultAllDayReminderPref.value = newValue as String
+                defaultAllDayReminderPref.summary = defaultAllDayReminderPref.entry
             }
             skipRemindersPref -> {
                 updateSkipRemindersSummary(newValue as String)
@@ -382,9 +397,13 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         const val KEY_NOTIFICATION_ALARM = "preferences_notification_alarm"
         const val KEY_SHOW_CONTROLS = "KEY_SHOW_CONTROLS"
         const val KEY_DEFAULT_REMINDER = "preferences_default_reminder"
+        const val KEY_DEFAULT_ALL_DAY_REMINDER = "preferences_default_all_day_reminder"
+        const val KEY_HANDLE_EMAIL_ONLY = "preferences_handle_email_only_events"
+        const val KEY_HANDLE_EVENTS_WITH_NO_REMINDERS = "preferences_handle_events_with_no_reminders"
         const val NO_REMINDER = -1
         const val NO_REMINDER_STRING = "-1"
         const val REMINDER_DEFAULT_TIME = 10 // in minutes
+        const val ALL_DAY_REMINDER_DEFAULT_TIME = 900 // in minutes
         const val SNOOZE_DELAY_DEFAULT_TIME = 5 // in minutes
         const val KEY_DEFAULT_CELL_HEIGHT = "preferences_default_cell_height"
         const val KEY_VERSION = "preferences_version"

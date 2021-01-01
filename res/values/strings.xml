@@ -502,10 +502,16 @@
     <string name="preferences_alerts_popup_title">Pop-up notification</string>
     <!-- List item label for setting the default number of reminder minutes -->
     <string name="preferences_default_reminder_title">Default reminder time</string>
+    <!-- List item label for setting the default number of reminder minutes for all day events-->
+    <string name="preferences_default_all_day_reminder_title">Default reminder for all-day events</string>
     <!-- Title of dialog for setting the default number of reminder minutes -->
     <string name="preferences_default_reminder_dialog">Default reminder time</string>
+    <!-- Title of dialog for setting the default number of reminder minutes for all day events -->
+    <string name="preferences_default_all_day_reminder_dialog">Default reminder time (all day events)</string>
     <!-- Default value for the number of reminder minutes -->
     <string name="preferences_default_reminder_default">10</string>
+    <!-- Default value for the number of reminder minutes / all day events -->
+    <string name="preferences_default_all_day_reminder_default">900</string> <!-- 9:00 on the day before -->
     <!-- Settings check box label to keep Calendar in a fixed 'home' time zone [CHAR LIMIT = 18] -->
     <string name="preferences_use_home_tz_title">Use home time zone</string>
     <!-- Settings description of what setting Calendar to use a fixed 'home' time

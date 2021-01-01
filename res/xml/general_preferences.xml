@@ -23,7 +23,7 @@
             app:entries="@array/pref_theme_entries"
             app:entryValues="@array/pref_theme_values"
             app:defaultValue="light" />
-        <SwitchPreference
+        <CheckBoxPreference
             app:defaultValue="false"
             app:key="pref_pure_black_night_mode"
             app:title="@string/preferences_pure_black_night_mode" />
@@ -109,11 +109,31 @@
             app:entryValues="@array/preferences_default_reminder_values"
             app:dialogTitle="@string/preferences_default_reminder_dialog" />
 
+        <ListPreference
+            app:key="preferences_default_all_day_reminder"
+            app:defaultValue="@string/preferences_default_all_day_reminder_default"
+            app:title="@string/preferences_default_all_day_reminder_title"
+            app:entries="@array/preferences_default_all_day_reminder_labels"
+            app:entryValues="@array/preferences_default_all_day_reminder_values"
+            app:dialogTitle="@string/preferences_default_all_day_reminder_dialog" />
+
         <Preference
             app:key="preferences_quick_responses"
             app:fragment="com.android.calendar.settings.QuickResponsePreferences"
             app:title="@string/quick_response_settings"
             app:summary="@string/quick_response_settings_summary" />
+
+        <CheckBoxPreference
+            app:key="preferences_handle_email_only_events"
+            app:defaultValue="false"
+            app:title="@string/handle_email_only_events_title"
+            app:summary="@string/handle_email_only_events_summary" />
+
+        <CheckBoxPreference
+            app:key="preferences_handle_events_with_no_reminders"
+            app:defaultValue="false"
+            app:title="@string/handle_events_with_no_reminders"
+            app:summary="@string/handle_events_with_no_reminders_summary" />
 
     </PreferenceCategory>
     <PreferenceCategory
