@@ -16,12 +16,14 @@
 
 package com.android.calendar;
 
+import android.Manifest;
 import android.accounts.Account;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -37,10 +39,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
+
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -2084,6 +2089,135 @@ public class Utils {
                 if (mCallBack != null) {
                     mCallBack.run();
                 }
+            }
+        }
+    }
+
+
+    public static class EventEmail {
+
+        private static final String[] ATTENDEES_PROJECTION = new String[]{
+                CalendarContract.Attendees.ATTENDEE_EMAIL,           // 0
+                CalendarContract.Attendees.ATTENDEE_STATUS,          // 1
+        };
+        private static final int ATTENDEES_INDEX_EMAIL = 0;
+        private static final int ATTENDEES_INDEX_STATUS = 1;
+        private static final String ATTENDEES_WHERE = CalendarContract.Attendees.EVENT_ID + "=?";
+        private static final String ATTENDEES_SORT_ORDER = CalendarContract.Attendees.ATTENDEE_NAME + " ASC, "
+                + CalendarContract.Attendees.ATTENDEE_EMAIL + " ASC";
+        private static final String[] EVENT_PROJECTION = new String[]{
+                Calendars.OWNER_ACCOUNT, // 0
+                Calendars.ACCOUNT_NAME,  // 1
+                CalendarContract.Events.TITLE,            // 2
+                CalendarContract.Events.ORGANIZER,        // 3
+        };
+        private static final int EVENT_INDEX_OWNER_ACCOUNT = 0;
+        private static final int EVENT_INDEX_ACCOUNT_NAME = 1;
+        private static final int EVENT_INDEX_TITLE = 2;
+        private static final int EVENT_INDEX_ORGANIZER = 3;
+
+        private static Cursor getEventCursor(Context context, long eventId) {
+            return context.getContentResolver().query(
+                    ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId), EVENT_PROJECTION,
+                    null, null, null);
+        }
+
+        private static Cursor getAttendeesCursor(Context context, long eventId) {
+            if (ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.READ_CALENDAR)
+                    != PackageManager.PERMISSION_GRANTED) {
+                //If permission is not granted then just return.
+                Log.d(TAG, "Manifest.permission.READ_CALENDAR is not granted");
+                return null;
+            }
+            return context.getContentResolver().query(CalendarContract.Attendees.CONTENT_URI,
+                    ATTENDEES_PROJECTION, ATTENDEES_WHERE, new String[]{Long.toString(eventId)},
+                    ATTENDEES_SORT_ORDER);
+        }
+
+        private static Cursor getLocationCursor(Context context, long eventId) {
+            return context.getContentResolver().query(
+                    ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventId),
+                    new String[]{CalendarContract.Events.EVENT_LOCATION}, null, null, null);
+        }
+
+        private static void addIfEmailable(List<String> emailList, String email, String syncAccount) {
+            if (Utils.isEmailableFrom(email, syncAccount)) {
+                emailList.add(email);
+            }
+        }
+
+        /**
+         * Creates an Intent for emailing the attendees of the event.  Returns null if there
+         * are no emailable attendees.
+         */
+        public static Intent createEmailIntent(Context context, long eventId, String body) {
+            // TODO: Refactor to move query part into Utils.createEmailAttendeeIntent, to
+            // be shared with EventInfoFragment.
+
+            // Query for the owner account(s).
+            String ownerAccount = null;
+            String syncAccount = null;
+            String eventTitle = null;
+            String eventOrganizer = null;
+            Cursor eventCursor = getEventCursor(context, eventId);
+            try {
+                if (eventCursor != null && eventCursor.moveToFirst()) {
+                    ownerAccount = eventCursor.getString(EVENT_INDEX_OWNER_ACCOUNT);
+                    syncAccount = eventCursor.getString(EVENT_INDEX_ACCOUNT_NAME);
+                    eventTitle = eventCursor.getString(EVENT_INDEX_TITLE);
+                    eventOrganizer = eventCursor.getString(EVENT_INDEX_ORGANIZER);
+                }
+            } finally {
+                if (eventCursor != null) {
+                    eventCursor.close();
+                }
+            }
+            if (TextUtils.isEmpty(eventTitle)) {
+                eventTitle = context.getResources().getString(R.string.no_title_label);
+            }
+
+            // Query for the attendees.
+            List<String> toEmails = new ArrayList<String>();
+            List<String> ccEmails = new ArrayList<String>();
+            Cursor attendeesCursor = getAttendeesCursor(context, eventId);
+            try {
+                if (attendeesCursor != null && attendeesCursor.moveToFirst()) {
+                    do {
+                        int status = attendeesCursor.getInt(ATTENDEES_INDEX_STATUS);
+                        String email = attendeesCursor.getString(ATTENDEES_INDEX_EMAIL);
+                        switch (status) {
+                            case CalendarContract.Attendees.ATTENDEE_STATUS_DECLINED:
+                                addIfEmailable(ccEmails, email, syncAccount);
+                                break;
+                            default:
+                                addIfEmailable(toEmails, email, syncAccount);
+                        }
+                    } while (attendeesCursor.moveToNext());
+                }
+            } finally {
+                if (attendeesCursor != null) {
+                    attendeesCursor.close();
+                }
+            }
+
+            // Add organizer only if no attendees to email (the case when too many attendees
+            // in the event to sync or show).
+            if (toEmails.size() == 0 && ccEmails.size() == 0 && eventOrganizer != null) {
+                addIfEmailable(toEmails, eventOrganizer, syncAccount);
+            }
+
+            Intent intent = null;
+            if (ownerAccount != null && (toEmails.size() > 0 || ccEmails.size() > 0)) {
+                intent = Utils.createEmailAttendeesIntent(context.getResources(), eventTitle, body,
+                        toEmails, ccEmails, ownerAccount);
+            }
+
+            if (intent == null) {
+                return null;
+            } else {
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                return intent;
             }
         }
     }

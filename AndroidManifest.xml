@@ -198,28 +198,12 @@
             android:exported="false"
             android:authorities="${applicationId}.CalendarRecentSuggestionsProvider" />
 
-        <!-- Declarations for alerts/reminders -->
-        <activity
-            android:name="com.android.calendar.alerts.AlertActivity"
-            android:excludeFromRecents="true"
-            android:launchMode="singleInstance"
-            android:theme="@android:style/Theme.Holo.Dialog" />
-
         <activity
             android:name="com.android.calendar.alerts.QuickResponseActivity"
             android:excludeFromRecents="true"
             android:label="@string/quick_response_dialog_title"
             android:launchMode="singleInstance"
             android:theme="@android:style/Theme.Holo.Dialog" />
-
-        <activity
-            android:name="com.android.calendar.alerts.SnoozeDelayActivity"
-            android:excludeFromRecents="true"
-            android:launchMode="singleInstance"
-            android:theme="@android:style/Theme.Holo.Dialog" />
-
-        <receiver android:name="com.android.calendar.alerts.GlobalDismissManager"
-                  android:exported="false" />
 
         <receiver android:name="com.android.calendar.UpgradeReceiver">
             <intent-filter>
@@ -240,12 +224,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-
-        <service android:name="com.android.calendar.alerts.AlertService" />
-
-        <service android:name="com.android.calendar.alerts.DismissAlarmsService" />
-
-        <service android:name="com.android.calendar.alerts.SnoozeAlarmsService" />
 
         <!-- Declarations for the widget -->
         <receiver android:name="com.android.calendar.widget.CalendarAppWidgetProvider">
@@ -287,18 +265,6 @@
         <!-- CN Light original activities and receivers -->
 
         <activity
-            android:name="com.github.quarck.calnotify.ui.ViewEventActivity"
-            android:label=""
-            android:launchMode="singleTask"
-            android:parentActivityName="com.android.calendar.AllInOneActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name="com.github.quarck.calnotify.ui.SnoozeAllActivity"
-            android:label="@string/snooze_all"
-            android:parentActivityName="com.android.calendar.AllInOneActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
             android:name="com.android.calendar.notifications.NotificationsLogActivity"
             android:label="@string/notification_log"
             android:parentActivityName="com.android.calendar.AllInOneActivity"
@@ -308,6 +274,34 @@
             android:label="@string/upcoming_events"
             android:parentActivityName="com.android.calendar.AllInOneActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name="com.github.quarck.calnotify.ui.ViewEventActivity"
+            android:label=""
+            android:launchMode="singleTask"
+            android:parentActivityName="com.android.calendar.AllInOneActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name="com.github.quarck.calnotify.ui.ViewEventActivityUpcoming"
+            android:label=""
+            android:launchMode="singleTask"
+            android:parentActivityName="com.android.calendar.notifications.UpcomingNotificationsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name="com.github.quarck.calnotify.ui.ViewEventActivityLog"
+            android:label=""
+            android:launchMode="singleTask"
+            android:parentActivityName="com.android.calendar.notifications.NotificationsLogActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name="com.github.quarck.calnotify.ui.SnoozeAllActivity"
+            android:label="@string/snooze_all"
+            android:parentActivityName="com.android.calendar.AllInOneActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+
 
 
         <activity

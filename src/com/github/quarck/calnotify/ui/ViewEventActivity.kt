@@ -503,3 +503,8 @@ open class ViewEventActivity : AppCompatActivity() {
     }
 
 }
+
+class ViewEventActivityUpcoming: ViewEventActivity() {}
+
+class ViewEventActivityLog: ViewEventActivity() {}
+

@@ -21,7 +21,7 @@ import com.github.quarck.calnotify.calendar.EventAlertRecord
 import com.github.quarck.calnotify.calendar.MonitorEventAlertEntry
 import com.github.quarck.calnotify.calendar.MonitorEventAlertEntryKey
 import com.github.quarck.calnotify.calendarmonitor.CalendarMonitor
-import com.github.quarck.calnotify.ui.ViewEventActivity
+import com.github.quarck.calnotify.ui.ViewEventActivityUpcoming
 import com.github.quarck.calnotify.utils.adjustCalendarColor
 import com.github.quarck.calnotify.utils.logs.DevLog
 import com.github.quarck.calnotify.utils.textutils.EventFormatter
@@ -246,7 +246,7 @@ class UpcomingNotificationsActivity : AppCompatActivity() {
         val event = entry.event ?: return
 
         startActivity(
-                Intent(this, ViewEventActivity::class.java)
+                Intent(this, ViewEventActivityUpcoming::class.java)
                         .putExtra(Consts.INTENT_EVENT_ID_KEY, event.eventId)
                         .putExtra(Consts.INTENT_INSTANCE_START_TIME_KEY, event.instanceStartTime)
                         .putExtra(Consts.INTENT_ALERT_TIME, event.alertTime)

@@ -104,7 +104,7 @@ public class QuickResponseActivity extends ListActivity implements OnItemClickLi
 
         @Override
         public void run() {
-            Intent emailIntent = AlertReceiver.createEmailIntent(QuickResponseActivity.this,
+            Intent emailIntent = Utils.EventEmail.createEmailIntent(QuickResponseActivity.this,
                     mEventId, mBody);
             if (emailIntent != null) {
                 try {
