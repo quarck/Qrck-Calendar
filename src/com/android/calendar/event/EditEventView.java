@@ -277,16 +277,14 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
         mLocationTextView.setTag(mLocationTextView.getBackground());
         mLocationAdapter = new EventLocationAdapter(activity);
         mLocationTextView.setAdapter(mLocationAdapter);
-        mLocationTextView.setOnEditorActionListener(new OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    // Dismiss the suggestions dropdown.  Return false so the other
-                    // side effects still occur (soft keyboard going away, etc.).
-                    mLocationTextView.dismissDropDown();
-                }
-                return false;
+
+        mLocationTextView.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                // Dismiss the suggestions dropdown.  Return false so the other
+                // side effects still occur (soft keyboard going away, etc.).
+                mLocationTextView.dismissDropDown();
             }
+            return false;
         });
 
         mAvailabilityExplicitlySet = false;
@@ -313,8 +311,8 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
                         } else {
                             mAvailabilityCurrentlySelected = position;
                             mAllDayChangingAvailability = false;
-                }
-            }
+                        }
+                    }
 
                     @Override
                     public void onNothingSelected(AdapterView<?> arg0) {
@@ -501,22 +499,6 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
             return false;
         }
         return fillModelFromUI();
-    }
-
-    public boolean fillModelFromReadOnlyUi() {
-        if (mModel == null || (mCalendarsCursor == null && mModel.mUri == null)) {
-            return false;
-        }
-        mModel.mReminders = EventViewUtils.reminderItemsToReminders(
-                    mReminderItems, mReminderMinuteValues, mReminderMethodValues);
-        mModel.mReminders.addAll(mUnsupportedReminders);
-        mModel.normalizeReminders();
-        int status = EventInfoUtils.getResponseFromButtonId(
-                mResponseRadioGroup.getCheckedRadioButtonId());
-        if (status != Attendees.ATTENDEE_STATUS_NONE) {
-            mModel.mSelfAttendeeStatus = status;
-        }
-        return true;
     }
 
     // This is called if the user clicks on one of the buttons: "Save",
@@ -875,8 +857,10 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
                 GeneralPreferences.KEY_DEFAULT_REMINDER, GeneralPreferences.DEFAULT_REMINDER_STRING);
         String defaultAllDayReminderString = prefs.getString(
                 GeneralPreferences.KEY_DEFAULT_ALL_DAY_REMINDER, GeneralPreferences.DEFAULT_ALL_DAY_REMINDER_STRING);
+
         mDefaultReminderMinutes = Integer.parseInt(defaultReminderString);
         mDefaultAllDayReminderMinutes = Integer.parseInt(defaultAllDayReminderString);
+
         prepareReminders();
         prepareAvailability();
         prepareAccess();

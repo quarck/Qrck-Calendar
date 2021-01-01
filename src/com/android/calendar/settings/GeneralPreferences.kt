@@ -62,8 +62,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
     private lateinit var defaultAllDayReminderPref: ListPreference
     private lateinit var handleEmailOnlyEventsPref: CheckBoxPreference
     private lateinit var handleEventsWithNoRemindersPref: CheckBoxPreference
-    private lateinit var copyDbPref: Preference
-    private lateinit var skipRemindersPref: ListPreference
 
     // >= 26
     private lateinit var notificationPref: Preference
@@ -103,9 +101,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         handleEmailOnlyEventsPref = preferenceScreen.findPreference(KEY_HANDLE_EMAIL_ONLY)!!
         handleEventsWithNoRemindersPref = preferenceScreen.findPreference(KEY_HANDLE_EVENTS_WITH_NO_REMINDERS)!!
 
-        copyDbPref = preferenceScreen.findPreference(KEY_OTHER_COPY_DB)!!
-        skipRemindersPref = preferenceScreen.findPreference(KEY_OTHER_REMINDERS_RESPONDED)!!
-
         val prefs = CalendarUtils.getSharedPreferences(activity!!,
                 Utils.SHARED_PREFS_NAME)
 
@@ -139,31 +134,7 @@ class GeneralPreferences : PreferenceFragmentCompat(),
                 .findFragmentByTag(FRAG_TAG_TIME_ZONE_PICKER) as TimeZonePickerDialogX?
         tzpd?.setOnTimeZoneSetListener(this)
 
-        updateSkipRemindersSummary(skipRemindersPref.value)
-
         initializeColorMap()
-    }
-
-    /**
-     * Update the summary for the SkipReminders preference.
-     * @param value The corresponding value of which summary to set. If null, the default summary
-     * will be set, and the value will be set accordingly too.
-     */
-    private fun updateSkipRemindersSummary(value: String?) {
-        // Default to "declined". Must match with R.array.preferences_skip_reminders_values.
-        var index = 0
-        val values = skipRemindersPref.entryValues
-        val entries = skipRemindersPref.entries
-        for (value_i in values.indices) {
-            if (values[value_i] == value) {
-                index = value_i
-                break
-            }
-        }
-        skipRemindersPref.summary = entries[index].toString()
-        if (value == null) { // Value was not known ahead of time, so the default value will be set.
-            skipRemindersPref.value = values[index].toString()
-        }
     }
 
     private fun showColorPickerDialog() {
@@ -232,7 +203,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         defaultAllDayReminderPref.onPreferenceChangeListener = listener
         handleEmailOnlyEventsPref.onPreferenceChangeListener = listener
         handleEventsWithNoRemindersPref.onPreferenceChangeListener = listener
-        skipRemindersPref.onPreferenceChangeListener = listener
     }
 
     override fun onStop() {
@@ -305,9 +275,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
                 defaultAllDayReminderPref.value = newValue as String
                 defaultAllDayReminderPref.summary = defaultAllDayReminderPref.entry
             }
-            skipRemindersPref -> {
-                updateSkipRemindersSummary(newValue as String)
-            }
             else -> {
                 return true
             }
@@ -335,10 +302,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
             }
             KEY_NOTIFICATION_ALARM -> {
                 showAlarmNotificationChannel()
-                return true
-            }
-            KEY_OTHER_COPY_DB -> {
-                showDbCopy()
                 return true
             }
             else -> return super.onPreferenceTreeClick(preference)
@@ -439,10 +402,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         private const val KEY_HOME_TZ_ENABLED = "preferences_home_tz_enabled"
         private const val KEY_HOME_TZ = "preferences_home_tz"
         private const val FRAG_TAG_TIME_ZONE_PICKER = "TimeZonePicker"
-
-        // experimental
-        const val KEY_OTHER_COPY_DB = "preferences_copy_db"
-        const val KEY_OTHER_REMINDERS_RESPONDED = "preferences_reminders_responded"
 
         internal const val REQUEST_CODE_ALERT_RINGTONE = 42
 

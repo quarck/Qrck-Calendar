@@ -1392,7 +1392,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             } else {
                 // TODO Fix the temp hack below: && mCurrentView !=
                 // ViewType.AGENDA
-                if (event.selectedTime != null && mCurrentView != ViewType.AGENDA) {
+                if (event.selectedTime != null) {
                     mController.sendEvent(this, EventType.GO_TO, event.selectedTime,
                             event.selectedTime, -1, ViewType.CURRENT);
                 }

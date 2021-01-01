@@ -575,14 +575,6 @@
     <!-- Experimental settings [CHAR LIMIT = 30]-->
     <string name="preferences_experimental_category">Experimental</string>
 
-    <!-- Reminders settings [CHAR LIMIT = 30]-->
-    <!-- Preference label for when to skip reminders [CHAR LIMIT = 25] -->
-    <string name="preferences_reminders_responded_label">Skip Reminders</string>
-    <!-- Dialog title for when to skip reminders [CHAR LIMIT = 25] -->
-    <string name="preferences_reminders_responded_dialog">Skip Reminders</string>
-    <!-- Send a copy of the database to developers for debugging [CHAR LIMIT="NONE"] -->
-    <string name="copy_db">Send database</string>
-
     <!-- Displayed in email address autocomplete list when searching for contacts
          in corporate directories. Example:  "Searching bigcompany.com..." [CHAR LIMIT=64] -->
     <string name="directory_searching_fmt">Searching <xliff:g id="domain">%s</xliff:g>\u2026</string>
