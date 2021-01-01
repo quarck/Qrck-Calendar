@@ -329,6 +329,7 @@
             android:parentActivityName="com.android.calendar.AllInOneActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name="com.github.quarck.calnotify.ui.EditEventActivityTextReceiver"
             android:label="@string/create_event"
