@@ -34,6 +34,7 @@ import com.android.calendar.AllInOneActivity;
 import com.android.calendar.DynamicTheme;
 import com.android.calendar.EventInfoActivity;
 import com.android.calendar.Utils;
+import com.github.quarck.calnotify.ui.ViewEventActivity;
 
 import org.qrck.seshat.R;
 
@@ -109,7 +110,7 @@ public class CalendarAppWidgetProvider extends AppWidgetProvider {
 
             dataString += "/" + id;
             // If we have an event id - start the event info activity
-            fillInIntent.setClass(context, EventInfoActivity.class);
+            fillInIntent.setClass(context, ViewEventActivity.class);
         } else {
             // If we do not have an event id - start AllInOne
             fillInIntent.setClass(context, AllInOneActivity.class);

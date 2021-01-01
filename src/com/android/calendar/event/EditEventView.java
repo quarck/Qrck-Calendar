@@ -207,6 +207,7 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
     private boolean mAllDayChangingAvailability;
     private int mAvailabilityCurrentlySelected;
     private int mDefaultReminderMinutes;
+    private int mDefaultAllDayReminderMinutes;
     private boolean mSaveAfterQueryComplete = false;
     private TimeZonePickerUtils mTzPickerUtils;
     private Time mStartTime;
@@ -871,9 +872,11 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
 
         SharedPreferences prefs = GeneralPreferences.Companion.getSharedPreferences(mActivity);
         String defaultReminderString = prefs.getString(
-                GeneralPreferences.KEY_DEFAULT_REMINDER, GeneralPreferences.NO_REMINDER_STRING);
+                GeneralPreferences.KEY_DEFAULT_REMINDER, GeneralPreferences.DEFAULT_REMINDER_STRING);
+        String defaultAllDayReminderString = prefs.getString(
+                GeneralPreferences.KEY_DEFAULT_ALL_DAY_REMINDER, GeneralPreferences.DEFAULT_ALL_DAY_REMINDER_STRING);
         mDefaultReminderMinutes = Integer.parseInt(defaultReminderString);
-
+        mDefaultAllDayReminderMinutes = Integer.parseInt(defaultAllDayReminderString);
         prepareReminders();
         prepareAvailability();
         prepareAccess();
@@ -1283,21 +1286,12 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
      * reminder time and method.
      */
     private void addReminder() {
-        // TODO: when adding a new reminder, make it different from the
-        // last one in the list (if any).
-        if (mDefaultReminderMinutes == GeneralPreferences.NO_REMINDER) {
-            EventViewUtils.addReminder(mActivity, mScrollView, this, mReminderItems,
-                    mReminderMinuteValues, mReminderMinuteLabels,
-                    mReminderMethodValues, mReminderMethodLabels,
-                    ReminderEntry.valueOf(GeneralPreferences.REMINDER_DEFAULT_TIME),
-                    mModel.mCalendarMaxReminders, null);
-        } else {
-            EventViewUtils.addReminder(mActivity, mScrollView, this, mReminderItems,
-                    mReminderMinuteValues, mReminderMinuteLabels,
-                    mReminderMethodValues, mReminderMethodLabels,
-                    ReminderEntry.valueOf(mDefaultReminderMinutes),
-                    mModel.mCalendarMaxReminders, null);
-        }
+        EventViewUtils.addReminder(mActivity, mScrollView, this, mReminderItems,
+                mReminderMinuteValues, mReminderMinuteLabels,
+                mReminderMethodValues, mReminderMethodLabels,
+                ReminderEntry.valueOf(mDefaultReminderMinutes),
+                mModel.mCalendarMaxReminders, null);
+
         updateRemindersVisibility(mReminderItems.size());
         EventViewUtils.updateAddReminderButton(mView, mReminderItems, mModel.mCalendarMaxReminders);
     }

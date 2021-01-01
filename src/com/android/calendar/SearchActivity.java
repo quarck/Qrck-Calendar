@@ -42,6 +42,7 @@ import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.agenda.AgendaFragment;
+import com.github.quarck.calnotify.ui.ViewEventActivity;
 
 import org.qrck.seshat.R;
 import org.qrck.seshat.databinding.SimpleFrameLayoutMaterialBinding;
@@ -192,7 +193,7 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
             Intent intent = new Intent(Intent.ACTION_VIEW);
             Uri eventUri = ContentUris.withAppendedId(Events.CONTENT_URI, event.id);
             intent.setData(eventUri);
-            intent.setClass(this, EventInfoActivity.class);
+            intent.setClass(this, ViewEventActivity.class);
             intent.putExtra(EXTRA_EVENT_BEGIN_TIME,
                     event.startTime != null ? event.startTime.toMillis(true) : -1);
             intent.putExtra(

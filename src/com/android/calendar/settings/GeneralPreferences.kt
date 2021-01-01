@@ -400,8 +400,8 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         const val KEY_DEFAULT_ALL_DAY_REMINDER = "preferences_default_all_day_reminder"
         const val KEY_HANDLE_EMAIL_ONLY = "preferences_handle_email_only_events"
         const val KEY_HANDLE_EVENTS_WITH_NO_REMINDERS = "preferences_handle_events_with_no_reminders"
-        const val NO_REMINDER = -1
-        const val NO_REMINDER_STRING = "-1"
+        const val DEFAULT_REMINDER_STRING = "10"
+        const val DEFAULT_ALL_DAY_REMINDER_STRING = "900"
         const val REMINDER_DEFAULT_TIME = 10 // in minutes
         const val ALL_DAY_REMINDER_DEFAULT_TIME = 900 // in minutes
         const val SNOOZE_DELAY_DEFAULT_TIME = 5 // in minutes

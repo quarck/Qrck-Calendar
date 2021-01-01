@@ -112,6 +112,7 @@ public class CalendarEventModel implements Serializable {
     public int mAccessLevel = 0;
     public ArrayList<ReminderEntry> mReminders;
     public ArrayList<ReminderEntry> mDefaultReminders;
+    public ArrayList<ReminderEntry> mDefaultAllDayReminders;
     // PROVIDER_NOTES Using EditEventHelper the owner should not be included in this
     // list and will instead be added by saveEvent. Is this what we want?
     public LinkedHashMap<String, Attendee> mAttendeesList;
@@ -122,6 +123,7 @@ public class CalendarEventModel implements Serializable {
     public CalendarEventModel() {
         mReminders = new ArrayList<ReminderEntry>();
         mDefaultReminders = new ArrayList<ReminderEntry>();
+        mDefaultAllDayReminders = new ArrayList<ReminderEntry>();
         mAttendeesList = new LinkedHashMap<String, Attendee>();
         mTimezone = TimeZone.getDefault().getID();
     }
@@ -133,14 +135,18 @@ public class CalendarEventModel implements Serializable {
         SharedPreferences prefs = GeneralPreferences.Companion.getSharedPreferences(context);
 
         String defaultReminder = prefs.getString(
-                GeneralPreferences.KEY_DEFAULT_REMINDER, GeneralPreferences.NO_REMINDER_STRING);
+                GeneralPreferences.KEY_DEFAULT_REMINDER, GeneralPreferences.DEFAULT_REMINDER_STRING);
+        String defaultAllDayReminder = prefs.getString(
+                GeneralPreferences.KEY_DEFAULT_ALL_DAY_REMINDER, GeneralPreferences.DEFAULT_ALL_DAY_REMINDER_STRING);
+
         int defaultReminderMins = Integer.parseInt(defaultReminder);
-        if (defaultReminderMins != GeneralPreferences.NO_REMINDER) {
-            // Assume all calendars allow at least one reminder.
-            mHasAlarm = true;
-            mReminders.add(ReminderEntry.valueOf(defaultReminderMins));
-            mDefaultReminders.add(ReminderEntry.valueOf(defaultReminderMins));
-        }
+        int defaultAllDayReminderMins = Integer.parseInt(defaultAllDayReminder);
+
+        // Assume all calendars allow at least one reminder.
+        mHasAlarm = true;
+        mReminders.add(ReminderEntry.valueOf(defaultReminderMins));
+        mDefaultReminders.add(ReminderEntry.valueOf(defaultReminderMins));
+        mDefaultAllDayReminders.add(ReminderEntry.valueOf(defaultAllDayReminderMins));
     }
 
     public CalendarEventModel(Context context, Intent intent) {

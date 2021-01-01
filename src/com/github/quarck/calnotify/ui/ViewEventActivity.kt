@@ -20,13 +20,14 @@
 package com.github.quarck.calnotify.ui
 
 //import com.github.quarck.calnotify.utils.logs.Logger
-import android.app.AlertDialog
+
 import android.content.ContentUris
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.net.Uri
 import android.os.Bundle
 import android.provider.CalendarContract
-import android.provider.CalendarContract.Events
+import android.provider.CalendarContract.*
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -57,6 +58,7 @@ import com.github.quarck.calnotify.utils.maps.MapsIntents
 import com.github.quarck.calnotify.utils.textutils.EventFormatter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.qrck.seshat.R
+
 
 // TODO: add repeating rule and calendar name somewhere on the snooze activity
 
@@ -106,13 +108,46 @@ open class ViewEventActivity : AppCompatActivity() {
         formatter = EventFormatter(this)
 
         // Populate event details
-        val eventId = intent.getLongExtra(Consts.INTENT_EVENT_ID_KEY, -1)
-        val instanceStartTime = intent.getLongExtra(Consts.INTENT_INSTANCE_START_TIME_KEY, -1L)
+        var eventId = intent.getLongExtra(Consts.INTENT_EVENT_ID_KEY, -1)
+        var instanceStartTime = intent.getLongExtra(Consts.INTENT_INSTANCE_START_TIME_KEY, -1L)
+        var instanceEndTime = -1L
         val alertTime = intent.getLongExtra(Consts.INTENT_ALERT_TIME, 0L)
+        var attendeeResponse = Attendees.ATTENDEE_STATUS_NONE
 
         snoozeFromMainActivity = intent.getBooleanExtra(Consts.INTENT_SNOOZE_FROM_MAIN_ACTIVITY, false)
         viewForFutureEvent = intent.getBooleanExtra(Consts.INTENT_VIEW_FUTURE_EVENT_EXTRA, false)
-        val noSkips = intent.getBooleanExtra(Consts.INTENT_NO_SKIPS_EXTRA, false)
+
+        if (intent != null && Intent.ACTION_VIEW == intent.action) {
+            instanceStartTime = intent.getLongExtra(EXTRA_EVENT_BEGIN_TIME, 0L)
+            instanceEndTime = intent.getLongExtra(EXTRA_EVENT_END_TIME, 0L)
+            attendeeResponse = intent.getIntExtra(Attendees.ATTENDEE_STATUS, Attendees.ATTENDEE_STATUS_NONE)
+
+            val data: Uri? = intent.data
+            if (data != null) {
+                try {
+                    val pathSegments: List<String> = data.getPathSegments()
+                    val size = pathSegments.size
+                    if (size > 2 && "EventTime" == pathSegments[2]) {
+                        // Support non-standard VIEW intent format:
+                        //dat = content://com.android.calendar/events/[id]/EventTime/[start]/[end]
+                        eventId = pathSegments[1].toLong()
+                        if (size > 4) {
+                            instanceStartTime = pathSegments[3].toLong()
+                            instanceEndTime = pathSegments[4].toLong()
+                        }
+                    } else {
+                        eventId = data.getLastPathSegment()?.toLong() ?: -1L
+                    }
+
+                    viewForFutureEvent = true
+                } catch (e: NumberFormatException) {
+//                    eventId = -1L
+                    instanceStartTime = 0
+                    instanceEndTime = 0
+                }
+            }
+        }
+
 
         // findViewById<Toolbar?>(R.id.toolbar)?.visibility = View.GONE
 

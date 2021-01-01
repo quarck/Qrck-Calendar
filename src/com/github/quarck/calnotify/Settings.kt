@@ -44,7 +44,8 @@ class Settings(val context: Context) : PersistentStorageBase(context, "settings"
             val prefs = getSharedPreferences(context)
             val defaultReminderString = prefs.getString(GeneralPreferences.KEY_DEFAULT_REMINDER,
                     GeneralPreferences.REMINDER_DEFAULT_TIME.toString())
-            return defaultReminderString!!.toInt()
+            val ret = defaultReminderString!!.toInt()
+            return if (ret >= 0) ret else GeneralPreferences.REMINDER_DEFAULT_TIME
         }
 
     val defaultReminderTime: Long by lazy { defaultReminderTimeMinutes * 60L * 1000L }

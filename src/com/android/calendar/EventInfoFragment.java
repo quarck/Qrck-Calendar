@@ -390,6 +390,7 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
     private boolean mNoCrossFade = false;  // Used to prevent repeated cross-fade
     private RadioGroup mResponseRadioGroup;
     private int mDefaultReminderMinutes;
+    private int mDefaultAllDayReminderMinutes;
     private boolean mUserModifiedReminders = false;
     /**
      * Contents of the "minutes" spinner.  This has default values from the XML file, augmented
@@ -891,8 +892,11 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
 
         SharedPreferences prefs = GeneralPreferences.Companion.getSharedPreferences(mActivity);
         String defaultReminderString = prefs.getString(
-                GeneralPreferences.KEY_DEFAULT_REMINDER, GeneralPreferences.NO_REMINDER_STRING);
+                GeneralPreferences.KEY_DEFAULT_REMINDER, GeneralPreferences.DEFAULT_REMINDER_STRING);
+        String defaultAllDayReminderString = prefs.getString(
+                GeneralPreferences.KEY_DEFAULT_ALL_DAY_REMINDER, GeneralPreferences.DEFAULT_ALL_DAY_REMINDER_STRING);
         mDefaultReminderMinutes = Integer.parseInt(defaultReminderString);
+        mDefaultAllDayReminderMinutes = Integer.parseInt(defaultAllDayReminderString);
         prepareReminders();
 
         return mView;
@@ -922,8 +926,7 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
         mIsRepeating = !TextUtils.isEmpty(rRule);
         // mHasAlarm will be true if it was saved in the event already, or if
         // we've explicitly been provided reminders (e.g. during rotation).
-        mHasAlarm = (mEventCursor.getInt(EVENT_INDEX_HAS_ALARM) == 1)? true :
-            (mReminders != null && mReminders.size() > 0);
+        mHasAlarm = (mEventCursor.getInt(EVENT_INDEX_HAS_ALARM) == 1) || (mReminders != null && mReminders.size() > 0);
         mMaxReminders = mEventCursor.getInt(EVENT_INDEX_MAX_REMINDERS);
         mCalendarAllowedReminders =  mEventCursor.getString(EVENT_INDEX_ALLOWED_REMINDERS);
         return true;
@@ -2113,18 +2116,10 @@ public class EventInfoFragment extends DialogFragment implements OnCheckedChange
     private void addReminder() {
         // TODO: when adding a new reminder, make it different from the
         // last one in the list (if any).
-        if (mDefaultReminderMinutes == GeneralPreferences.NO_REMINDER) {
-            EventViewUtils.addReminder(mActivity, mScrollView, this, mReminderViews,
-                    mReminderMinuteValues, mReminderMinuteLabels, mReminderMethodValues,
-                    mReminderMethodLabels,
-                    ReminderEntry.valueOf(GeneralPreferences.REMINDER_DEFAULT_TIME), mMaxReminders,
-                    mReminderChangeListener);
-        } else {
-            EventViewUtils.addReminder(mActivity, mScrollView, this, mReminderViews,
-                    mReminderMinuteValues, mReminderMinuteLabels, mReminderMethodValues,
-                    mReminderMethodLabels, ReminderEntry.valueOf(mDefaultReminderMinutes),
-                    mMaxReminders, mReminderChangeListener);
-        }
+        EventViewUtils.addReminder(mActivity, mScrollView, this, mReminderViews,
+                mReminderMinuteValues, mReminderMinuteLabels, mReminderMethodValues,
+                mReminderMethodLabels, ReminderEntry.valueOf(mDefaultReminderMinutes),
+                mMaxReminders, mReminderChangeListener);
 
         EventViewUtils.updateAddReminderButton(mView, mReminderViews, mMaxReminders);
     }

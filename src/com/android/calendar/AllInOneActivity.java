@@ -54,6 +54,7 @@ import com.android.calendar.settings.SettingsActivity;
 import com.android.calendar.settings.GeneralPreferences;
 import com.android.calendar.settings.SettingsActivityKt;
 import com.android.calendar.settings.ViewDetailsPreferences;
+import com.github.quarck.calnotify.ui.ViewEventActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -1411,7 +1412,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     Uri eventUri = ContentUris.withAppendedId(Events.CONTENT_URI, event.id);
                     intent.setData(eventUri);
-                    intent.setClass(this, EventInfoActivity.class);
+                    intent.setClass(this, ViewEventActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT |
                             Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     intent.putExtra(EXTRA_EVENT_BEGIN_TIME, event.startTime.toMillis(false));
