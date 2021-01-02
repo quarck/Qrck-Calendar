@@ -409,8 +409,6 @@ class UpcomingNotificationsActivity : AppCompatActivity() {
                         .putExtra(Consts.INTENT_EVENT_ID_KEY, event.eventId)
                         .putExtra(Consts.INTENT_INSTANCE_START_TIME_KEY, event.instanceStartTime)
                         .putExtra(Consts.INTENT_ALERT_TIME, event.alertTime)
-                        .putExtra(Consts.INTENT_SNOOZE_FROM_MAIN_ACTIVITY, true)
-                        .putExtra(Consts.INTENT_VIEW_FUTURE_EVENT_EXTRA, true)
                         .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
     }
 

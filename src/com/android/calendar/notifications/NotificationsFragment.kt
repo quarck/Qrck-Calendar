@@ -142,9 +142,7 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
                 R.id.action_snooze_all ->
                     startActivity(
                             Intent(ctx, SnoozeAllActivity::class.java)
-                                    .putExtra(Consts.INTENT_SNOOZE_ALL_IS_CHANGE, !(adapter?.hasActiveEvents
-                                            ?: false))
-                                    .putExtra(Consts.INTENT_SNOOZE_FROM_MAIN_ACTIVITY, true)
+                                    .putExtra(Consts.INTENT_SNOOZE_ALL_IS_CHANGE, !(adapter?.hasActiveEvents ?: false))
                                     )
 
                 R.id.action_upcoming -> {
@@ -241,7 +239,6 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
                                 .putExtra(Consts.INTENT_NOTIFICATION_ID_KEY, event.notificationId)
                                 .putExtra(Consts.INTENT_EVENT_ID_KEY, event.eventId)
                                 .putExtra(Consts.INTENT_INSTANCE_START_TIME_KEY, event.instanceStartTime)
-                                .putExtra(Consts.INTENT_SNOOZE_FROM_MAIN_ACTIVITY, true)
                                 .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
 
             }

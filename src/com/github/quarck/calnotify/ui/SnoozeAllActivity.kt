@@ -87,8 +87,6 @@ open class SnoozeAllActivity : AppCompatActivity() {
 
     var snoozeAllIsChange = false
 
-    var snoozeFromMainActivity = false
-
     val snoozePresetControlIds = intArrayOf(
             R.id.snooze_view_snooze_present1,
             R.id.snooze_view_snooze_present2,
@@ -130,8 +128,6 @@ open class SnoozeAllActivity : AppCompatActivity() {
         formatter = EventFormatter(this)
 
         snoozeAllIsChange = intent.getBooleanExtra(Consts.INTENT_SNOOZE_ALL_IS_CHANGE, false)
-
-        snoozeFromMainActivity = intent.getBooleanExtra(Consts.INTENT_SNOOZE_FROM_MAIN_ACTIVITY, false)
 
         val toolbar = findViewById<Toolbar?>(R.id.toolbar)
         setSupportActionBar(toolbar)

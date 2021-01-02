@@ -77,11 +77,12 @@ open class ViewEventActivity : AppCompatActivity() {
     private val calendarReloadManager = CalendarReloadManager
     private val calendarProvider = CalendarProvider
 
-    var snoozeFromMainActivity = false
-    var viewForFutureEvent = false
+    var hasEventInDB = false
 
     lateinit var calendarNameTextView: TextView
     lateinit var calendarAccountTextView: TextView
+
+    var isUpcoming = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -114,9 +115,6 @@ open class ViewEventActivity : AppCompatActivity() {
         val alertTime = intent.getLongExtra(Consts.INTENT_ALERT_TIME, 0L)
         var attendeeResponse = Attendees.ATTENDEE_STATUS_NONE
 
-        snoozeFromMainActivity = intent.getBooleanExtra(Consts.INTENT_SNOOZE_FROM_MAIN_ACTIVITY, false)
-        viewForFutureEvent = intent.getBooleanExtra(Consts.INTENT_VIEW_FUTURE_EVENT_EXTRA, false)
-
         if (intent != null && Intent.ACTION_VIEW == intent.action) {
             instanceStartTime = intent.getLongExtra(EXTRA_EVENT_BEGIN_TIME, 0L)
             instanceEndTime = intent.getLongExtra(EXTRA_EVENT_END_TIME, 0L)
@@ -138,22 +136,20 @@ open class ViewEventActivity : AppCompatActivity() {
                     } else {
                         eventId = data.getLastPathSegment()?.toLong() ?: -1L
                     }
-
-                    viewForFutureEvent = true
                 } catch (e: NumberFormatException) {
 //                    eventId = -1L
                     instanceStartTime = 0
                     instanceEndTime = 0
                 }
             }
+
+            hasEventInDB = false
+        }
+        else {
+            hasEventInDB = !isUpcoming
         }
 
-
-        // findViewById<Toolbar?>(R.id.toolbar)?.visibility = View.GONE
-
-        // load event if it is not a "snooze all"
-
-        if (!viewForFutureEvent) {
+        if (hasEventInDB) {
             EventsStorage(this).use { db ->
 
                 var dbEvent = db.getEvent(eventId, instanceStartTime)
@@ -231,12 +227,6 @@ open class ViewEventActivity : AppCompatActivity() {
         // title
         val title = findViewById<TextView>(R.id.event_view_title)
         title.text = if (event.title.isNotEmpty()) event.title else this.resources.getString(R.string.empty_title);
-//        title.setMovementMethod(ScrollingMovementMethod())
-//        title.post {
-//            val y = title.getLayout()?.getLineTop(0)
-//            if (y != null)
-//                title.scrollTo(0, y)
-//        }
         title.setTextIsSelectable(true)
 
         findViewById<View>(R.id.event_view_event_color_view).setBackgroundColor(event.color.adjustCalendarColor(darker = false))
@@ -254,7 +244,6 @@ open class ViewEventActivity : AppCompatActivity() {
         }
 
         var eventTimeZoneOffset = 0
-//        var deviceTimeZoneOffset = 0
         if (event.timeZone.isNotBlank()) {
             try {
                 val eventTimeZone = java.util.TimeZone.getTimeZone(event.timeZone)
@@ -267,13 +256,7 @@ open class ViewEventActivity : AppCompatActivity() {
         }
 
         findViewById<TextView>(R.id.event_view_timezone).apply {
-//            if (eventTimeZoneOffset == deviceTimeZoneOffset) {
-//                text = event.timeZone
-//                visibility = View.VISIBLE
-//            }
-//            else {
             visibility = View.GONE
-            //}
         }
 
         // recurrence
@@ -308,7 +291,7 @@ open class ViewEventActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.event_view_description).text = event.desc
         }
 
-        if (!viewForFutureEvent) {
+        if (hasEventInDB) {
             findViewById<RelativeLayout>(R.id.snooze_layout).visibility = View.VISIBLE
         } else {
             findViewById<RelativeLayout>(R.id.snooze_layout).visibility = View.GONE
@@ -351,12 +334,10 @@ open class ViewEventActivity : AppCompatActivity() {
 
         fabMoveButton.backgroundTintList = fabColorStateList
 
-        val allowEdit = !calendar.isReadOnly
-
-        val eventStartTimeHasPassed = (DateTimeUtils.isUTCTodayOrInThePast(event.startTime))
-        if (allowEdit && !viewForFutureEvent && eventStartTimeHasPassed) {
+        if ((isUpcoming || hasEventInDB) && !calendar.isReadOnly) {
             fabMoveButton.setOnClickListener(this::showMoveMenu)
-        } else {
+        }
+        else {
             fabMoveButton.visibility = View.GONE
         }
     }
@@ -371,7 +352,7 @@ open class ViewEventActivity : AppCompatActivity() {
             menu.findItem(R.id.action_delete_event)?.isVisible = false
         }
 
-        if (viewForFutureEvent && event.alertTime != 0L ) {
+        if (!hasEventInDB && event.alertTime != 0L ) {
             menu.findItem(R.id.action_dismiss)?.isVisible = false
         }
 
@@ -477,7 +458,7 @@ open class ViewEventActivity : AppCompatActivity() {
         mDeleteHelper.setDeleteNotificationListener {}
         mDeleteHelper.setOnDismissListener{}
         mDeleteHelper.delete(event.instanceStartTime, event.instanceEndTime, event.eventId, -1) {
-            if (!viewForFutureEvent && event.alertTime != 0L) {
+            if (hasEventInDB && event.alertTime != 0L) {
                 CalNotifyController.dismissEvent(this, EventFinishType.DeletedInTheApp, event)
             }
             finish()
@@ -515,7 +496,11 @@ open class ViewEventActivity : AppCompatActivity() {
 
 }
 
-class ViewEventActivityUpcoming: ViewEventActivity() {}
+class ViewEventActivityUpcoming: ViewEventActivity() {
+    init {
+        isUpcoming = true
+    }
+}
 
 class ViewEventActivityLog: ViewEventActivity() {}
 
