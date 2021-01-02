@@ -20,6 +20,7 @@ import com.github.quarck.calnotify.eventsstorage.EventsStorage
 import com.github.quarck.calnotify.eventsstorage.FinishedEventsStorage
 import com.github.quarck.calnotify.ui.*
 import com.github.quarck.calnotify.utils.logs.DevLog
+import com.github.quarck.calnotify.utils.md5state
 import kotlinx.coroutines.*
 import org.qrck.seshat.R
 
@@ -34,6 +35,7 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
     private var refreshLayout: SwipeRefreshLayout? = null
 
     private var adapter: EventListAdapter? = null
+    private var lastEventsSummary = md5state(0, 0, 0, 0)
 
     private var lastEventDismissalScrollPosition: Int? = null
 
@@ -155,38 +157,49 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
         return super.onOptionsItemSelected(item)
     }
 
+    private suspend fun loadCurrentEvents(ctx: Context, skipPurge: Boolean = false) = withContext(Dispatchers.IO) {
+
+        if (!skipPurge) {
+            FinishedEventsStorage(ctx).use {
+                it.purgeOld(System.currentTimeMillis(), Consts.BIN_KEEP_HISTORY_MILLISECONDS)
+            }
+        }
+
+        val events = EventsStorage(ctx).use { db ->
+            db.events.sortedWith(
+                    Comparator { lhs, rhs ->
+                        if (lhs.snoozedUntil < rhs.snoozedUntil)
+                            return@Comparator -1;
+                        else if (lhs.snoozedUntil > rhs.snoozedUntil)
+                            return@Comparator 1;
+
+                        if (lhs.lastStatusChangeTime > rhs.lastStatusChangeTime)
+                            return@Comparator -1;
+                        else if (lhs.lastStatusChangeTime < rhs.lastStatusChangeTime)
+                            return@Comparator 1;
+
+                        return@Comparator 0;
+
+                    }).toTypedArray()
+        }
+
+        val summary = md5state(0, 0, 0, 0)
+
+        for (e in events) {
+            summary.xor(e.contentMd5)
+        }
+
+        Pair(events, summary)
+    }
+
 
     private fun reloadData() {
-
         val ctx = this.context ?: return
 
         scope.launch {
-
-            val events =
-                    withContext(Dispatchers.IO) {
-                        FinishedEventsStorage(ctx).use { it.purgeOld(System.currentTimeMillis(), Consts.BIN_KEEP_HISTORY_MILLISECONDS) }
-
-                        EventsStorage(ctx).use { db ->
-                            db.events.sortedWith(
-                                    Comparator<EventAlertRecord> { lhs, rhs ->
-
-                                        if (lhs.snoozedUntil < rhs.snoozedUntil)
-                                            return@Comparator -1;
-                                        else if (lhs.snoozedUntil > rhs.snoozedUntil)
-                                            return@Comparator 1;
-
-                                        if (lhs.lastStatusChangeTime > rhs.lastStatusChangeTime)
-                                            return@Comparator -1;
-                                        else if (lhs.lastStatusChangeTime < rhs.lastStatusChangeTime)
-                                            return@Comparator 1;
-
-                                        return@Comparator 0;
-
-                                    }).toTypedArray()
-                        }
-                    }
-
+            val (events, eventsSummary) = loadCurrentEvents(ctx)
             adapter?.setEventsToDisplay(events);
+            lastEventsSummary = eventsSummary
             onNumEventsUpdated()
             refreshLayout?.isRefreshing = false
         }
@@ -236,45 +249,37 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
             DevLog.info(LOG_TAG, "onItemRemoved: Removing event id ${event.eventId} from DB and dismissing notification id ${event.notificationId}")
             CalNotifyController.dismissEvent(ctx, EventFinishType.ManuallyInTheApp, event)
             lastEventDismissalScrollPosition = adapter?.scrollPosition
+            lastEventsSummary.xor(event.contentMd5)
             onNumEventsUpdated()
         }
     }
-
-    // TODO: validate this is used!!
-    // TODO: validate this is used!!
-    // TODO: validate this is used!!
 
     override fun onItemRestored(event: EventAlertRecord) {
         this.context?.let { ctx ->
             DevLog.info(LOG_TAG, "onItemRestored, eventId=${event.eventId}")
             CalNotifyController.restoreEvent(ctx, event)
+            lastEventsSummary.xor(event.contentMd5)
             onNumEventsUpdated()
         }
     }
 
-    override fun onItemSnooze(v: View, position: Int, eventId: Long) {
-        DevLog.info(LOG_TAG, "onItemSnooze, pos=$position, eventId=$eventId");
+    fun onDataUpdated(causedByUser: Boolean) {
+        if (causedByUser) {
+            reloadData()
+            return
+        }
 
-        val event = adapter?.getEventAtPosition(position, eventId)
-        if (event != null) {
+        val act = this.activity ?: return
 
-            this.context?.let { ctx ->
-                startActivity(
-                        Intent(ctx, ViewEventActivity::class.java)
-                                .putExtra(Consts.INTENT_NOTIFICATION_ID_KEY, event.notificationId)
-                                .putExtra(Consts.INTENT_EVENT_ID_KEY, event.eventId)
-                                .putExtra(Consts.INTENT_INSTANCE_START_TIME_KEY, event.instanceStartTime)
-                                .putExtra(Consts.INTENT_SNOOZE_FROM_MAIN_ACTIVITY, true)
-                                .setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        scope.launch {
+            val (_, eventsSummary) = loadCurrentEvents(act, true)
+            DevLog.debug(LOG_TAG, "onDataUpdated: last summary: $lastEventsSummary, new summary: $eventsSummary")
+            if (lastEventsSummary != eventsSummary) {
+                withContext(Dispatchers.Main) {
+                    reloadLayout.visibility = View.VISIBLE
+                }
             }
         }
-    }
-
-    fun onDataUpdated(causedByUser: Boolean) {
-        if (causedByUser)
-            reloadData()
-        else
-            this.activity?.runOnUiThread { reloadLayout.visibility = View.VISIBLE }
     }
 
 
