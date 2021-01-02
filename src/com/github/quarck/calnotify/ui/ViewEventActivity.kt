@@ -373,15 +373,6 @@ open class ViewEventActivity : AppCompatActivity() {
 
         if (viewForFutureEvent && event.alertTime != 0L ) {
             menu.findItem(R.id.action_dismiss)?.isVisible = false
-
-            val wasHandled = CalendarMonitor(CalendarProvider).getAlertWasHandled(this, event)
-            val inShortRange = (event.instanceStartTime-System.currentTimeMillis()) in 0 until 2 * Consts.DAY_IN_MILLISECONDS
-            menu.findItem(R.id.action_mark_done)?.isVisible = !wasHandled && inShortRange
-            menu.findItem(R.id.action_mark_not_done)?.isVisible = wasHandled && inShortRange
-        }
-        else {
-            menu.findItem(R.id.action_mark_done)?.isVisible = false
-            menu.findItem(R.id.action_mark_not_done)?.isVisible = false
         }
 
         return true
@@ -400,16 +391,6 @@ open class ViewEventActivity : AppCompatActivity() {
 
             R.id.action_dismiss -> {
                 CalNotifyController.dismissEvent(this, EventFinishType.ManuallyInTheApp, event)
-                finish()
-            }
-
-            R.id.action_mark_done -> {
-                CalNotifyController.dismissFutureEvent(this, MonitorDataPair.fromEventAlertRecord(event))
-                finish()
-            }
-
-            R.id.action_mark_not_done -> {
-                CalNotifyController.restoreEvent(this, event)
                 finish()
             }
         }
