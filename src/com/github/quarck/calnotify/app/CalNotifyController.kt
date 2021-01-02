@@ -627,6 +627,7 @@ object CalNotifyController  {
             }
             else {
                 DevLog.error(LOG_TAG, "dismissEvent: can't find event $eventId, $instanceStartTime")
+                notificationManager.removeNotification(context, notificationId)
             }
         }
     }

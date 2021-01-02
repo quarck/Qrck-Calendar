@@ -564,7 +564,7 @@ class EventNotificationManager {
 
     }
 
-    private fun removeNotification(ctx: Context, notificationId: Int) {
+    fun removeNotification(ctx: Context, notificationId: Int) {
         val notificationManager = ctx.notificationManager
         notificationManager.cancel(notificationId)
     }
