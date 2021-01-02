@@ -70,6 +70,12 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
         refreshLayout?.setOnRefreshListener {
             reloadLayout.visibility = View.GONE;
             reloadData()
+
+            val ctx = this.activity
+            ctx?.let {
+                val calendarController = CalendarController.getInstance(ctx);
+                calendarController.refreshCalendars();
+            }
         }
 
         this.context?.let {
