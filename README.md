@@ -1,37 +1,13 @@
 # Seshat Calendar
-Seshat (the ancient Egyptian goddess of wisdom, knowledge, and writing) is an open source material designed calendar made for everyone!
-Forked from The Etar Calendar.
+Based on the mix of "Calendar Notifications Plus" and calendar by The Etar Project (based on AOSP), this app implements an alternative calendar app for android that takes an additional care to make sure calendar event notifications are delivered on time and ensures that such notifications are not lost by any accident - notification stays until you mark it as done. 
 
-![Seshat Calendar](metadata/animation.gif)
+
+# What does the name mean? 
+Seshat is the ancient Egyptian goddess of wisdom, knowledge, and writing. 
 
 ## Special thanks
 
 The application is an enhanced version of The Etar Calendar, which itself is en enhanced version of AOSP Calendar.
-Without the help of [Free Software for Android](https://github.com/Free-Software-for-Android/Standalone-Calendar) team,
-this app would be just a dream. So thanks to them!
-
-## Features
-- Month view.
-- Week, day & agenda view.
-- Uses Android calendar sync. Works with Google Calendar, Exchange, etc.
-- Material designed.
-- Support offline calendar.
-- Agenda widget.
-- Multilingual UI.
-
-## How to use Seshat
-Store your calendar on the phone only:
-  - Create an offline calendar.
-
-Sync your calendar to a server:
-  - A cloud-synched calendar could be a google calendar, but you can also use
-  any other public Caldav-server or even host your own (which would be the
-  only way to keep full control over your data and still have ONE calendar
-  usable from different devices.) To sync such a calendar to some server you
-  need yet another app, e. g. DAVx5. That’s necessary because a Caldav client
-  isn't included in Seshat.
-
-  The following [link](https://ownyourbits.com/2017/12/30/sync-nextcloud-tasks-calendars-and-contacts-on-your-android-device/) provides a tutorial how to use Nextcloud + DAVx5 + Seshat.
 
 ### Technical explanation
 On Android there are "Calendar providers". These can be calendars that are
