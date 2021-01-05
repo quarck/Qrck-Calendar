@@ -2,7 +2,7 @@
 Based on the mix of "Calendar Notifications Plus" and calendar by The Etar Project (based on AOSP), this app implements an alternative calendar app for android that takes an additional care to make sure calendar event notifications are delivered on time and ensures that such notifications are not lost by any accident - notification stays until you mark it as done. 
 
 
-# What does the name mean? 
+## What does the name mean? 
 Seshat is the ancient Egyptian goddess of wisdom, knowledge, and writing. 
 
 ## Special thanks
