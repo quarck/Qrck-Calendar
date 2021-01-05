@@ -41,6 +41,7 @@ import com.android.calendar.Utils
 import com.github.quarck.calnotify.Consts
 import org.qrck.seshat.R
 import com.github.quarck.calnotify.Settings
+import com.github.quarck.calnotify.app.TagsManager
 import com.github.quarck.calnotify.calendar.*
 import com.github.quarck.calnotify.calendar.CalendarEditor
 import com.github.quarck.calnotify.utils.logs.DevLog
@@ -143,6 +144,8 @@ open class EditEventActivity : AppCompatActivity() {
     private lateinit var notificationPrototype: TextView
     private lateinit var addNotification: TextView
 
+    private lateinit var alarmTag: SwitchMaterial
+
     private lateinit var note: EditText
 
     private lateinit var eventTitleLayout: RelativeLayout
@@ -161,6 +164,8 @@ open class EditEventActivity : AppCompatActivity() {
     private var calendarProvider = CalendarProvider
 
     private val reminders = mutableListOf<ReminderWrapper>()
+
+    private var addAlarmTag = false
 
     private var originalEvent: EventRecord? = null
     private var originalInstanceStart = 0L
@@ -307,6 +312,8 @@ open class EditEventActivity : AppCompatActivity() {
         notificationPrototype = findViewById<TextView?>(R.id.notificationPrototype) ?: throw Exception("Can't find notificationPrototype")
         addNotification = findViewById<TextView?>(R.id.add_notification) ?: throw Exception("Can't find add_notification")
 
+        alarmTag = findViewById(R.id.switch_alarm_tag) ?: throw Exception("Can't find switch_alarm_tag")
+
         note = findViewById<EditText?>(R.id.event_note) ?: throw Exception("Can't find event_note")
 
         notificationPrototype.visibility = View.GONE
@@ -352,6 +359,8 @@ open class EditEventActivity : AppCompatActivity() {
         accountName.setOnClickListener(this::onAccountClick)
 
         switchAllDay.setOnClickListener(this::onSwitchAllDayClick)
+
+        alarmTag.setOnClickListener(this::onSwitchAddAlarmClick)
 
         dateFrom.setOnClickListener(this::onDateFromClick)
         timeFrom.setOnClickListener(this::onTimeFromClick)
@@ -668,8 +677,13 @@ open class EditEventActivity : AppCompatActivity() {
         val isRecurring = newRRule != null && !newRRule.isEmpty()
         val wasRecurring = oldRRule != null && !oldRRule.isEmpty()
 
+        var newTitle = eventTitleText.text.toString()
+        if (addAlarmTag && !newTitle.contains(TagsManager.ALARM_TAG)) {
+            newTitle = newTitle + " " + TagsManager.ALARM_TAG
+        }
+
         val details = CalendarEventDetails(
-                title = eventTitleText.text.toString(),
+                title = newTitle,
                 desc = note.text.toString(),
                 location = eventLocation.text.toString(),
                 timezone = originalEvent?.timezone ?: calendar.timeZone,
@@ -737,6 +751,11 @@ open class EditEventActivity : AppCompatActivity() {
 
         updateDateTimeUI()
         updateReminders()
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun onSwitchAddAlarmClick(v: View) {
+        addAlarmTag = alarmTag.isChecked
     }
 
     @Suppress("UNUSED_PARAMETER")

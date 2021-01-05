@@ -494,6 +494,7 @@
     <!-- Settings check box label to enable or disable notifications -->
     <string name="preferences_alerts_title">Notifications</string>
     <string name="preferences_alarm_alerts_title">Alarm Notifications</string>
+    <string name="preferences_alarm_alerts_explanation">Events with #alarm tag anywhere in the title or description would use this notification category.\nIt uses Alarm sound stream, thus on many devices would produce sound notification even in silent mode.\nOn top of that, notification sound would be repeated every few minutes.\nAdditionally you can enable this notification channel to bypass DND mode if you wish to get always notified about events marked with #alarm.</string>
     <!-- Settings dialog label that specifies when the phone should vibrate -->
     <string name="preferences_alerts_vibrateWhen_title">Vibrate</string>
     <!-- Title of ringtone selector dialog -->
@@ -1097,6 +1098,7 @@
     <string name="clear_log">Clear Log</string>
     <string name="clear_log_confirmation">Clear log entries?</string>
     <string name="no_undo">No undo available for this action</string>
+    <string name="alarm_tag_string">#alarm</string>
 
 
 </resources>

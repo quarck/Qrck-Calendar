@@ -89,7 +89,8 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Preference
         app:key="preferences_notification_alarm"
-        app:title="@string/preferences_alarm_alerts_title" />
+        app:title="@string/preferences_alarm_alerts_title"
+        app:summary="@string/preferences_alarm_alerts_explanation"/>
 
     <PreferenceScreen
         android:key="preferences_handled_calendars"
