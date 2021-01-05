@@ -510,10 +510,10 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                         mCurrentView == ViewType.NOTIFICATIONS_UPCOMING) {
 
                     long currentTime = System.currentTimeMillis();
-                    long currentTimeRoundedUp = currentTime + 15 * 60 * 1000 - (currentTime % (15 * 60 * 1000));
+                    currentTime -= (currentTime % (60 * 60 * 1000)); // drop to the hour
 
                     mController.sendEventRelatedEvent(
-                            this, EventType.CREATE_EVENT, -1, currentTimeRoundedUp, 0, 0, 0, -1);
+                            this, EventType.CREATE_EVENT, -1, currentTime, 0, 0, 0, -1);
                 } else {
                     //Create new Event
                     Time t = new Time();

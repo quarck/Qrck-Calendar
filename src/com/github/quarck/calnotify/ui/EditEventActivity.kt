@@ -29,6 +29,7 @@ import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.provider.CalendarContract
+import android.provider.CalendarContract.*
 import android.text.format.DateUtils
 import android.view.Menu
 import android.view.View
@@ -242,7 +243,24 @@ open class EditEventActivity : AppCompatActivity() {
         val action = intent.action
         val type = intent.type
 
-        if (Intent.ACTION_SEND.equals(action) && type != null) {
+        val eventId = intent.getLongExtra(EVENT_ID, -1)
+
+
+        // Set default date and time
+        var eventDefaultStart = System.currentTimeMillis()
+        eventDefaultStart -= (eventDefaultStart % (3600 * 1000L))  // Drop minutes, seconds and millis
+        eventDefaultStart += Consts.NEW_EVENT_DEFAULT_ADD_HOURS * Consts.HOUR_IN_MILLISECONDS
+        val eventDefaultEnd = eventDefaultStart + Utils.getDefaultEventDurationInMillis(this)
+
+        originalInstanceStart = intent.getLongExtra(INSTANCE_START, eventDefaultStart)
+        originalInstanceEnd = intent.getLongExtra(INSTANCE_END, eventDefaultEnd)
+
+        if (Intent.ACTION_VIEW.equals(action)) {
+            originalInstanceStart = intent.getLongExtra(EXTRA_EVENT_BEGIN_TIME, originalInstanceStart)
+            originalInstanceEnd = intent.getLongExtra(EXTRA_EVENT_END_TIME, originalInstanceEnd)
+            receivedSharedText = intent.getStringExtra(Events.TITLE) ?: ""
+        }
+        else if (Intent.ACTION_SEND.equals(action) && type != null) {
             if ("text/plain".equals(type)) {
                 receivedSharedText = intent.getStringExtra(Intent.EXTRA_TEXT) ?: ""
             }
@@ -253,11 +271,9 @@ open class EditEventActivity : AppCompatActivity() {
             }
         }
 
-        val eventId = intent.getLongExtra(EVENT_ID, -1)
-        originalInstanceStart = intent.getLongExtra(INSTANCE_START, 0)
-        originalInstanceEnd = intent.getLongExtra(INSTANCE_END, 0)
-
-        val newStartTime = intent.getLongExtra(NEW_EVENT_START_TIME, 0)
+        if (originalInstanceEnd == 0L || originalInstanceEnd == -1L) {
+            originalInstanceEnd = originalInstanceStart +  Utils.getDefaultEventDurationInMillis(this)
+        }
 
         if (eventId != -1L) {
             originalEvent = CalendarProvider.getEvent(this, eventId)
@@ -280,6 +296,131 @@ open class EditEventActivity : AppCompatActivity() {
             }
         }
 
+        initViewItems()
+
+        // settings
+        settings = Settings(this)
+
+        // Default calendar
+        calendars = calendarProvider
+                .getCalendars(this)
+                .filter {
+                    !it.isReadOnly &&
+                            it.isVisible &&
+                            settings.getCalendarIsHandled(it.calendarId)
+                }
+
+        if (calendars.isEmpty()) {
+            DevLog.error(LOG_TAG, "You have no enabled calendars")
+
+            accountName.text = "" // remove debug mess
+
+            AlertDialog.Builder(this)
+                    .setMessage(R.string.no_active_calendars)
+                    .setPositiveButton(android.R.string.ok) { _, _ ->
+                        finish()
+                    }
+                    .show()
+
+            return
+        }
+
+        val calendarId = intent.getLongExtra(Events.CALENDAR_ID, persistentState.lastCalendar)
+        if (calendarId != -1L) {
+            calendar = calendars.filter { it.calendarId == calendarId }.firstOrNull() ?: calendars[0]
+        } else {
+            calendar = calendars.filter { it.isPrimary }.firstOrNull() ?: calendars[0]
+        }
+
+        // Set-up fields
+
+        isAllDay = intent.getBooleanExtra(EXTRA_EVENT_ALL_DAY, false)
+
+        val eventToEdit = originalEvent
+
+        if (eventToEdit != null) {
+            val cal = calendars.find { it.calendarId == eventToEdit.calendarId }
+            if (cal == null) {
+                Toast.makeText(this, R.string.calendar_not_found, Toast.LENGTH_LONG).show()
+                finish()
+                return
+            }
+            calendar = cal
+
+            isAllDay = eventToEdit.isAllDay
+            switchAllDay.isChecked = isAllDay
+            switchAllDay.isEnabled = false
+
+            rRule = eventToEdit.rRule
+            rDate = eventToEdit.rDate
+            exRRule = eventToEdit.exRRule
+            exRDate = eventToEdit.exRDate
+
+            accountName.text = calendar.name
+            eventTitleLayout.background = ColorDrawable(eventToEdit.color.invertColor().scaleColor(0.1f))
+            eventTitleText.background = ColorDrawable(eventToEdit.color.invertColor().scaleColor(0.1f))
+            eventTitleText.setTextColor(ColorStateList.valueOf(eventToEdit.color.scaleColor(1.8f)))
+
+            window.statusBarColor = 0
+
+            eventTitleText.setText(eventToEdit.title)
+            note.setText(eventToEdit.desc)
+            eventLocation.setText(eventToEdit.location)
+
+            for (reminder in eventToEdit.reminders) {
+                addReminder(reminder, isAllDay)
+            }
+
+            updateReminders()
+        }
+        else {
+            // Initialize default values
+            accountName.text = calendar.name
+            eventTitleText.setTextColor(ColorStateList.valueOf(calendar.color.scaleColor(1.8f)))
+
+            eventTitleLayout.background = ColorDrawable(calendar.color.invertColor().scaleColor(0.1f))
+            eventTitleText.background = ColorDrawable(calendar.color.invertColor().scaleColor(0.1f))
+
+            if (receivedSharedText.isNotEmpty()) {
+                eventTitleText.setText(receivedSharedText)
+            }
+
+            window.statusBarColor = calendar.color.scaleColor(0.7f)
+
+            val defaultReminder = Utils.getDefaultEventReminderMinutes(this) * Consts.MINUTE_IN_MILLISECONDS
+            addReminder(EventReminderRecord(defaultReminder), false)
+
+            val defaultAllDayReminder = Utils.getDefaultAllDayEventReminderMinutes(this) * Consts.MINUTE_IN_MILLISECONDS
+            addReminder(EventReminderRecord(defaultAllDayReminder), true)
+
+            updateReminders()
+        }
+
+        from = DateTimeUtils.createCalendarTime(originalInstanceStart)
+        to = DateTimeUtils.createCalendarTime(originalInstanceEnd)
+
+        if (isAllDay) {
+            val fromUtc = DateTimeUtils.createUTCCalendarTime(originalInstanceStart)
+            val toUtc = DateTimeUtils.createUTCCalendarTime(originalInstanceEnd)
+
+            from.year = fromUtc.year
+            from.month = fromUtc.month
+            from.dayOfMonth = fromUtc.dayOfMonth
+
+            to.year = toUtc.year
+            to.month = toUtc.month
+            to.dayOfMonth = toUtc.dayOfMonth
+        }
+
+        updateDateTimeUI();
+
+        eventTitleText.requestFocus()
+        eventTitleText.setSelection(eventTitleText.text.length)
+
+        updateRecurrenceLabel()
+    }
+
+    fun initViewItems() {
         layoutMain = findViewById(R.id.layout_main)
         layoutRecurrence = findViewById(R.id.layout_recurrence)
 
@@ -318,39 +459,6 @@ open class EditEventActivity : AppCompatActivity() {
 
         notificationPrototype.visibility = View.GONE
 
-        // settings
-        settings = Settings(this)
-
-        // Default calendar
-        calendars = calendarProvider
-                .getCalendars(this)
-                .filter {
-                    !it.isReadOnly &&
-                            it.isVisible &&
-                            settings.getCalendarIsHandled(it.calendarId)
-                }
-
-        if (calendars.isEmpty()) {
-            DevLog.error(LOG_TAG, "You have no enabled calendars")
-
-            accountName.text = "" // remove debug mess
-
-            AlertDialog.Builder(this)
-                    .setMessage(R.string.no_active_calendars)
-                    .setPositiveButton(android.R.string.ok) { _, _ ->
-                        finish()
-                    }
-                    .show()
-
-            return
-        }
-
-        val lastCalendar = persistentState.lastCalendar
-        if (lastCalendar != -1L) {
-            calendar = calendars.filter { it.calendarId == lastCalendar }.firstOrNull() ?: calendars[0]
-        } else {
-            calendar = calendars.filter { it.isPrimary }.firstOrNull() ?: calendars[0]
-        }
 
         // Set onClickListener-s
         buttonSave.setOnClickListener(this::onButtonSaveClick)
@@ -372,106 +480,6 @@ open class EditEventActivity : AppCompatActivity() {
 
         buttonRecurrence.setOnClickListener(this::onButtonRecurrence)
 
-        // Set-up fields
-
-        val eventToEdit = originalEvent
-
-        if (eventToEdit != null) {
-            val cal = calendars.find { it.calendarId == eventToEdit.calendarId }
-            if (cal == null) {
-                Toast.makeText(this, R.string.calendar_not_found, Toast.LENGTH_LONG).show()
-                finish()
-                return
-            }
-            calendar = cal
-
-            isAllDay = eventToEdit.isAllDay
-            switchAllDay.isChecked = isAllDay
-            switchAllDay.isEnabled = false
-
-            rRule = eventToEdit.rRule
-            rDate = eventToEdit.rDate
-            exRRule = eventToEdit.exRRule
-            exRDate = eventToEdit.exRDate
-
-            accountName.text = calendar.name
-            eventTitleLayout.background = ColorDrawable(eventToEdit.color.invertColor().scaleColor(0.1f))
-            eventTitleText.background = ColorDrawable(eventToEdit.color.invertColor().scaleColor(0.1f))
-            eventTitleText.setTextColor(ColorStateList.valueOf(eventToEdit.color.scaleColor(1.8f)))
-
-            window.statusBarColor = 0
-
-            eventTitleText.setText(eventToEdit.title)
-            note.setText(eventToEdit.desc)
-            eventLocation.setText(eventToEdit.location)
-
-//            eventTimeSonze.setText(eventToEdit.timezone)
-
-            from = DateTimeUtils.createCalendarTime(originalInstanceStart)
-            to = DateTimeUtils.createCalendarTime(originalInstanceEnd)
-
-            if (eventToEdit.isAllDay) {
-                val fromUtc = DateTimeUtils.createUTCCalendarTime(originalInstanceStart)
-                val toUtc = DateTimeUtils.createUTCCalendarTime(originalInstanceEnd)
-
-                from.year = fromUtc.year
-                from.month = fromUtc.month
-                from.dayOfMonth = fromUtc.dayOfMonth
-
-                to.year = toUtc.year
-                to.month = toUtc.month
-                to.dayOfMonth = toUtc.dayOfMonth
-            }
-
-            updateDateTimeUI()
-
-            for (reminder in eventToEdit.reminders) {
-                addReminder(reminder, isAllDay)
-            }
-
-            updateReminders()
-
-        }
-        else {
-            // Initialize default values
-            accountName.text = calendar.name
-            eventTitleText.setTextColor(ColorStateList.valueOf(calendar.color.scaleColor(1.8f)))
-
-            eventTitleLayout.background = ColorDrawable(calendar.color.invertColor().scaleColor(0.1f))
-            eventTitleText.background = ColorDrawable(calendar.color.invertColor().scaleColor(0.1f))
-
-            if (receivedSharedText.isNotEmpty()) {
-                eventTitleText.setText(receivedSharedText)
-            }
-
-            window.statusBarColor = calendar.color.scaleColor(0.7f)
-
-            // Set default date and time
-            var currentTime = if (newStartTime != 0L) newStartTime else System.currentTimeMillis()
-            currentTime -= (currentTime % 1000)  // Drop millis
-
-            from = DateTimeUtils.createCalendarTime(currentTime)
-            from.addHours(Consts.NEW_EVENT_DEFAULT_ADD_HOURS)
-            from.minute = 0
-            from.second = 0
-
-            to = DateTimeUtils.createCalendarTime(from.timeInMillis)
-            to.addMinutes(Consts.DEFAULT_NEW_EVENT_DURATION_MINUTES)
-
-            DevLog.debug(LOG_TAG, "${from.timeInMillis}, ${to.timeInMillis}, $from, $to")
-
-            updateDateTimeUI();
-
-            addReminder(EventReminderRecord(Consts.NEW_EVENT_DEFAULT_NEW_EVENT_REMINDER), false)
-            addReminder(EventReminderRecord(Consts.NEW_EVENT_DEFAULT_ALL_DAY_REMINDER), true)
-
-            updateReminders()
-        }
-
-        eventTitleText.requestFocus()
-        eventTitleText.setSelection(eventTitleText.text.length)
-
-        updateRecurrenceLabel()
     }
 
     fun updateRecurrenceLabel() {
@@ -1249,10 +1257,12 @@ open class EditEventActivity : AppCompatActivity() {
     @Suppress("UNUSED_PARAMETER")
     fun onAddNotificationClick(v: View) {
         if (!isAllDay) {
-            showAddReminderListDialog(EventReminderRecord(Consts.NEW_EVENT_DEFAULT_NEW_EVENT_REMINDER), null)
+            val defaultReminder = Utils.getDefaultEventReminderMinutes(this) * Consts.MINUTE_IN_MILLISECONDS
+            showAddReminderListDialog(EventReminderRecord(defaultReminder), null)
         }
         else {
-            showAddReminderListAllDayDialog(EventReminderRecord(Consts.NEW_EVENT_DEFAULT_ALL_DAY_REMINDER), null)
+            val defaultAllDayReminder = Utils.getDefaultAllDayEventReminderMinutes(this) * Consts.MINUTE_IN_MILLISECONDS
+            showAddReminderListAllDayDialog(EventReminderRecord(defaultAllDayReminder), null)
         }
     }
 
@@ -1316,6 +1326,5 @@ open class EditEventActivity : AppCompatActivity() {
         const val EVENT_ID = "event_id"
         const val INSTANCE_START = "instance_start"
         const val INSTANCE_END = "instance_end"
-        const val NEW_EVENT_START_TIME = "new_start_time"
     }
 }

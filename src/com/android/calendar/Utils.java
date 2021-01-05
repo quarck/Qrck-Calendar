@@ -607,6 +607,20 @@ public class Utils {
         return defaultDurationInMins * DateUtils.MINUTE_IN_MILLIS;
     }
 
+    public static int getDefaultEventReminderMinutes(Context context) {
+        SharedPreferences prefs = GeneralPreferences.Companion.getSharedPreferences(context);
+        String defaultReminder = prefs.getString(
+                GeneralPreferences.KEY_DEFAULT_REMINDER, GeneralPreferences.DEFAULT_REMINDER_STRING);
+        return Integer.parseInt(defaultReminder);
+    }
+
+    public static int getDefaultAllDayEventReminderMinutes(Context context) {
+        SharedPreferences prefs = GeneralPreferences.Companion.getSharedPreferences(context);
+        String defaultAllDayReminder = prefs.getString(
+                GeneralPreferences.KEY_DEFAULT_ALL_DAY_REMINDER, GeneralPreferences.DEFAULT_ALL_DAY_REMINDER_STRING);
+        return Integer.parseInt(defaultAllDayReminder);
+    }
+
     /**
      * Get first day of week as java.util.Calendar constant.
      *
