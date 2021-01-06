@@ -66,6 +66,12 @@ class Settings(val context: Context) : PersistentStorageBase(context, "settings"
             return prefs.getBoolean(GeneralPreferences.KEY_HANDLE_EMAIL_ONLY, false)
         }
 
+    val useOngoingNotification: Boolean
+        get()  {
+            val prefs = getSharedPreferences(context)
+            return prefs.getBoolean(GeneralPreferences.KEY_USE_ONGOING_NOTIFICATION, GeneralPreferences.DEFAULT_USE_ONGOING)
+        }
+
     var doNotShowBatteryOptimisationWarning: Boolean
         get() = getBoolean(DO_NOT_SHOW_BATTERY_OPTIMISATION, false)
         set(value) = setBoolean(DO_NOT_SHOW_BATTERY_OPTIMISATION, value)

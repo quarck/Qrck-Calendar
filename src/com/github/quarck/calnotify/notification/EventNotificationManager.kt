@@ -24,6 +24,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import android.text.format.DateUtils
+import com.android.calendar.settings.GeneralPreferences
 import com.github.quarck.calnotify.*
 import com.github.quarck.calnotify.calendar.*
 import com.github.quarck.calnotify.eventsstorage.EventsStorage
@@ -341,6 +342,9 @@ class EventNotificationManager {
         val alertOnlyOnce = notificationRecords.all{it.alertOnlyOnce}
         val contentText = if (lines.size > 0) lines[0] else ""
 
+        val prefs = GeneralPreferences.getSharedPreferences(context)
+        val useOngoing = prefs.getBoolean(GeneralPreferences.KEY_USE_ONGOING_NOTIFICATION, GeneralPreferences.DEFAULT_USE_ONGOING)
+
         val builder =
                 NotificationCompat.Builder(context, channel.channelId)
                         .setContentTitle(contentTitle)
@@ -348,7 +352,7 @@ class EventNotificationManager {
                         .setSmallIcon(R.drawable.ic_date_range_white_24dp)
                         .setContentIntent(pendingIntent)
                         .setAutoCancel(false)
-                        .setOngoing(true)
+                        .setOngoing(useOngoing)
                         .setStyle(notificationStyle)
                         .setNumber(numEvents)
                         .setShowWhen(false)
@@ -486,13 +490,16 @@ class EventNotificationManager {
 
         val channel = NotificationChannelManager.createNotificationChannel(ctx, soundState)
 
+        val prefs = GeneralPreferences.getSharedPreferences(ctx)
+        val useOngoing = prefs.getBoolean(GeneralPreferences.KEY_USE_ONGOING_NOTIFICATION, GeneralPreferences.DEFAULT_USE_ONGOING)
+
         val builder = NotificationCompat.Builder(ctx, channel.channelId)
                 .setContentTitle(title)
                 .setContentText(notificationTextString)
                 .setSmallIcon(R.drawable.ic_event_white_24dp)
                 .setContentIntent(snoozeActivityIntent)
                 .setAutoCancel(false)
-                .setOngoing(true)
+                .setOngoing(useOngoing)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(notificationTextString))
                 .setWhen(event.lastStatusChangeTime)
                 .setShowWhen(false)

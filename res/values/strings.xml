@@ -1100,5 +1100,8 @@
     <string name="no_undo">No undo available for this action</string>
     <string name="alarm_tag_string">#alarm</string>
 
+    <string name="preferences_use_ongoing_notification">Use ongoing notification</string>
+    <string name="preferences_use_ongoing_notification_summary">Display all notifications are ongoing\nIf this option is disabled, swiping of the notification away only clears the system notification area, while event still has to be marked as done (via swipe) inside the app</string>
+
 
 </resources>
