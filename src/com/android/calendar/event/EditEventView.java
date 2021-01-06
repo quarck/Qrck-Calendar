@@ -70,6 +70,7 @@ import android.widget.TimePicker;
 
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.util.Pair;
 
 import com.android.calendar.CalendarEventModel;
 import com.android.calendar.CalendarEventModel.Attendee;
@@ -92,6 +93,8 @@ import com.android.ex.chips.RecipientEditTextView;
 import com.android.timezonepicker.TimeZoneInfo;
 import com.android.timezonepicker.TimeZonePickerDialog;
 import com.android.timezonepicker.TimeZonePickerUtils;
+import com.github.quarck.calnotify.ui.IReminderEditorListener;
+import com.github.quarck.calnotify.ui.ReminderEditorUtils;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
@@ -101,12 +104,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.jetbrains.annotations.NotNull;
 import org.qrck.seshat.R;
 
 public class EditEventView implements View.OnClickListener, DialogInterface.OnCancelListener,
         DialogInterface.OnClickListener, OnItemSelectedListener,
         RecurrencePickerDialog.OnRecurrenceSetListener,
-        TimeZonePickerDialog.OnTimeZoneSetListener {
+        TimeZonePickerDialog.OnTimeZoneSetListener, IReminderEditorListener {
 
     private static final String TAG = "EditEvent";
     private static final String GOOGLE_SECONDARY_CALENDAR = "calendar.google.com";
@@ -179,19 +183,7 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
     private TimePickerDialog mStartTimePickerDialog;
     private TimePickerDialog mEndTimePickerDialog;
     private DatePickerDialog mDatePickerDialog;
-    /**
-     * Contents of the "minutes" spinner.  This has default values from the XML file, augmented
-     * with any additional values that were already associated with the event.
-     */
-    private ArrayList<Integer> mReminderMinuteValues;
-    private ArrayList<String> mReminderMinuteLabels;
-    /**
-     * Contents of the "methods" spinner.  The "values" list specifies the method constant
-     * (e.g. {@link Reminders#METHOD_ALERT}) associated with the labels.  Any methods that
-     * aren't allowed by the Calendar will be removed.
-     */
-    private ArrayList<Integer> mReminderMethodValues;
-    private ArrayList<String> mReminderMethodLabels;
+
     /**
      * Contents of the "availability" spinner. The "values" list specifies the
      * type constant (e.g. {@link Events#AVAILABILITY_BUSY}) associated with the
@@ -216,9 +208,43 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
     private boolean mAllDay = false;
     private int mModification = EditEventHelper.MODIFY_UNINITIALIZED;
     private EventRecurrence mEventRecurrence = new EventRecurrence();
-    private ArrayList<ConstraintLayout> mReminderItems = new ArrayList<ConstraintLayout>(0);
+
+    private ArrayList<Pair<ConstraintLayout, ReminderEntry>> mReminderItems = new ArrayList<Pair<ConstraintLayout, ReminderEntry>>(0);
+
     private ArrayList<ReminderEntry> mUnsupportedReminders = new ArrayList<ReminderEntry>();
     private String mRrule;
+
+    private View.OnClickListener onRemoveReminderClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+            // This must be a click on one of the "remove reminder" or "change reminder" buttons
+            ConstraintLayout reminderView = (ConstraintLayout) view.getParent();
+            removeReminderForLayout(reminderView);
+
+            updateRemindersVisibility(mReminderItems.size());
+            EventViewUtils.updateAddReminderButton(mView, mReminderItems, mModel.mCalendarMaxReminders);
+        }
+    };
+
+    private View.OnClickListener onChangeReminderClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+            ConstraintLayout reminderView = (ConstraintLayout) view.getParent();
+            Pair<Integer, Pair<ConstraintLayout, ReminderEntry>> ppair = findReminderItemForLayout(reminderView);
+
+            if (ppair != null) {
+                if (mAllDayCheckBox.isChecked()) {
+                    ReminderEditorUtils.showAddReminderListAllDayDialog(mActivity, EditEventView.this, ppair.second.second, ppair.second.first);
+                } else {
+                    ReminderEditorUtils.showAddReminderListDialog(mActivity, EditEventView.this, ppair.second.second, ppair.second.first);
+                }
+                updateRemindersVisibility(mReminderItems.size());
+                EventViewUtils.updateAddReminderButton(mView, mReminderItems, mModel.mCalendarMaxReminders);
+            }
+        }
+    };
 
     public EditEventView(Activity activity, View view, EditDoneRunnable done) {
 
@@ -527,14 +553,6 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
             rpd.show(fm, FRAG_TAG_RECUR_PICKER);
             return;
         }
-
-        // This must be a click on one of the "remove reminder" buttons
-        ConstraintLayout reminderItem = (ConstraintLayout) view.getParent();
-        LinearLayout parent = (LinearLayout) reminderItem.getParent();
-        parent.removeView(reminderItem);
-        mReminderItems.remove(reminderItem);
-        updateRemindersVisibility(mReminderItems.size());
-        EventViewUtils.updateAddReminderButton(mView, mReminderItems, mModel.mCalendarMaxReminders);
     }
 
     @Override
@@ -582,8 +600,7 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
         if (mModel == null) {
             return false;
         }
-        mModel.mReminders = EventViewUtils.reminderItemsToReminders(mReminderItems,
-                mReminderMinuteValues, mReminderMethodValues);
+        mModel.mReminders = EventViewUtils.reminderItemsToReminders(mReminderItems);
         mModel.mReminders.addAll(mUnsupportedReminders);
         mModel.normalizeReminders();
         mModel.mHasAlarm = mReminderItems.size() > 0;
@@ -718,49 +735,20 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
         CalendarEventModel model = mModel;
         Resources r = mActivity.getResources();
 
-        // Load the labels and corresponding numeric values for the minutes and methods lists
-        // from the assets.  If we're switching calendars, we need to clear and re-populate the
-        // lists (which may have elements added and removed based on calendar properties).  This
-        // is mostly relevant for "methods", since we shouldn't have any "minutes" values in a
-        // new event that aren't in the default set.
-        mReminderMinuteValues = loadIntegerArray(r, R.array.reminder_minutes_values);
-        mReminderMinuteLabels = loadStringArray(r, R.array.reminder_minutes_labels);
-        mReminderMethodValues = loadIntegerArray(r, R.array.reminder_methods_values);
-        mReminderMethodLabels = loadStringArray(r, R.array.reminder_methods_labels);
-
-        // Remove any reminder methods that aren't allowed for this calendar.  If this is
-        // a new event, mCalendarAllowedReminders may not be set the first time we're called.
-        if (mModel.mCalendarAllowedReminders != null) {
-            EventViewUtils.reduceMethodList(mReminderMethodValues, mReminderMethodLabels,
-                    mModel.mCalendarAllowedReminders);
-        }
+//        // Remove any reminder methods that aren't allowed for this calendar.  If this is
+//        // a new event, mCalendarAllowedReminders may not be set the first time we're called.
+//        if (mModel.mCalendarAllowedReminders != null) {
+//            EventViewUtils.reduceMethodList(mReminderMethodValues, mReminderMethodLabels,
+//                    mModel.mCalendarAllowedReminders);
+//        }
 
         int numReminders = 0;
         if (model.mHasAlarm) {
             ArrayList<ReminderEntry> reminders = model.mReminders;
             numReminders = reminders.size();
-            // Insert any minute values that aren't represented in the minutes list.
             for (ReminderEntry re : reminders) {
-                if (mReminderMethodValues.contains(re.getMethod())) {
-                    EventViewUtils.addMinutesToList(mActivity, mReminderMinuteValues,
-                            mReminderMinuteLabels, re.getMinutes());
-                }
-            }
-
-            // Create a UI element for each reminder.  We display all of the reminders we get
-            // from the provider, even if the count exceeds the calendar maximum.  (Also, for
-            // a new event, we won't have a maxReminders value available.)
-            mUnsupportedReminders.clear();
-            for (ReminderEntry re : reminders) {
-                if (mReminderMethodValues.contains(re.getMethod())
-                        || re.getMethod() == Reminders.METHOD_DEFAULT) {
-                    EventViewUtils.addReminder(mActivity, mScrollView, this, mReminderItems,
-                            mReminderMinuteValues, mReminderMinuteLabels, mReminderMethodValues,
-                            mReminderMethodLabels, re, Integer.MAX_VALUE, null);
-                } else {
-                    // TODO figure out a way to display unsupported reminders
-                    mUnsupportedReminders.add(re);
-                }
+                EventViewUtils.addReminder(mActivity, mScrollView, onRemoveReminderClickListener, onChangeReminderClickListener, mReminderItems,
+                        re, mAllDayCheckBox.isChecked(), Integer.MAX_VALUE);
             }
         }
 
@@ -1270,14 +1258,13 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
      * reminder time and method.
      */
     private void addReminder() {
-        EventViewUtils.addReminder(mActivity, mScrollView, this, mReminderItems,
-                mReminderMinuteValues, mReminderMinuteLabels,
-                mReminderMethodValues, mReminderMethodLabels,
-                ReminderEntry.valueOf(mDefaultReminderMinutes),
-                mModel.mCalendarMaxReminders, null);
 
-        updateRemindersVisibility(mReminderItems.size());
-        EventViewUtils.updateAddReminderButton(mView, mReminderItems, mModel.mCalendarMaxReminders);
+        if (!mAllDayCheckBox.isChecked()) {
+            ReminderEditorUtils.showAddReminderListDialog(mActivity, this, ReminderEntry.valueOf(mDefaultReminderMinutes), null);
+        }
+        else {
+            ReminderEditorUtils.showAddReminderListAllDayDialog(mActivity, this, ReminderEntry.valueOf(mDefaultAllDayReminderMinutes), null);
+        }
     }
 
     // From com.google.android.gm.ComposeActivity
@@ -1556,8 +1543,58 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
         }
     }
 
+    public Pair<Integer, Pair<ConstraintLayout, ReminderEntry>> findReminderItemForLayout(ConstraintLayout reminderView) {
+        for (int i =0; i < mReminderItems.size(); ++ i) {
+            Pair<ConstraintLayout, ReminderEntry> pair = mReminderItems.get(i);
+            if (pair.first == reminderView) {
+                return new Pair<>(i, pair);
+            }
+        }
+        return null;
+    }
+
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    private void removeReminderForLayout(ConstraintLayout reminderView) {
+        Pair<Integer, Pair<ConstraintLayout, ReminderEntry>> ppair = findReminderItemForLayout(reminderView);
+        LinearLayout parent = (LinearLayout) reminderView.getParent();
+
+        int reminderPosition = ppair.first;
+        mReminderItems.remove(reminderPosition);
+        parent.removeView(reminderView);
+    }
+
+    @Override
+    public void removeReminder(@NotNull View existingReminderView) {
+        removeReminderForLayout((ConstraintLayout)existingReminderView);
+        updateRemindersVisibility(mReminderItems.size());
+        EventViewUtils.updateAddReminderButton(mView, mReminderItems, mModel.mCalendarMaxReminders);
+    }
+
+    @Override
+    public void modifyReminder(@NotNull View existingReminderView, @NotNull ReminderEntry newReminder) {
+        removeReminderForLayout((ConstraintLayout)existingReminderView);
+
+        EventViewUtils.addReminder(mActivity, mScrollView, onRemoveReminderClickListener, onChangeReminderClickListener, mReminderItems,
+                newReminder,
+                mAllDayCheckBox.isChecked(),
+                mModel.mCalendarMaxReminders);
+
+        updateRemindersVisibility(mReminderItems.size());
+        EventViewUtils.updateAddReminderButton(mView, mReminderItems, mModel.mCalendarMaxReminders);
+    }
+
+    @Override
+    public void addReminder(@NotNull ReminderEntry reminder, boolean isForAllDay) {
+        EventViewUtils.addReminder(mActivity, mScrollView, onRemoveReminderClickListener, onChangeReminderClickListener, mReminderItems,
+                reminder,
+                isForAllDay,
+                mModel.mCalendarMaxReminders);
+
+        updateRemindersVisibility(mReminderItems.size());
+        EventViewUtils.updateAddReminderButton(mView, mReminderItems, mModel.mCalendarMaxReminders);
     }
 
     public static class CalendarsAdapter extends ResourceCursorAdapter {

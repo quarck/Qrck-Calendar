@@ -26,10 +26,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.util.Pair;
 
 import com.android.calendar.CalendarEventModel.ReminderEntry;
+import com.github.quarck.calnotify.ui.ReminderEditorUtils;
 
 import java.util.ArrayList;
 
@@ -111,22 +114,15 @@ public class EventViewUtils {
      * Extracts reminder minutes info from UI elements.
      *
      * @param reminderItems UI elements (layouts with spinners) that hold array indices.
-     * @param reminderMinuteValues Maps array index to time in minutes.
-     * @param reminderMethodValues Maps array index to alert method constant.
      * @return Array with reminder data.
      */
     public static ArrayList<ReminderEntry> reminderItemsToReminders(
-            ArrayList<ConstraintLayout> reminderItems, ArrayList<Integer> reminderMinuteValues,
-            ArrayList<Integer> reminderMethodValues) {
+            ArrayList<Pair<ConstraintLayout, ReminderEntry>> reminderItems) {
         int len = reminderItems.size();
         ArrayList<ReminderEntry> reminders = new ArrayList<ReminderEntry>(len);
         for (int index = 0; index < len; index++) {
-            ConstraintLayout layout = reminderItems.get(index);
-            Spinner minuteSpinner = (Spinner) layout.findViewById(R.id.reminder_minutes_value);
-            Spinner methodSpinner = (Spinner) layout.findViewById(R.id.reminder_method_value);
-            int minutes = reminderMinuteValues.get(minuteSpinner.getSelectedItemPosition());
-            int method = reminderMethodValues.get(methodSpinner.getSelectedItemPosition());
-            reminders.add(ReminderEntry.valueOf(minutes, method));
+            Pair<ConstraintLayout, ReminderEntry> item = reminderItems.get(index);
+            reminders.add(item.second);
         }
         return reminders;
     }
@@ -224,11 +220,16 @@ public class EventViewUtils {
      * initial position of the spinner into the spinner's tag for comparison
      * with any new position setting.
      */
-    public static boolean addReminder(Activity activity, View view, View.OnClickListener listener,
-            ArrayList<ConstraintLayout> items, ArrayList<Integer> minuteValues,
-            ArrayList<String> minuteLabels, ArrayList<Integer> methodValues,
-            ArrayList<String> methodLabels, ReminderEntry newReminder, int maxReminders,
-            OnItemSelectedListener onItemSelected) {
+    public static boolean addReminder(
+            Activity activity,
+            View view,
+            View.OnClickListener removeReminderListener,
+            View.OnClickListener changeReminderListener,
+            ArrayList<Pair<ConstraintLayout, ReminderEntry>> items,
+            ReminderEntry newReminder,
+            boolean isAllDayEvent,
+            int maxReminders
+    ) {
 
         if (items.size() >= maxReminders) {
             return false;
@@ -242,39 +243,17 @@ public class EventViewUtils {
 
         ImageButton reminderRemoveButton;
         reminderRemoveButton = (ImageButton) reminderItem.findViewById(R.id.reminder_remove);
-        reminderRemoveButton.setOnClickListener(listener);
+        reminderRemoveButton.setOnClickListener(removeReminderListener);
 
-        /*
-         * The spinner has the default set of labels from the string resource file, but we
-         * want to drop in our custom set of labels because it may have additional entries.
-         */
-        Spinner spinner = (Spinner) reminderItem.findViewById(R.id.reminder_minutes_value);
-        setReminderSpinnerLabels(activity, spinner, minuteLabels);
+        TextView reminderSummaryText;
+        reminderSummaryText = (TextView) reminderItem.findViewById(R.id.reminder_summary_text);
+        reminderSummaryText.setOnClickListener(changeReminderListener);
 
-        int index = findMinutesInReminderList(minuteValues, newReminder.getMinutes());
-        spinner.setSelection(index);
+        String reminderAsText = ReminderEditorUtils.eventReminderMinutesToLocalizedString(
+                activity, isAllDayEvent, newReminder.getMinutes(), newReminder.getMethod());
+        reminderSummaryText.setText(reminderAsText);
 
-        if (onItemSelected != null) {
-            spinner.setTag(index);
-            spinner.setOnItemSelectedListener(onItemSelected);
-        }
-
-        /*
-         * Configure the alert-method spinner.  Methods not supported by the current Calendar
-         * will not be shown.
-         */
-        spinner = (Spinner) reminderItem.findViewById(R.id.reminder_method_value);
-        setReminderSpinnerLabels(activity, spinner, methodLabels);
-
-        index = findMethodInReminderList(methodValues, newReminder.getMethod());
-        spinner.setSelection(index);
-
-        if (onItemSelected != null) {
-            spinner.setTag(index);
-            spinner.setOnItemSelectedListener(onItemSelected);
-        }
-
-        items.add(reminderItem);
+        items.add(new Pair(reminderItem, newReminder));
 
         return true;
     }
@@ -283,7 +262,7 @@ public class EventViewUtils {
      * Enables/disables the 'add reminder' button depending on the current number of
      * reminders.
      */
-    public static void updateAddReminderButton(View view, ArrayList<ConstraintLayout> reminders,
+    public static void updateAddReminderButton(View view, ArrayList<Pair<ConstraintLayout, ReminderEntry>> reminders,
             int maxReminders) {
         View reminderAddButton = view.findViewById(R.id.reminder_add);
         if (reminderAddButton != null) {

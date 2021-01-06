@@ -363,11 +363,10 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         const val KEY_DEFAULT_ALL_DAY_REMINDER = "preferences_default_all_day_reminder"
         const val KEY_HANDLE_EMAIL_ONLY = "preferences_handle_email_only_events"
         const val KEY_HANDLE_EVENTS_WITH_NO_REMINDERS = "preferences_handle_events_with_no_reminders"
-        const val DEFAULT_REMINDER_STRING = "10"
-        const val DEFAULT_ALL_DAY_REMINDER_STRING = "900"
-        const val REMINDER_DEFAULT_TIME = 10 // in minutes
-        const val ALL_DAY_REMINDER_DEFAULT_TIME = 900 // in minutes
-        const val SNOOZE_DELAY_DEFAULT_TIME = 5 // in minutes
+        const val DEFAULT_REMINDER_STRING = "15"
+        const val DEFAULT_ALL_DAY_REMINDER_STRING = "960"
+        const val REMINDER_DEFAULT_TIME = 15 // in minutes
+        const val ALL_DAY_REMINDER_DEFAULT_TIME = 960 // in minutes
         const val KEY_DEFAULT_CELL_HEIGHT = "preferences_default_cell_height"
         const val KEY_VERSION = "preferences_version"
         /** Key to SharePreference for default view (CalendarController.ViewType)  */

@@ -552,6 +552,7 @@
             style="@style/TextAppearance.EditEvent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginStart="12dp"
             android:background="?android:attr/selectableItemBackground"
             android:contentDescription="@string/accessibility_add_reminder"
