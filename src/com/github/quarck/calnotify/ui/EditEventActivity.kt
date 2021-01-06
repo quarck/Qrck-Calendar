@@ -754,7 +754,7 @@ open class EditEventActivity : AppCompatActivity() {
         }
         else {
             to = DateTimeUtils.createCalendarTime(from.timeInMillis)
-            to.addMinutes(Consts.DEFAULT_NEW_EVENT_DURATION_MINUTES)
+            to.addMinutes((Utils.getDefaultEventDurationInMillis(this) / Consts.MINUTE_IN_MILLISECONDS).toInt())
         }
 
         updateDateTimeUI()
@@ -839,6 +839,8 @@ open class EditEventActivity : AppCompatActivity() {
                     to.year = year
                     to.month = month
                     to.dayOfMonth = day
+                    if (isAllDay)
+                        to.addDays(1)
 
                     if (to.before(from)) {
                         Toast.makeText(this, getString(R.string.end_time_before_start_time), Toast.LENGTH_LONG).show()
