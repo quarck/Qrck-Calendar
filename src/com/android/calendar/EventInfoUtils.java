@@ -16,114 +16,21 @@
 
 package com.android.calendar;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.app.Activity;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.FragmentManager;
-import android.app.Service;
-import android.content.ActivityNotFoundException;
-import android.content.ContentProviderOperation;
-import android.content.ContentResolver;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
-import android.database.Cursor;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
-import android.provider.CalendarContract;
 import android.provider.CalendarContract.Attendees;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Colors;
 import android.provider.CalendarContract.Events;
 import android.provider.CalendarContract.Reminders;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.CommonDataKinds;
-import android.provider.ContactsContract.Intents;
-import android.provider.ContactsContract.QuickContact;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.FileProvider;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
-import android.text.TextUtils;
-import android.text.format.Time;
-import android.text.method.LinkMovementMethod;
-import android.text.method.MovementMethod;
-import android.text.style.ForegroundColorSpan;
-import android.text.util.Rfc822Token;
-import android.util.Log;
-import android.util.SparseArray;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityManager;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.ScrollView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.calendar.CalendarController.EventInfo;
-import com.android.calendar.CalendarController.EventType;
-import com.android.calendar.CalendarEventModel.Attendee;
-import com.android.calendar.CalendarEventModel.ReminderEntry;
-import com.android.calendar.alerts.QuickResponseActivity;
-import com.android.calendar.event.AttendeesView;
-import com.android.calendar.event.EditEventActivity;
-import com.android.calendar.event.EditEventHelper;
-import com.android.calendar.event.EventColorPickerDialog;
-import com.android.calendar.event.EventViewUtils;
-import com.android.calendar.icalendar.IcalendarUtils;
-import com.android.calendar.icalendar.Organizer;
-import com.android.calendar.icalendar.VCalendar;
-import com.android.calendar.icalendar.VEvent;
-import com.android.calendarcommon2.DateException;
-import com.android.calendarcommon2.Duration;
-import com.android.calendarcommon2.EventRecurrence;
-import com.android.colorpicker.HsvColorComparator;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import org.qrck.seshat.BuildConfig;
 import org.qrck.seshat.R;
 
-import static android.provider.CalendarContract.EXTRA_EVENT_ALL_DAY;
-import static android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME;
-import static android.provider.CalendarContract.EXTRA_EVENT_END_TIME;
-import static com.android.calendar.CalendarController.EVENT_EDIT_ON_LAUNCH;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class EventInfoUtils
 {

@@ -112,7 +112,6 @@ public class Utils {
     public static final int DECLINED_EVENT_TEXT_ALPHA = 0xC0;
     public static final int YEAR_MIN = 1970;
     public static final int YEAR_MAX = 2036;
-    public static final String KEY_QUICK_RESPONSES = "preferences_quick_responses";
     public static final String APPWIDGET_DATA_TYPE = "vnd.android.data/update";
     // Defines used by the DNA generation code
     static final int DAY_IN_MINUTES = 60 * 24;
@@ -1640,24 +1639,6 @@ public class Utils {
         c.unregisterReceiver(r);
     }
 
-    /**
-     * Get a list of quick responses used for emailing guests from the
-     * SharedPreferences. If not are found, get the hard coded ones that shipped
-     * with the app
-     *
-     * @param context
-     * @return a list of quick responses.
-     */
-    @NonNull
-    public static String[] getQuickResponses(Context context) {
-        String[] s = Utils.getSharedPreference(context, KEY_QUICK_RESPONSES, (String[]) null);
-
-        if (s == null) {
-            s = context.getResources().getStringArray(R.array.quick_response_defaults);
-        }
-
-        return s;
-    }
 
     /**
      * Return the app version code.

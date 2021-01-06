@@ -118,12 +118,6 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
         app:entryValues="@array/preferences_default_all_day_reminder_values"
         app:dialogTitle="@string/preferences_default_all_day_reminder_dialog" />
 
-    <Preference
-        app:key="preferences_quick_responses"
-        app:fragment="com.android.calendar.settings.QuickResponsePreferences"
-        app:title="@string/quick_response_settings"
-        app:summary="@string/quick_response_settings_summary" />
-
     <CheckBoxPreference
         app:key="preferences_handle_email_only_events"
         app:defaultValue="false"

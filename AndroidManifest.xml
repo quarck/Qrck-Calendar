@@ -183,13 +183,6 @@
             android:exported="false"
             android:authorities="${applicationId}.CalendarRecentSuggestionsProvider" />
 
-        <activity
-            android:name="com.android.calendar.alerts.QuickResponseActivity"
-            android:excludeFromRecents="true"
-            android:label="@string/quick_response_dialog_title"
-            android:launchMode="singleInstance"
-            android:theme="@android:style/Theme.Holo.Dialog" />
-
         <receiver android:name="com.android.calendar.UpgradeReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
