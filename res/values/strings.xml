@@ -948,28 +948,6 @@
     <string name="remind">Remind</string>
     <string name="remind_col">Remind:</string>
 
-    <string-array name="default_reminder_intervals">
-        <item>1 minute</item>
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>1 hour</item>
-        <item>2 hours</item>
-        <item>4 hours</item>
-        <item>1 day</item>
-        <item>1 week</item>
-        <item>Custom</item>
-    </string-array>
-
-    <string-array name="default_reminder_intervals_all_day">
-        <item>Enter manually</item>
-        <item>Day before at 8:00</item>
-        <item>Day before at 12:00</item>
-        <item>Day before at 18:00</item>
-        <item>Day before at 21:00</item>
-        <item>On the day at 8:00</item>
-        <item>On the day at 12:00</item>
-    </string-array>
-
     <string name="new_event_max_reminder_is_28_days">Max reminder interval is 28 days before the event</string>
 
     <string name="add_event_event_title_hint">Title</string>

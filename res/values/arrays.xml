@@ -45,173 +45,6 @@
         <item>purple</item>
     </string-array>
 
-    <!-- Choices for the "Reminder method" spinner.
-         These must be kept in sync with the reminder_methods_values array.
-         [CHAR LIMIT=10]
-    -->
-    <string-array name="reminder_methods_labels">
-        <item>Notification</item>
-        <item>Email</item>
-        <item>SMS</item>
-        <item>Alarm</item>
-    </string-array>
-
-    <!-- This maps reminder_methods_labels to internal constants. -->
-    <integer-array name="reminder_methods_values" translatable="false">
-        <item>1</item>  <!-- METHOD_ALERT -->
-        <item>2</item>  <!-- METHOD_EMAIL -->
-        <item>3</item>  <!-- METHOD_SMS -->
-        <item>4</item>  <!-- METHOD_ALARM -->
-    </integer-array>
-
-    <!-- Choices for the "Reminder minutes" spinner.
-         These must be kept in sync with the reminder_minutes_values array.
-         For consistency, the format should match what
-         EventViewUtils.constructReminderLabel() generates.  (TODO: eliminate
-         this and just generate the list from reminder_minutes_values?)
-         [CHAR LIMIT=15]
-    -->
-    <string-array name="reminder_minutes_labels">
-        <item>0 minutes</item>
-        <item>1 minute</item>
-        <item>5 minutes</item>
-        <item>10 minutes</item>
-        <item>15 minutes</item>
-        <item>20 minutes</item>
-        <item>25 minutes</item>
-        <item>30 minutes</item>
-        <item>45 minutes</item>
-        <item>1 hour</item>
-        <item>2 hours</item>
-        <item>3 hours</item>
-        <item>6 hours</item>
-        <item>12 hours</item>
-        <item>24 hours</item>
-        <item>2 days</item>
-        <item>1 week</item>
-        <item>2 weeks</item>
-    </string-array>
-
-    <integer-array name="reminder_minutes_values" translatable="false">
-        <item>0</item>
-        <item>1</item>
-        <item>5</item>
-        <item>10</item>
-        <item>15</item>
-        <item>20</item>
-        <item>25</item>
-        <item>30</item>
-        <item>45</item>
-        <item>60</item>
-        <item>120</item>
-        <item>180</item>
-        <item>360</item>
-        <item>720</item>
-        <item>1440</item>
-        <item>2880</item>
-        <item>10080</item>
-        <item>20160</item>
-    </integer-array>
-
-  <!-- Choices for the "Reminder minutes" spinner in the settings.
-         These must be kept in sync with the preferences_default_reminder_values array.
-         [CHAR LIMIT=12]
-    -->
-    <string-array name="preferences_default_reminder_labels">
-        <item>0 minutes</item>
-        <item>1 minute</item>
-        <item>5 minutes</item>
-        <item>10 minutes</item>
-        <item>15 minutes</item>
-        <item>20 minutes</item>
-        <item>25 minutes</item>
-        <item>30 minutes</item>
-        <item>45 minutes</item>
-        <item>1 hour</item>
-        <item>2 hours</item>
-        <item>3 hours</item>
-        <item>12 hours</item>
-        <item>24 hours</item>
-        <item>2 days</item>
-        <item>1 week</item>
-    </string-array>
-
-    <string-array name="preferences_default_reminder_values" translatable="false">
-        <item>"0"</item>
-        <item>"1"</item>
-        <item>"5"</item>
-        <item>"10"</item>
-        <item>"15"</item>
-        <item>"20"</item>
-        <item>"25"</item>
-        <item>"30"</item>
-        <item>"45"</item>
-        <item>"60"</item>
-        <item>"120"</item>
-        <item>"180"</item>
-        <item>"720"</item>
-        <item>"1440"</item>
-        <item>"2880"</item>
-        <item>"10080"</item>
-    </string-array>
-
-    <string-array name="preferences_default_all_day_reminder_labels">
-        <item>day before at 5:00</item>
-        <item>day before at 6:00</item>
-        <item>day before at 7:00</item>
-        <item>day before at 8:00</item>
-        <item>day before at 9:00</item>
-        <item>day before at 10:00</item>
-        <item>day before at 11:00</item>
-        <item>day before at 12:00</item>
-        <item>day before at 13:00</item>
-        <item>day before at 14:00</item>
-        <item>day before at 15:00</item>
-        <item>day before at 16:00</item>
-        <item>day before at 17:00</item>
-        <item>day before at 18:00</item>
-        <item>day before at 19:00</item>
-        <item>day before at 20:00</item>
-        <item>day before at 21:00</item>
-        <item>day before at 22:00</item>
-        <item>day before at 23:00</item>
-        <item>on the day at 5:00</item>
-        <item>on the day at 6:00</item>
-        <item>on the day at 7:00</item>
-        <item>on the day at 8:00</item>
-        <item>on the day at 9:00</item>
-        <item>on the day at 10:00</item>
-    </string-array>
-
-    <!-- unit: minutes to event start (midnight) -->
-    <string-array name="preferences_default_all_day_reminder_values" translatable="false">
-        <item>1140</item>
-        <item>1080</item>
-        <item>1020</item>
-        <item>960</item>
-        <item>900</item>
-        <item>840</item>
-        <item>780</item>
-        <item>720</item>
-        <item>660</item>
-        <item>600</item>
-        <item>540</item>
-        <item>480</item>
-        <item>420</item>
-        <item>360</item>
-        <item>300</item>
-        <item>240</item>
-        <item>180</item>
-        <item>120</item>
-        <item>60</item>
-        <item>-300</item>
-        <item>-360</item>
-        <item>-420</item>
-        <item>-480</item>
-        <item>-540</item>
-        <item>-600</item>
-    </string-array>
-
     <!-- Labels for the default startup page preference. -->
     <string-array name="default_start_entries" translatable="false">
         <item>@string/default_start_last</item>
@@ -482,7 +315,7 @@
         <item>1</item>
     </integer-array>
 
-    <integer-array name="default_reminder_intervals_milliseconds_values">
+    <integer-array name="reminder_intervals_milliseconds_values">
         <item>60000</item>
         <item>900000</item>
         <item>1800000</item>
@@ -493,8 +326,20 @@
         <item>604800000</item>
         <item>-1</item>
     </integer-array>
+    <string-array name="reminder_intervals_labels">
+        <item>1 minute</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>4 hours</item>
+        <item>1 day</item>
+        <item>1 week</item>
+        <item>Custom</item>
+    </string-array>
 
-    <integer-array name="default_reminder_intervals_all_day_seconds_values">
+
+    <integer-array name="reminder_intervals_all_day_seconds_values">
         <item>-2147483648</item>     <!-- since both negative and positive values are legal here, -2^31 is used as an indicator for 'enter manually' -->
         <item>57600</item>
         <item>43200</item>
@@ -503,6 +348,55 @@
         <item>-28800</item>
         <item>-43200</item>
     </integer-array>
+    <string-array name="reminder_intervals_all_day_labels">
+        <item>Enter manually</item>
+        <item>Day before at 8:00</item>
+        <item>Day before at 12:00</item>
+        <item>Day before at 18:00</item>
+        <item>Day before at 21:00</item>
+        <item>On the day at 8:00</item>
+        <item>On the day at 12:00</item>
+    </string-array>
+
+    <string-array name="preferences_default_all_day_reminder_labels">
+        <item>Day before at 8:00</item>
+        <item>Day before at 12:00</item>
+        <item>Day before at 18:00</item>
+        <item>Day before at 21:00</item>
+        <item>On the day at 8:00</item>
+        <item>On the day at 12:00</item>
+    </string-array>
+
+    <string-array name="preferences_default_all_day_reminder_values" translatable="false">
+        <item>960</item>
+        <item>720</item>
+        <item>360</item>
+        <item>180</item>
+        <item>-480</item>
+        <item>-720</item>
+    </string-array>
+
+    <string-array name="preferences_default_reminder_labels">
+        <item>1 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>4 hours</item>
+        <item>1 day</item>
+        <item>1 week</item>
+    </string-array>
+    <string-array name="preferences_default_reminder_values" translatable="false">
+        <item>1</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>240</item>
+        <item>1440</item>
+        <item>10080</item>
+    </string-array>
+
 
     <string-array name="month_names">
         <item>January</item>

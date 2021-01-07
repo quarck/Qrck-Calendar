@@ -201,8 +201,8 @@ object ReminderEditorUtils {
         if (currentReminder.method != CalendarContract.Reminders.METHOD_DEFAULT)
             return showAddReminderCustomDialog(act, listener, currentReminder, existingReminderView)
 
-        val intervalNames: Array<String> = act.resources.getStringArray(R.array.default_reminder_intervals)
-        val intervalValues = act.resources.getIntArray(R.array.default_reminder_intervals_milliseconds_values)
+        val intervalNames: Array<String> = act.resources.getStringArray(R.array.reminder_intervals_labels)
+        val intervalValues = act.resources.getIntArray(R.array.reminder_intervals_milliseconds_values)
 
         if (intervalValues.find { it.toLong() == currentReminder.millisecondsBefore } == null) {
             // reminder is not one of standard ones - we have to show custom idalog
@@ -324,8 +324,8 @@ object ReminderEditorUtils {
         if (currentReminder.method != CalendarContract.Reminders.METHOD_DEFAULT)
             return showAddReminderCustomAllDayDialog(act, listener, currentReminder, existingReminderView)
 
-        val reminderNames: Array<String> = act.resources.getStringArray(R.array.default_reminder_intervals_all_day)
-        val reminderValues = act.resources.getIntArray(R.array.default_reminder_intervals_all_day_seconds_values)
+        val reminderNames: Array<String> = act.resources.getStringArray(R.array.reminder_intervals_all_day_labels)
+        val reminderValues = act.resources.getIntArray(R.array.reminder_intervals_all_day_seconds_values)
 
         val enterManuallyValue = -2147483648
 
