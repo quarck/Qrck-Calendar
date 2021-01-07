@@ -102,6 +102,21 @@
         </activity-alias>
 
         <activity
+            android:name="com.android.calendar.event.EditEventTextReceiverActivity"
+            android:label="@string/create_event">
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name="com.android.calendar.GoogleCalendarUriIntentFilter"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_label"
@@ -303,45 +318,6 @@
             <intent-filter>
                 <action android:name="com.github.quarck.calnotify.prefs.CalendarsActivity" />
                 <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.github.quarck.calnotify.ui.TestActivity"
-            android:label="@string/title_activity_activity_test_buttons_and_to_do"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name="com.github.quarck.calnotify.ui.PrivacyPolicyActivity"
-            android:label="@string/title_activity_privacy_policy"
-            android:parentActivityName="com.android.calendar.AllInOneActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <!-- activity
-            android:name="com.github.quarck.calnotify.ui.EditEventActivity"
-            android:label="@string/empty"
-            android:parentActivityName="com.android.calendar.AllInOneActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" / -->
-
-        <activity
-            android:name="com.github.quarck.calnotify.ui.EditEventActivityTextReceiver"
-            android:label="@string/create_event"
-            android:parentActivityName="com.android.calendar.AllInOneActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/plain" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.PROCESS_TEXT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/plain" />
             </intent-filter>
         </activity>
 
