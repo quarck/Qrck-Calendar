@@ -146,6 +146,7 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
     TextView mEndTimeHome;
     TextView mEndDateHome;
     SwitchCompat mAllDayCheckBox;
+    SwitchCompat mAddAlarmCheckBox;
     Spinner mCalendarsSpinner;
     Button mRruleButton;
     Spinner mAvailabilitySpinner;
@@ -280,6 +281,7 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
         mEndTimeHome = (TextView) view.findViewById(R.id.end_time_home_tz);
         mEndDateHome = (TextView) view.findViewById(R.id.end_date_home_tz);
         mAllDayCheckBox = view.findViewById(R.id.is_all_day);
+        mAddAlarmCheckBox = view.findViewById(R.id.add_alarm_tag);
         mRruleButton = (Button) view.findViewById(R.id.rrule);
         mAvailabilitySpinner = (Spinner) view.findViewById(R.id.availability);
         mAccessLevelSpinner = (Spinner) view.findViewById(R.id.visibility);
@@ -608,6 +610,10 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
         mModel.mAllDay = mAllDayCheckBox.isChecked();
         mModel.mLocation = mLocationTextView.getText().toString();
         mModel.mDescription = mDescriptionTextView.getText().toString();
+        if (!mModel.mDescription.contains("#alarm") && mAddAlarmCheckBox.isChecked()) {
+            mModel.mDescription = mModel.mDescription + "\n#alarm";
+        }
+
         if (TextUtils.isEmpty(mModel.mLocation)) {
             mModel.mLocation = null;
         }
@@ -836,6 +842,15 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
         // doesn't get called
         if (prevAllDay == mAllDayCheckBox.isChecked()) {
             setAllDayViewsVisibility(prevAllDay);
+        }
+
+        if (model.mDescription.contains("#alarm"))
+        {
+            mAddAlarmCheckBox.setChecked(true);
+            mAddAlarmCheckBox.setEnabled(false);
+        } else {
+            mAddAlarmCheckBox.setChecked(false);
+            mAddAlarmCheckBox.setEnabled(true);
         }
 
         populateTimezone(mStartTime.normalize(true));
