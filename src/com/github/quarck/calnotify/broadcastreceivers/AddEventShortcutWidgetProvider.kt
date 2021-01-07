@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import org.qrck.seshat.R
-import com.github.quarck.calnotify.ui.EditEventActivity
+import com.android.calendar.event.EditEventActivity
 
 class AddEventShortcutWidgetProvider : AppWidgetProvider() {
     override fun onUpdate(

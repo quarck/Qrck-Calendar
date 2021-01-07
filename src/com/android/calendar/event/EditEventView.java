@@ -843,9 +843,8 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
         if (prevAllDay == mAllDayCheckBox.isChecked()) {
             setAllDayViewsVisibility(prevAllDay);
         }
-
-        if (model.mDescription.contains("#alarm"))
-        {
+        
+        if (model.mDescription != null && model.mDescription.contains("#alarm")) {
             mAddAlarmCheckBox.setChecked(true);
             mAddAlarmCheckBox.setEnabled(false);
         } else {

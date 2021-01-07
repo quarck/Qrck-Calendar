@@ -316,12 +316,12 @@
             android:parentActivityName="com.android.calendar.AllInOneActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity
+        <!-- activity
             android:name="com.github.quarck.calnotify.ui.EditEventActivity"
             android:label="@string/empty"
             android:parentActivityName="com.android.calendar.AllInOneActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" / -->
 
         <activity
             android:name="com.github.quarck.calnotify.ui.EditEventActivityTextReceiver"
