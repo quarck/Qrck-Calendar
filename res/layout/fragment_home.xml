@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     android:padding="0dp"
     app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-    tools:context=".ui.MainActivityHomeFragment"
     >
     <LinearLayout
         android:layout_width="match_parent"
@@ -29,7 +28,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/divider"
+                android:background="?attr/cn_divider"
                 />
 
             <TextView
@@ -37,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/calendar_was_changed_pull_down_to_refresh"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/primary_text"
+                android:textColor="?attr/cn_primary_text"
                 android:gravity="start"
                 android:paddingTop="@dimen/activity_main_text_padding_top"
                 android:paddingBottom="@dimen/activity_main_text_padding_bottom"
@@ -75,7 +74,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:gravity="center"
         android:visibility="gone"
-        android:textColor="@color/secondary_text"
+        android:textColor="?attr/cn_secondary_text"
         android:text="@string/no_events_to_display"
         />
 
@@ -85,7 +84,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:gravity="center"
         android:visibility="gone"
-        android:textColor="@color/secondary_text"
+        android:textColor="?attr/cn_secondary_text"
         android:text="@string/no_calendar_permissions_main" />
 
 

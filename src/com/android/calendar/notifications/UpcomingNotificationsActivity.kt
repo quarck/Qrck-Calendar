@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.LayoutInflater
@@ -19,6 +20,8 @@ import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.android.calendar.DynamicTheme
+import com.android.calendar.Utils
 import com.github.quarck.calnotify.Consts
 import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.calendar.*
@@ -110,15 +113,26 @@ class UpcomingEventListAdapter(
 
                     val escapeVelocityMultiplier = 5.0f
 
-                    val background = ColorDrawable(ContextCompat.getColor(context, R.color.skip_event_bg))
-                    var vMark = (ContextCompat.getDrawable(context, R.drawable.ic_check_white_24dp) ?: throw Exception("Now v-mark"))
-                            .apply{
-                                colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                                        ContextCompat.getColor(context, R.color.icons), BlendModeCompat.SRC_ATOP)
-                            }
+                    val background: ColorDrawable
+                    val iconsColor: Int
+                    val vMark: Drawable
 
                     var vMarkMargin = context.resources.getDimension(R.dimen.ic_clear_margin).toInt()
                     var bgMargin = context.resources.getDimension(R.dimen.swipe_bg_margin).toInt()
+
+                    init {
+                        if (Utils.getSharedPreference(context, "pref_theme", "light") == "light") {
+                            background = ColorDrawable(ContextCompat.getColor(context, R.color.cn_white_skip_event_bg))
+                            iconsColor = ContextCompat.getColor(context, R.color.cn_white_icons)
+                        } else {
+                            background = ColorDrawable(ContextCompat.getColor(context, R.color.cn_dark_skip_event_bg))
+                            iconsColor = ContextCompat.getColor(context, R.color.cn_dark_icons)
+                        }
+                        vMark = (ContextCompat.getDrawable(context, R.drawable.ic_check_white_24dp) ?: throw Exception("Now v-mark"))
+                                .apply{ colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(iconsColor, BlendModeCompat.SRC_ATOP) }
+
+                    }
+
 
                     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
                         val adapter = recyclerView.adapter as UpcomingEventListAdapter? ?: return 0
@@ -294,6 +308,8 @@ class UpcomingEventListAdapter(
 class UpcomingNotificationsActivity : AppCompatActivity() {
     private val scope = MainScope()
 
+    private var dynamicTheme = DynamicTheme()
+
     private lateinit var recyclerView: RecyclerView
 
     private lateinit var adapter: UpcomingEventListAdapter
@@ -317,6 +333,7 @@ class UpcomingNotificationsActivity : AppCompatActivity() {
         DevLog.info(LOG_TAG, "onCreate")
 
         super.onCreate(savedInstanceState)
+        dynamicTheme.onCreate(this)
 
         setContentView(R.layout.activity_upcoming)
 
@@ -331,14 +348,21 @@ class UpcomingNotificationsActivity : AppCompatActivity() {
 
         window.navigationBarColor = ContextCompat.getColor(this, android.R.color.black)
 
-        primaryColor = ContextCompat.getColor(this, R.color.primary)
+        if (Utils.getSharedPreference(this, "pref_theme", "light") == "light") {
+            primaryColor = ContextCompat.getColor(this, R.color.cn_white_primary)
+            colorNonSkippedItemBottomLine = ContextCompat.getColor(this, R.color.cn_white_secondary_text)
+        }
+        else {
+            primaryColor = ContextCompat.getColor(this, R.color.cn_dark_primary)
+            colorNonSkippedItemBottomLine = ContextCompat.getColor(this, R.color.cn_dark_secondary_text)
+        }
+
         eventFormatter  = EventFormatter(this)
         adapter = UpcomingEventListAdapter(this, this)
 
         eventReminderTimeFmt = this.resources.getString(R.string.reminder_at_fmt)
 
         colorSkippedItemBotomLine = ContextCompat.getColor(this, R.color.material_red)
-        colorNonSkippedItemBottomLine = ContextCompat.getColor(this, R.color.secondary_text)
 
         todayHeading = this.resources.getString(R.string.today_semi)
         todayHeadingEmpty = this.resources.getString(R.string.no_more_today)
@@ -354,6 +378,7 @@ class UpcomingNotificationsActivity : AppCompatActivity() {
     override fun onResume() {
         DevLog.debug(LOG_TAG, "onResume")
         super.onResume()
+        dynamicTheme.onResume(this)
 
         scope.launch {
 

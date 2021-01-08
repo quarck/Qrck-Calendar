@@ -40,6 +40,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import com.android.calendar.CalendarController
 import com.android.calendar.DeleteEventHelper
+import com.android.calendar.DynamicTheme
 import com.github.quarck.calnotify.Consts
 import com.github.quarck.calnotify.Settings
 import com.github.quarck.calnotify.app.CalNotifyController
@@ -84,6 +85,8 @@ open class ViewEventActivity : AppCompatActivity() {
 
     var isUpcoming = false
 
+    val dynamicTheme = DynamicTheme()
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -92,6 +95,8 @@ open class ViewEventActivity : AppCompatActivity() {
             finish()
             return
         }
+
+        dynamicTheme.onCreate(this)
 
         setContentView(R.layout.activity_view)
 
@@ -340,6 +345,11 @@ open class ViewEventActivity : AppCompatActivity() {
         else {
             fabMoveButton.visibility = View.GONE
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        dynamicTheme.onResume(this)
     }
 
 

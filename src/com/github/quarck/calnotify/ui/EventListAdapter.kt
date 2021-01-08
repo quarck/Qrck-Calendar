@@ -22,6 +22,7 @@ package com.github.quarck.calnotify.ui
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -34,6 +35,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
+import com.android.calendar.Utils
 import org.qrck.seshat.R
 import com.github.quarck.calnotify.calendar.*
 import com.github.quarck.calnotify.utils.logs.DevLog
@@ -97,7 +99,7 @@ class EventListAdapter(
             onRecycleViewRegistered(_recyclerView)
         }
 
-    private val primaryColor: Int = ContextCompat.getColor(context, R.color.primary)
+    private val primaryColor: Int
 
     private var currentScrollPosition: Int = 0
 
@@ -105,6 +107,14 @@ class EventListAdapter(
     private var eventsPendingRemoval = mutableMapOf<EventAlertRecordKey, EventAlertRecord>()
 
     private val eventFormatter = EventFormatter(context)
+
+    init {
+        if (Utils.getSharedPreference(context, "pref_theme", "light") == "light") {
+            primaryColor = ContextCompat.getColor(context, R.color.cn_white_primary)
+        } else {
+            primaryColor = ContextCompat.getColor(context, R.color.cn_dark_primary)
+        }
+    }
 
     val scrollPosition: Int
         get() = currentScrollPosition
@@ -129,15 +139,28 @@ class EventListAdapter(
 
                     val escapeVelocityMultiplier = 5.0f
 
-                    val background = ColorDrawable(ContextCompat.getColor(context, R.color.complete_event_bg))
-                    var vMark = (ContextCompat.getDrawable(context, R.drawable.ic_check_white_24dp) ?: throw Exception("Now v-mark"))
-                                .apply{
-                                    colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
-                                            ContextCompat.getColor(context, R.color.icons), BlendModeCompat.SRC_ATOP)
-                                }
+                    val iconsColor: Int
+
+                    val background: ColorDrawable
+                    val vMark: Drawable
 
                     var vMarkMargin = context.resources.getDimension(R.dimen.ic_clear_margin).toInt()
                     var bgMargin = context.resources.getDimension(R.dimen.swipe_bg_margin).toInt()
+
+                    init {
+                        if (Utils.getSharedPreference(context, "pref_theme", "light") == "light") {
+                            background = ColorDrawable(ContextCompat.getColor(context, R.color.cn_white_complete_event_bg))
+                            iconsColor = ContextCompat.getColor(context, R.color.cn_white_icons)
+                        } else {
+                            background = ColorDrawable(ContextCompat.getColor(context, R.color.cn_dark_complete_event_bg))
+                            iconsColor = ContextCompat.getColor(context, R.color.cn_dark_icons)
+                        }
+                        vMark = (ContextCompat.getDrawable(context, R.drawable.ic_check_white_24dp) ?: throw Exception("Now v-mark"))
+                                .apply{
+                                    colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                                            iconsColor, BlendModeCompat.SRC_ATOP)
+                                }
+                    }
 
                     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
                         val position = viewHolder.adapterPosition

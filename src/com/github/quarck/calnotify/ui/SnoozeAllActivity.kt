@@ -27,6 +27,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
+import com.android.calendar.DynamicTheme
 import com.github.quarck.calnotify.Consts
 import org.qrck.seshat.R
 import com.github.quarck.calnotify.Settings
@@ -79,6 +80,7 @@ fun formatSnoozePreset(ctx: Context, preset: Long): String {
 
 open class SnoozeAllActivity : AppCompatActivity() {
 
+    private var dynamicTheme = DynamicTheme()
     lateinit var snoozePresets: LongArray
 
     lateinit var settings: Settings
@@ -117,6 +119,7 @@ open class SnoozeAllActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
+        dynamicTheme.onCreate(this)
 
         setContentView(R.layout.activity_snooze_all)
 
@@ -172,6 +175,10 @@ open class SnoozeAllActivity : AppCompatActivity() {
                     resources.getString(R.string.change_all_title)
     }
 
+    override fun onResume() {
+        super.onResume()
+        dynamicTheme.onResume(this)
+    }
 
     @Suppress("unused", "UNUSED_PARAMETER")
     fun onButtonCancelClick(v: View?) {

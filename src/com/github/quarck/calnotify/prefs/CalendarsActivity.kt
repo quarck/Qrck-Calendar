@@ -30,6 +30,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
+import com.android.calendar.DynamicTheme
 import com.github.quarck.calnotify.Consts
 import org.qrck.seshat.R
 import com.github.quarck.calnotify.Settings
@@ -134,6 +135,8 @@ class CalendarListAdapter(val context: Context, var entries: Array<CalendarListE
 
 class CalendarsActivity : AppCompatActivity() {
 
+    private val dynamicTheme = DynamicTheme()
+
     private val scope = MainScope()
 
     private lateinit var adapter: CalendarListAdapter
@@ -144,6 +147,7 @@ class CalendarsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        dynamicTheme.onCreate(this)
 
         DevLog.debug(LOG_TAG, "onCreate")
 
@@ -176,6 +180,7 @@ class CalendarsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        dynamicTheme.onResume(this)
 
         scope.launch {
             // load the data here

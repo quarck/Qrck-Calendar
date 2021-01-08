@@ -32,7 +32,7 @@
             android:paddingEnd="10dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:textColor="@color/primary_text"
+            android:textColor="?attr/cn_primary_text"
             android:layout_gravity="center"
             />
 
@@ -53,7 +53,7 @@
             android:paddingEnd="10dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            android:textColor="@color/primary_text"
+            android:textColor="?attr/cn_primary_text"
             android:layout_gravity="center"
             />
 
@@ -78,7 +78,7 @@
         android:paddingEnd="10dp"
         android:paddingTop="30dp"
         android:paddingBottom="10dp"
-        android:textColor="@color/primary_text"
+        android:textColor="?attr/cn_primary_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:layout_gravity="center_horizontal"
         />

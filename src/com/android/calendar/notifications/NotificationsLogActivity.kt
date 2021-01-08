@@ -1,12 +1,8 @@
 package com.android.calendar.notifications
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -17,6 +13,8 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.android.calendar.DynamicTheme
+import com.android.calendar.Utils
 import com.github.quarck.calnotify.Consts
 import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.calendar.EventFinishType
@@ -29,7 +27,6 @@ import com.github.quarck.calnotify.utils.logs.DevLog
 import com.github.quarck.calnotify.utils.textutils.EventFormatter
 import com.github.quarck.calnotify.utils.textutils.dateToStr
 import kotlinx.coroutines.*
-import org.qrck.seshat.BuildConfig
 import org.qrck.seshat.R
 
 
@@ -57,11 +54,13 @@ class NotificationsLogActivity : AppCompatActivity(), SimpleEventListCallback<Fi
 
     private val scope = MainScope()
 
+    private val dynamicTheme = DynamicTheme()
+
     private lateinit var recyclerView: RecyclerView
 
     private var adapter: SimpleEventListAdapter<FinishedEventAlertRecord>? = null
 
-    private var primaryColor: Int? = Consts.DEFAULT_CALENDAR_EVENT_COLOR
+    //private var primaryColor: Int? = Consts.DEFAULT_CALENDAR_EVENT_COLOR
     private var eventFormatter: EventFormatter? = null
 
     private var bottomLineColor: Int = 0x7f3f3f3f
@@ -70,9 +69,11 @@ class NotificationsLogActivity : AppCompatActivity(), SimpleEventListCallback<Fi
         DevLog.info(LOG_TAG, "onCreate")
 
         super.onCreate(savedInstanceState)
+        dynamicTheme.onCreate(this)
 
         setContentView(R.layout.activity_finished)
 
+        ///X
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
         setSupportActionBar(findViewById<Toolbar?>(R.id.toolbar))
@@ -84,7 +85,6 @@ class NotificationsLogActivity : AppCompatActivity(), SimpleEventListCallback<Fi
 
         window.navigationBarColor = ContextCompat.getColor(this, android.R.color.black)
 
-        primaryColor = ContextCompat.getColor(this, R.color.primary)
         eventFormatter  = EventFormatter(this)
         adapter =
                 SimpleEventListAdapter(
@@ -92,7 +92,11 @@ class NotificationsLogActivity : AppCompatActivity(), SimpleEventListCallback<Fi
                         R.layout.event_card_compact,
                         this)
 
-        bottomLineColor = ContextCompat.getColor(this, R.color.divider)
+        if (Utils.getSharedPreference(this, "pref_theme", "light") == "light") {
+            bottomLineColor = ContextCompat.getColor(this, R.color.cn_white_divider)
+        } else {
+            bottomLineColor = ContextCompat.getColor(this, R.color.cn_dark_divider)
+        }
 
         recyclerView = findViewById<RecyclerView>(R.id.list_events)
         recyclerView.adapter = adapter;
@@ -102,6 +106,7 @@ class NotificationsLogActivity : AppCompatActivity(), SimpleEventListCallback<Fi
     override fun onResume() {
         DevLog.debug(LOG_TAG, "onResume")
         super.onResume()
+        dynamicTheme.onResume(this)
 
         scope.launch {
             val events = withContext(Dispatchers.IO) {
@@ -151,7 +156,7 @@ class NotificationsLogActivity : AppCompatActivity(), SimpleEventListCallback<Fi
             if (entry.event.color != 0)
                 entry.event.color.adjustCalendarColor()
             else
-                primaryColor ?: Consts.DEFAULT_CALENDAR_EVENT_COLOR
+                Consts.DEFAULT_CALENDAR_EVENT_COLOR
 
     override fun getUseBoldTitle(entry: FinishedEventAlertRecord): Boolean = false
 

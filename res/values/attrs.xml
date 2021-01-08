@@ -48,5 +48,26 @@
         <attr name="iconSettingsGeneral" format="reference" />
         <attr name="iconAddCalendar" format="reference" />
         <attr name="iconCalendarAccount" format="reference" />
+
+        <attr name="cn_background" format="color" />
+        <attr name="cn_backgroundToolbar" format="color" />
+        <attr name="cn_primary" format="color" />
+        <attr name="cn_primary_dark" format="color" />
+        <attr name="cn_primary_light" format="color" />
+        <attr name="cn_accent" format="color" />
+        <attr name="cn_primary_text" format="color" />
+        <attr name="cn_secondary_text" format="color" />
+        <attr name="cn_icons" format="color" />
+        <attr name="cn_divider" format="color" />
+        <attr name="cn_divider_light" format="color" />
+        <attr name="cn_event_title_color" format="color" />
+        <attr name="cn_event_title_hint_color" format="color" />
+        <attr name="cn_event_unselected_tag_color" format="color" />
+        <attr name="cn_event_selected_tag_color" format="color" />
+        <attr name="cn_light_divider" format="color" />
+        <attr name="cn_ultra_light_divider" format="color" />
+        <attr name="cn_complete_event_bg" format="color" />
+        <attr name="cn_skip_event_bg" format="color" />
+        <attr name="cn_cal_sample_primary" format="color" />
     </declare-styleable>
 </resources>

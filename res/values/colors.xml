@@ -431,52 +431,78 @@
 	
 	
 	
-    <color name="background">#000</color>
+    <color name="cn_white_background">#FFF</color>
+    <color name="cn_dark_background">#111</color>
+    <color name="cn_black_background">#000</color>
 
-    <color name="backgroundToolbar">#111111</color>
 
-    <color name="primary">#A08375</color>
-    <color name="primary_dark">#BAA59C</color>
-    <color name="primary_light">#302724</color>
+    <color name="cn_white_backgroundToolbar">#111111</color>
+    <color name="cn_white_primary">#607D8B</color>
+    <color name="cn_white_primary_dark">#455A64</color>
+    <color name="cn_white_primary_light">#CFD8DC</color>
+    <color name="cn_white_accent">#009688</color>
+    <color name="cn_white_primary_text">#212121</color>
+    <color name="cn_white_secondary_text">#727272</color>
+    <color name="cn_white_icons">#FFFFFF</color>
+    <color name="cn_white_divider">#B6B6B6</color>
+    <color name="cn_white_divider_light">#C6C6C6</color>
+    <color name="cn_white_event_title_color">#FFFFFF</color>
+    <color name="cn_white_event_title_hint_color">#CECECE</color>
+    <color name="cn_white_event_unselected_tag_color">#AEAEAE</color>
+    <color name="cn_white_event_selected_tag_color">#FFFFFF</color>
+    <color name="cn_white_light_divider">#D6D6D6</color>
+    <color name="cn_white_ultra_light_divider">#F0F0F0</color>
+    <color name="cn_white_material_red">#c3362b</color>
+    <color name="cn_white_material_blue">#3f51b8</color>
+    <color name="cn_white_complete_event_bg">#03A9e4</color>
+    <color name="cn_white_skip_event_bg">#03d499</color>
+    <color name="cn_white_cal_sample_primary">#03A9F4</color>
 
-    <color name="accent">#107EED</color>
-    <color name="primary_text">#DEDEDF</color>
-    <color name="secondary_text">#8D8D8E</color>
-    <color name="icons">#000000</color>
-    <color name="divider">#89494A</color>
-    <color name="divider_light">#39393A</color>
 
-    <color name="event_title_color">#FFFFFF</color>
-    <color name="event_title_hint_color">#313132</color>
+    <color name="cn_dark_backgroundToolbar">#111111</color>
+    <color name="cn_dark_primary">#A08375</color>
+    <color name="cn_dark_primary_dark">#BAA59C</color>
+    <color name="cn_dark_primary_light">#302724</color>
+    <color name="cn_dark_accent">#107EED</color>
+    <color name="cn_dark_primary_text">#DEDEDF</color>
+    <color name="cn_dark_secondary_text">#8D8D8E</color>
+    <color name="cn_dark_icons">#000000</color>
+    <color name="cn_dark_divider">#89494A</color>
+    <color name="cn_dark_divider_light">#39393A</color>
+    <color name="cn_dark_event_title_color">#FFFFFF</color>
+    <color name="cn_dark_event_title_hint_color">#313132</color>
+    <color name="cn_dark_event_unselected_tag_color">#515152</color>
+    <color name="cn_dark_event_selected_tag_color">#FFFFFF</color>
+    <color name="cn_dark_light_divider">#292929</color>
+    <color name="cn_dark_ultra_light_divider">#0F0F0F</color>
+    <color name="cn_dark_complete_event_bg">#03A9e4</color>
+    <color name="cn_dark_skip_event_bg">#03d499</color>
+    <color name="cn_dark_cal_sample_primary">#03A9F4</color>
 
-    <color name="event_unselected_tag_color">#515152</color>
-    <color name="event_selected_tag_color">#FFFFFF</color>
-
-    <color name="light_divider">#292929</color>
-
-    <color name="ultra_light_divider">#0F0F0F</color>
+    <color name="cn_black_backgroundToolbar">#111111</color>
+    <color name="cn_black_primary">#A08375</color>
+    <color name="cn_black_primary_dark">#BAA59C</color>
+    <color name="cn_black_primary_light">#302724</color>
+    <color name="cn_black_accent">#107EED</color>
+    <color name="cn_black_primary_text">#DEDEDF</color>
+    <color name="cn_black_secondary_text">#8D8D8E</color>
+    <color name="cn_black_icons">#000000</color>
+    <color name="cn_black_divider">#89494A</color>
+    <color name="cn_black_divider_light">#39393A</color>
+    <color name="cn_black_event_title_color">#FFFFFF</color>
+    <color name="cn_black_event_title_hint_color">#313132</color>
+    <color name="cn_black_event_unselected_tag_color">#515152</color>
+    <color name="cn_black_event_selected_tag_color">#FFFFFF</color>
+    <color name="cn_black_light_divider">#292929</color>
+    <color name="cn_black_ultra_light_divider">#0F0F0F</color>
+    <color name="cn_black_complete_event_bg">#03A9e4</color>
+    <color name="cn_black_skip_event_bg">#03d499</color>
+    <color name="cn_black_cal_sample_primary">#03A9F4</color>
 
     <color name="material_red">#D3362b</color>
     <color name="material_blue">#3f51b8</color>
-
-
-    <color name="complete_event_bg">#03A9e4</color>
-
-    <color name="skip_event_bg">#03d499</color>
-
-    <color name="cal_sample_primary">#03A9F4</color>
-
-    <color name="quiet_hours_active_text">#FFC107</color>
-    <color name="quiet_hours_active_background">#221111</color>
-
     <color name="nearly_black">#0f0f0f</color>
     <color name="true_black_as_night">#000</color>
-
-    <color name="cal_current_month">#EEEEEF</color>
-    <color name="cal_today_color">#Ff2924</color>
-    <color name="cal_other_month">#4D4D4E</color>
-
-    <color name="cal_current_day_bg">#757575</color>
 
 	
 </resources>

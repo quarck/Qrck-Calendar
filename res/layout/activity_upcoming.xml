@@ -21,7 +21,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/backgroundToolbar"
+            android:background="?attr/cn_backgroundToolbar"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:titleTextAppearance="@style/ToolbarTitle"
             android:elevation="@dimen/toolbar_elevation"
@@ -33,7 +33,7 @@
         android:id="@+id/list_events"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background"
+        android:background="?attr/cn_background"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         />
 
