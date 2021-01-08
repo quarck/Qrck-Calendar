@@ -431,12 +431,11 @@
 	
 	
 	
-    <color name="cn_white_background">#FFF</color>
-    <color name="cn_dark_background">#111</color>
-    <color name="cn_black_background">#000</color>
+    <color name="cn_white_background">#FFFFFF</color>
+    <color name="cn_dark_background">#303030</color>
+    <color name="cn_black_background">#000000</color>
 
 
-    <color name="cn_white_backgroundToolbar">#111111</color>
     <color name="cn_white_primary">#607D8B</color>
     <color name="cn_white_primary_dark">#455A64</color>
     <color name="cn_white_primary_light">#CFD8DC</color>
@@ -459,7 +458,6 @@
     <color name="cn_white_cal_sample_primary">#03A9F4</color>
 
 
-    <color name="cn_dark_backgroundToolbar">#111111</color>
     <color name="cn_dark_primary">#A08375</color>
     <color name="cn_dark_primary_dark">#BAA59C</color>
     <color name="cn_dark_primary_light">#302724</color>
@@ -479,7 +477,6 @@
     <color name="cn_dark_skip_event_bg">#03d499</color>
     <color name="cn_dark_cal_sample_primary">#03A9F4</color>
 
-    <color name="cn_black_backgroundToolbar">#111111</color>
     <color name="cn_black_primary">#A08375</color>
     <color name="cn_black_primary_dark">#BAA59C</color>
     <color name="cn_black_primary_light">#302724</color>
@@ -501,8 +498,6 @@
 
     <color name="material_red">#D3362b</color>
     <color name="material_blue">#3f51b8</color>
-    <color name="nearly_black">#0f0f0f</color>
-    <color name="true_black_as_night">#000</color>
 
 	
 </resources>

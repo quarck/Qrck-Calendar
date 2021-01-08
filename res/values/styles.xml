@@ -68,7 +68,6 @@
         <item name="iconCalendarAccount">@android:color/black</item>
 
         <item name="cn_background">@color/cn_white_background</item>
-        <item name="cn_backgroundToolbar">@color/cn_white_backgroundToolbar</item>
         <item name="cn_primary">@color/cn_white_primary</item>
         <item name="cn_primary_dark">@color/cn_white_primary_dark</item>
         <item name="cn_primary_light">@color/cn_white_primary_light</item>
@@ -311,6 +310,6 @@
 
     <style name="ToolbarTitle" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Title">
         <item name="android:textSize">20sp</item>
-    </style>		
-		
+    </style>
+
 </resources>

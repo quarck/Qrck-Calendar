@@ -20,7 +20,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/cn_backgroundToolbar"
+            style="@style/Widget.CalendarAppTheme.ActionBar"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:titleTextAppearance="@style/ToolbarTitle"
             android:elevation="@dimen/toolbar_elevation"

@@ -73,9 +73,6 @@ class NotificationsLogActivity : AppCompatActivity(), SimpleEventListCallback<Fi
 
         setContentView(R.layout.activity_finished)
 
-        ///X
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-
         setSupportActionBar(findViewById<Toolbar?>(R.id.toolbar))
         supportActionBar?.let{
             it.setDisplayHomeAsUpEnabled(true)
@@ -92,12 +89,7 @@ class NotificationsLogActivity : AppCompatActivity(), SimpleEventListCallback<Fi
                         R.layout.event_card_compact,
                         this)
 
-        if (Utils.getSharedPreference(this, "pref_theme", "light") == "light") {
-            bottomLineColor = ContextCompat.getColor(this, R.color.cn_white_divider)
-        } else {
-            bottomLineColor = ContextCompat.getColor(this, R.color.cn_dark_divider)
-        }
-
+        bottomLineColor = DynamicTheme.resolveColor(this, R.attr.cn_divider)
         recyclerView = findViewById<RecyclerView>(R.id.list_events)
         recyclerView.adapter = adapter;
         adapter?.recyclerView = recyclerView

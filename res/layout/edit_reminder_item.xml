@@ -34,6 +34,7 @@
         android:textSize="18sp"
         android:focusable="true"
         android:clickable="true"
+        android:textColor="?attr/editEvent_small_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="HardcodedText" />

@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/linearLyaoutCalendarView"
-        android:background="@color/true_black_as_night"
+        android:background="?attr/cn_background"
         >
 
     <TextView

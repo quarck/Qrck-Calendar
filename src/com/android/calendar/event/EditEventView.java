@@ -213,7 +213,6 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
 
     private ArrayList<Pair<ConstraintLayout, ReminderEntry>> mReminderItems = new ArrayList<Pair<ConstraintLayout, ReminderEntry>>(0);
 
-    private ArrayList<ReminderEntry> mUnsupportedReminders = new ArrayList<ReminderEntry>();
     private String mRrule;
 
     private View.OnClickListener onRemoveReminderClickListener = new View.OnClickListener() {
@@ -605,7 +604,6 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
             return false;
         }
         mModel.mReminders = EventViewUtils.reminderItemsToReminders(mReminderItems);
-        mModel.mReminders.addAll(mUnsupportedReminders);
         mModel.normalizeReminders();
         mModel.mHasAlarm = mReminderItems.size() > 0;
         mModel.mTitle = mTitleTextView.getText().toString();
@@ -825,6 +823,7 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 setAllDayViewsVisibility(isChecked);
+                resetReminders(isChecked);
             }
         });
 
@@ -1343,6 +1342,19 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
             TimeZone.setDefault(null);
         }
         view.setText(timeString);
+    }
+
+    protected void resetReminders(boolean isAllDay) {
+
+        mReminderItems.clear();
+        LinearLayout reminderLayout =
+                (LinearLayout) mScrollView.findViewById(R.id.reminder_items_container);
+        reminderLayout.removeAllViews();
+
+        if (isAllDay)
+            addReminder(ReminderEntry.valueOf(mDefaultAllDayReminderMinutes), true);
+        else
+            addReminder(ReminderEntry.valueOf(mDefaultReminderMinutes), false);
     }
 
     /**

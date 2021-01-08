@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:background="@color/true_black_as_night" />
+        android:background="?attr/cn_background" />
 
 	<TextView
 		android:id="@+id/no_calendars_text"

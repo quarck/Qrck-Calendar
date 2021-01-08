@@ -6,6 +6,10 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
+import android.util.TypedValue;
+
+import androidx.annotation.AttrRes;
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
 import org.qrck.seshat.R;
@@ -44,6 +48,16 @@ public class DynamicTheme {
             activity.startActivity(intent);
             OverridePendingTransition.invoke(activity);
         }
+    }
+
+    @ColorInt
+    public static int resolveColor(Context context, @AttrRes int attr)
+    {
+        TypedValue typedValue = new TypedValue();
+        Resources.Theme theme = context.getTheme();
+        theme.resolveAttribute(attr, typedValue, true);
+        @ColorInt int color = typedValue.data;
+        return color;
     }
 
     private static String getTheme(Context context) {

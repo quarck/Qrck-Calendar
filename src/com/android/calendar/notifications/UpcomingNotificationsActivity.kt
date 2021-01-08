@@ -113,26 +113,15 @@ class UpcomingEventListAdapter(
 
                     val escapeVelocityMultiplier = 5.0f
 
-                    val background: ColorDrawable
-                    val iconsColor: Int
-                    val vMark: Drawable
+                    val background = ColorDrawable(DynamicTheme.resolveColor(context, R.attr.cn_skip_event_bg))
+                    val iconsColor = DynamicTheme.resolveColor(context, R.attr.cn_icons)
+                    val vMark: Drawable = (ContextCompat.getDrawable(context, R.drawable.ic_check_white_24dp) ?: throw Exception("Now v-mark"))
+                            .apply{
+                                colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(iconsColor, BlendModeCompat.SRC_ATOP)
+                            }
 
                     var vMarkMargin = context.resources.getDimension(R.dimen.ic_clear_margin).toInt()
                     var bgMargin = context.resources.getDimension(R.dimen.swipe_bg_margin).toInt()
-
-                    init {
-                        if (Utils.getSharedPreference(context, "pref_theme", "light") == "light") {
-                            background = ColorDrawable(ContextCompat.getColor(context, R.color.cn_white_skip_event_bg))
-                            iconsColor = ContextCompat.getColor(context, R.color.cn_white_icons)
-                        } else {
-                            background = ColorDrawable(ContextCompat.getColor(context, R.color.cn_dark_skip_event_bg))
-                            iconsColor = ContextCompat.getColor(context, R.color.cn_dark_icons)
-                        }
-                        vMark = (ContextCompat.getDrawable(context, R.drawable.ic_check_white_24dp) ?: throw Exception("Now v-mark"))
-                                .apply{ colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(iconsColor, BlendModeCompat.SRC_ATOP) }
-
-                    }
-
 
                     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
                         val adapter = recyclerView.adapter as UpcomingEventListAdapter? ?: return 0
@@ -337,8 +326,6 @@ class UpcomingNotificationsActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_upcoming)
 
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-
         setSupportActionBar(findViewById<Toolbar?>(R.id.toolbar))
         supportActionBar?.let{
             it.setDisplayHomeAsUpEnabled(true)
@@ -348,14 +335,8 @@ class UpcomingNotificationsActivity : AppCompatActivity() {
 
         window.navigationBarColor = ContextCompat.getColor(this, android.R.color.black)
 
-        if (Utils.getSharedPreference(this, "pref_theme", "light") == "light") {
-            primaryColor = ContextCompat.getColor(this, R.color.cn_white_primary)
-            colorNonSkippedItemBottomLine = ContextCompat.getColor(this, R.color.cn_white_secondary_text)
-        }
-        else {
-            primaryColor = ContextCompat.getColor(this, R.color.cn_dark_primary)
-            colorNonSkippedItemBottomLine = ContextCompat.getColor(this, R.color.cn_dark_secondary_text)
-        }
+        primaryColor = DynamicTheme.resolveColor(this, R.attr.cn_primary)
+        colorNonSkippedItemBottomLine = DynamicTheme.resolveColor(this, R.attr.cn_secondary_text)
 
         eventFormatter  = EventFormatter(this)
         adapter = UpcomingEventListAdapter(this, this)

@@ -184,7 +184,7 @@
         android:id="@+id/event_card_heading_layout"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/true_black_as_night"
+        android:background="?attr/cn_background"
         android:visibility="gone"
         >
 

@@ -45,7 +45,6 @@
         <item name="iconCalendarAccount">@android:color/white</item>
 
         <item name="cn_background">@color/cn_dark_background</item>
-        <item name="cn_backgroundToolbar">@color/cn_dark_backgroundToolbar</item>
         <item name="cn_primary">@color/cn_dark_primary</item>
         <item name="cn_primary_dark">@color/cn_dark_primary_dark</item>
         <item name="cn_primary_light">@color/cn_dark_primary_light</item>
@@ -110,7 +109,6 @@
         <item name="iconCalendarAccount">@android:color/white</item>
 
         <item name="cn_background">@color/cn_black_background</item>
-        <item name="cn_backgroundToolbar">@color/cn_black_backgroundToolbar</item>
         <item name="cn_primary">@color/cn_black_primary</item>
         <item name="cn_primary_dark">@color/cn_black_primary_dark</item>
         <item name="cn_primary_light">@color/cn_black_primary_light</item>

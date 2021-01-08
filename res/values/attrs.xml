@@ -50,7 +50,6 @@
         <attr name="iconCalendarAccount" format="reference" />
 
         <attr name="cn_background" format="color" />
-        <attr name="cn_backgroundToolbar" format="color" />
         <attr name="cn_primary" format="color" />
         <attr name="cn_primary_dark" format="color" />
         <attr name="cn_primary_light" format="color" />

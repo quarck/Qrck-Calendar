@@ -18,9 +18,10 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/cn_background"
             app:popupTheme="@style/AppTheme.PopupOverlay"
+            style="@style/Widget.CalendarAppTheme.ActionBar"
             app:titleTextAppearance="@style/ToolbarTitle"
+
             android:elevation="@dimen/toolbar_elevation"
             tools:targetApi="m"/>
 
@@ -44,7 +45,6 @@
                 android:background="?attr/cn_background"
                 android:id="@+id/event_view_event_details_layout"
                 android:visibility="visible"
-                android:elevation="@dimen/toolbar_elevation"
                 tools:targetApi="m">
 
                 <View
@@ -53,7 +53,7 @@
                     android:layout_height="12dp"
                     android:layout_marginStart="22dp"
                     android:layout_marginEnd="@dimen/event_view_img_padding_end"
-                    android:layout_marginTop="11dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginBottom="12dp"
                     android:background="@color/material_blue"
                     />
@@ -66,7 +66,7 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textColor="?attr/cn_primary_text"
                     android:paddingStart="@dimen/event_view_padding_start"
-                    android:paddingTop="@dimen/event_view_in_text_vert_padding"
+                    android:paddingTop="10dp"
                     android:paddingEnd="@dimen/event_view_padding_end"
                     android:paddingBottom="@dimen/event_view_in_text_vert_padding"
                     android:gravity="start|bottom"
@@ -420,7 +420,7 @@
 
                         android:paddingEnd="@dimen/event_view_padding_end"
                         android:paddingStart="0dp"
-                        android:paddingTop="5dp"
+                        android:paddingTop="0dp"
                         android:paddingBottom="5dp"
                         >
 
