@@ -55,7 +55,6 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 import java.util.*
 
 interface IReminderEditorListener {
-    fun removeReminder(existingReminderView: View)
     fun modifyReminder(existingReminderView: View, newReminder: CalendarEventModel.ReminderEntry)
     fun addReminder(reminder: CalendarEventModel.ReminderEntry, isForAllDay: Boolean)
 }
@@ -179,16 +178,8 @@ object ReminderEditorUtils {
                 listener.addReminder(reminder, isForAllDay = false)
         }
 
-        if (existingReminderView != null) {
-            builder.setNegativeButton(R.string.remove_reminder) {
-                _: DialogInterface?, _: Int ->
-                listener.removeReminder(existingReminderView)
-            }
-        }
-        else {
-            builder.setNegativeButton(android.R.string.cancel) {
-                _: DialogInterface?, _: Int ->
-            }
+        builder.setNegativeButton(android.R.string.cancel) {
+            _: DialogInterface?, _: Int ->
         }
 
         builder.create().show()
@@ -233,16 +224,8 @@ object ReminderEditorUtils {
             }
         }
 
-        if (existingReminderView != null) {
-            builder.setNegativeButton(R.string.remove_reminder) {
-                _: DialogInterface?, _: Int ->
-                listener.removeReminder(existingReminderView)
-            }
-        }
-        else {
-            builder.setNegativeButton(android.R.string.cancel) {
-                _: DialogInterface?, _: Int ->
-            }
+        builder.setNegativeButton(android.R.string.cancel) {
+            _: DialogInterface?, _: Int ->
         }
 
         builder.show()
@@ -302,16 +285,8 @@ object ReminderEditorUtils {
                 listener.addReminder(reminder, isForAllDay = true)
         }
 
-        if (existingReminderView != null) {
-            builder.setNegativeButton(R.string.remove_reminder) {
-                _: DialogInterface?, _: Int ->
-                listener.removeReminder(existingReminderView)
-            }
-        }
-        else {
-            builder.setNegativeButton(android.R.string.cancel) {
-                _: DialogInterface?, _: Int ->
-            }
+        builder.setNegativeButton(android.R.string.cancel) {
+            _: DialogInterface?, _: Int ->
         }
 
         builder.create().show()
@@ -361,16 +336,8 @@ object ReminderEditorUtils {
             }
         }
 
-        if (existingReminderView != null) {
-            builder.setNegativeButton(R.string.remove_reminder) {
-                _: DialogInterface?, _: Int ->
-                listener.removeReminder(existingReminderView)
-            }
-        }
-        else {
-            builder.setNegativeButton(android.R.string.cancel) {
-                _: DialogInterface?, _: Int ->
-            }
+        builder.setNegativeButton(android.R.string.cancel) {
+            _: DialogInterface?, _: Int ->
         }
 
         builder.show()

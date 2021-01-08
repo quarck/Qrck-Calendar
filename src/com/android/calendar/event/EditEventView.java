@@ -170,6 +170,7 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
     View mAttendeesGroup;
     View mStartHomeGroup;
     View mEndHomeGroup;
+    View mAddAlarmCheckBoxGroup;
     private int[] mOriginalPadding = new int[4];
     private ProgressDialog mLoadingCalendarsDialog;
     private AlertDialog mNoCalendarsDialog;
@@ -282,6 +283,7 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
         mEndDateHome = (TextView) view.findViewById(R.id.end_date_home_tz);
         mAllDayCheckBox = view.findViewById(R.id.is_all_day);
         mAddAlarmCheckBox = view.findViewById(R.id.add_alarm_tag);
+        mAddAlarmCheckBoxGroup = view.findViewById(R.id.alarm_group);
         mRruleButton = (Button) view.findViewById(R.id.rrule);
         mAvailabilitySpinner = (Spinner) view.findViewById(R.id.availability);
         mAccessLevelSpinner = (Spinner) view.findViewById(R.id.visibility);
@@ -843,13 +845,11 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
         if (prevAllDay == mAllDayCheckBox.isChecked()) {
             setAllDayViewsVisibility(prevAllDay);
         }
-        
-        if (model.mDescription != null && model.mDescription.contains("#alarm")) {
-            mAddAlarmCheckBox.setChecked(true);
-            mAddAlarmCheckBox.setEnabled(false);
+
+        if (model.mTitle == null) {
+            mAddAlarmCheckBoxGroup.setVisibility(View.VISIBLE);
         } else {
-            mAddAlarmCheckBox.setChecked(false);
-            mAddAlarmCheckBox.setEnabled(true);
+            mAddAlarmCheckBoxGroup.setVisibility(View.GONE);
         }
 
         populateTimezone(mStartTime.normalize(true));
@@ -1578,13 +1578,6 @@ public class EditEventView implements View.OnClickListener, DialogInterface.OnCa
         int reminderPosition = ppair.first;
         mReminderItems.remove(reminderPosition);
         parent.removeView(reminderView);
-    }
-
-    @Override
-    public void removeReminder(@NotNull View existingReminderView) {
-        removeReminderForLayout((ConstraintLayout)existingReminderView);
-        updateRemindersVisibility(mReminderItems.size());
-        EventViewUtils.updateAddReminderButton(mView, mReminderItems, mModel.mCalendarMaxReminders);
     }
 
     @Override
