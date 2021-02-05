@@ -1426,7 +1426,8 @@ object CalendarProvider  {
                         continue
                     }
 
-                    if (!handledCalendars.contains(event.calendarId) || event.calendarId == -1L) {
+                    // if we were given the exact eventId -- don't filter by the calendar Id
+                    if (eventId == null && (!handledCalendars.contains(event.calendarId) || event.calendarId == -1L)) {
                         DevLog.info(LOG_TAG, "Event id ${event.eventId} / calId ${event.calendarId} - not handling")
                         continue
                     }
