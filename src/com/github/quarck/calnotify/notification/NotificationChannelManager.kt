@@ -175,8 +175,8 @@ object NotificationChannelManager {
     // Note: don't forget to change notification_preferences.xml and reminder_preferences.xml if
     // channel name is changed!
 
-    const val NOTIFICATION_CHANNEL_ID_DEFAULT = "com.github.calnotify.notify.v5.cal"
-    const val NOTIFICATION_CHANNEL_ID_ALARM = "com.github.calnotify.notify.v4.calalrm"
+    const val NOTIFICATION_CHANNEL_ID_DEFAULT = "com.github.calnotify.notify.v6r2.cal"
+    const val NOTIFICATION_CHANNEL_ID_ALARM = "com.github.calnotify.notify.v6r2.calalrm"
 
     enum class SoundState {
         Normal,
@@ -250,6 +250,7 @@ object NotificationChannelManager {
         else {
             notificationChannel.vibrationPattern = Consts.VIBRATION_PATTERN_ALARM
             notificationChannel.legacyStreamType = AudioManager.STREAM_ALARM
+            notificationChannel.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         }
 
         context.notificationManager.createNotificationChannel(notificationChannel)

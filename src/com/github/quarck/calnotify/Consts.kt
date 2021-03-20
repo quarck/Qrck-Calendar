@@ -32,7 +32,7 @@ object Consts {
 
     const val DATA_UPDATED_BROADCAST = BuildConfig.APPLICATION_ID + ".dataupdated"
 
-    const val ALARM_REMINDER_INTERVAL: Long = 60L * 1000L
+    const val ALARM_REMINDER_INTERVAL: Long = 45L * 1000L
 
     const val DAY_IN_MILLISECONDS = 24L * 3600L * 1000L
     const val DAY_IN_SECONDS: Long = 3600L * 24
@@ -57,20 +57,32 @@ object Consts {
     // max number of notifications displayed on the screen at all the times
     const val MAX_NOTIFICATIONS = 6
 
-    private const val VIBRATION_DURATION: Long = 1200
-
     val VIBRATION_PATTERN_DEFAULT = longArrayOf(0,
-            VIBRATION_DURATION / 20, VIBRATION_DURATION / 20,
-            VIBRATION_DURATION / 20, VIBRATION_DURATION / 20,
-            VIBRATION_DURATION / 20, VIBRATION_DURATION / 20,
-            VIBRATION_DURATION / 20, VIBRATION_DURATION / 6,
-            VIBRATION_DURATION)
+            // on off
+            60, 60,
+            60, 60,
+            60, 60,
+            60, 200,
+            1200
+    )
 
     val VIBRATION_PATTERN_ALARM = longArrayOf(0,
-            VIBRATION_DURATION / 5, VIBRATION_DURATION / 5,
-            VIBRATION_DURATION / 5, VIBRATION_DURATION / 5,
-            VIBRATION_DURATION / 5, VIBRATION_DURATION / 3,
-            VIBRATION_DURATION)
+            // on off time
+            240, 240,
+            240, 240,
+            240, 400,
+            1200, 2000,
+
+            240, 240,
+            240, 240,
+            240, 400,
+            1200, 2000,
+
+            240, 240,
+            240, 240,
+            240, 400,
+            1200,
+    )
 
     const val DEFAULT_LED_COLOR = 0x7f0000ff
 
