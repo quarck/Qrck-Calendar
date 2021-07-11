@@ -375,7 +375,10 @@ class UpcomingNotificationsActivity : AppCompatActivity() {
         DevLog.debug(LOG_TAG, "onResume")
         super.onResume()
         dynamicTheme.onResume(this)
+        reload()
+    }
 
+    private fun reload() {
         scope.launch {
 
             val from = System.currentTimeMillis()
@@ -407,7 +410,6 @@ class UpcomingNotificationsActivity : AppCompatActivity() {
 
             adapter.setEventsToDisplay(merged)
         }
-
     }
 
     override fun onDestroy() {
@@ -493,6 +495,7 @@ class UpcomingNotificationsActivity : AppCompatActivity() {
     fun onEventReschedule(event: UpcomingEventAlertRecordWrap) {
         if (event.event != null)
             ViewEventActivity.rescheduleEvent(this, event.event) {}
+        reload()
     }
 
     companion object {
