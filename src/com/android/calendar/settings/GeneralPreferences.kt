@@ -361,7 +361,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         const val KEY_ALERTS_CATEGORY = "preferences_alerts_category"
         const val KEY_NOTIFICATION = "preferences_notification"
         const val KEY_NOTIFICATION_ALARM = "preferences_notification_alarm"
-        const val KEY_SHOW_CONTROLS = "KEY_SHOW_CONTROLS"
         const val KEY_DEFAULT_REMINDER = "preferences_default_reminder"
         const val KEY_DEFAULT_ALL_DAY_REMINDER = "preferences_default_all_day_reminder"
         const val KEY_HANDLE_EMAIL_ONLY = "preferences_handle_email_only_events"

@@ -88,7 +88,7 @@ import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.agenda.AgendaFragment;
 import com.android.calendar.month.MonthByWeekFragment;
-import com.android.calendar.selectcalendars.SelectVisibleCalendarsFragment;
+//import com.android.calendar.selectcalendars.SelectVisibleCalendarsFragment;
 
 import java.io.File;
 import java.util.Calendar;
@@ -153,7 +153,6 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
     private int mCurrentView;
     private boolean mPaused = true;
     private boolean mUpdateOnResume = false;
-    private boolean mHideControls = false;
     private boolean mShowSideViews = true;
     private boolean mShowWeekNum = false;
     private TextView mHomeTime;
@@ -188,7 +187,6 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
     private FloatingActionButton mFab;
     private View mSecondaryPane;
     private String mTimeZone;
-    private boolean mShowCalendarControls;
     private int mWeekNum;
     private int mCalendarControlsAnimationTime;
     private int mControlsAnimateWidth;
@@ -207,7 +205,6 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
     private ActionBar mActionBar;
     private SearchView mSearchView;
     private MenuItem mSearchMenu;
-    private MenuItem mControlsMenu;
     private MenuItem mViewSettings;
     private Menu mOptionsMenu;
     private QueryHandler mHandler;
@@ -230,8 +227,6 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         }
     };
 
-    private String mHideString;
-    private String mShowString;
     // Params for animating the controls on the right
     private LayoutParams mControlsParams;
     private LinearLayout.LayoutParams mVerticalControlsParams;
@@ -306,8 +301,6 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         }
 
         Resources res = getResources();
-        mHideString = res.getString(R.string.hide_controls);
-        mShowString = res.getString(R.string.show_controls);
         mOrientation = res.getConfiguration().orientation;
         if (mOrientation == Configuration.ORIENTATION_LANDSCAPE) {
             mControlsAnimateWidth = (int) res.getDimension(R.dimen.calendar_controls_width);
@@ -325,13 +318,9 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
 
         mControlsAnimateHeight = (int) res.getDimension(R.dimen.calendar_controls_height);
 
-        mHideControls = !Utils.getSharedPreference(
-                this, GeneralPreferences.KEY_SHOW_CONTROLS, true);
         mIsMultipane = Utils.getConfigBool(this, R.bool.multiple_pane_config);
         mIsTabletConfig = Utils.getConfigBool(this, R.bool.tablet_config);
         mShowAgendaWithMonth = Utils.getConfigBool(this, R.bool.show_agenda_with_month);
-        mShowCalendarControls =
-                Utils.getConfigBool(this, R.bool.show_calendar_controls);
 
         mCalendarControlsAnimationTime = res.getInteger(R.integer.calendar_controls_animation_time);
         Utils.setAllowWeekForDetailView(mIsMultipane);
@@ -612,9 +601,6 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         mController.sendEvent(this, EventType.UPDATE_TITLE, t, t, -1, ViewType.CURRENT,
                 mController.getDateFlags(), null, null);
 
-        if (mControlsMenu != null) {
-            mControlsMenu.setTitle(mHideControls ? mShowString : mHideString);
-        }
         mPaused = false;
 
         if (mViewEventId != -1 && mIntentEventStartMillis != -1 && mIntentEventEndMillis != -1) {
@@ -740,22 +726,8 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         }
         FragmentTransaction ft = getFragmentManager().beginTransaction();
 
-        if (mShowCalendarControls) {
-            Fragment miniMonthFrag = new MonthByWeekFragment(timeMillis, true);
-            ft.replace(R.id.mini_month, miniMonthFrag);
-            mController.registerEventHandler(R.id.mini_month, (EventHandler) miniMonthFrag);
-
-            Fragment selectCalendarsFrag = new SelectVisibleCalendarsFragment();
-            ft.replace(R.id.calendar_list, selectCalendarsFrag);
-            mController.registerEventHandler(
-                    R.id.calendar_list, (EventHandler) selectCalendarsFrag);
-        }
-        if (!mShowCalendarControls || viewType == ViewType.EDIT
-                || viewType == ViewType.NOTIFICATIONS || viewType == ViewType.NOTIFICATIONS_LOG
-                || viewType == ViewType.NOTIFICATIONS_UPCOMING) {
-            mMiniMonth.setVisibility(View.GONE);
-            mCalendarsList.setVisibility(View.GONE);
-        }
+        mMiniMonth.setVisibility(View.GONE);
+        mCalendarsList.setVisibility(View.GONE);
 
         EventInfo info = null;
         if (viewType == ViewType.EDIT) {
@@ -864,27 +836,8 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             mSearchView.setOnSuggestionListener(this);
         }
 
-        // Hide the "show/hide controls" button if this is a phone
-        // or the view type is "Month" or "Agenda".
-
-        mControlsMenu = menu.findItem(R.id.action_hide_controls);
-        if (!mShowCalendarControls) {
-            if (mControlsMenu != null) {
-                mControlsMenu.setVisible(false);
-                mControlsMenu.setEnabled(false);
-            }
-        } else if (mControlsMenu != null && mController != null
-                && (mController.getViewType() == ViewType.MONTH ||
-                mController.getViewType() == ViewType.AGENDA)) {
-            mControlsMenu.setVisible(false);
-            mControlsMenu.setEnabled(false);
-        } else if (mControlsMenu != null) {
-            mControlsMenu.setTitle(mHideControls ? mShowString : mHideString);
-        }
-
         mViewSettings = menu.findItem(R.id.action_view_settings);
         updateViewSettingsVisiblility();
-
 
         MenuItem menuItem = menu.findItem(R.id.action_today);
         if (!isNotificationsView) {
@@ -953,23 +906,6 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                     datePickerDialog.getDatePicker().setFirstDayOfWeek(Utils.getFirstDayOfWeekAsCalendar(this));
                     datePickerDialog.show();
 
-        } else if (itemId == R.id.action_hide_controls) {
-            mHideControls = !mHideControls;
-            Utils.setSharedPreference(
-                    this, GeneralPreferences.KEY_SHOW_CONTROLS, !mHideControls);
-            item.setTitle(mHideControls ? mShowString : mHideString);
-            if (!mHideControls) {
-                mMiniMonth.setVisibility(View.VISIBLE);
-                mCalendarsList.setVisibility(View.VISIBLE);
-                mMiniMonthContainer.setVisibility(View.VISIBLE);
-            }
-            final ObjectAnimator slideAnimation = ObjectAnimator.ofInt(this, "controlsOffset",
-                    mHideControls ? 0 : mControlsAnimateWidth,
-                    mHideControls ? mControlsAnimateWidth : 0);
-            slideAnimation.setDuration(mCalendarControlsAnimationTime);
-            ObjectAnimator.setFrameDelay(0);
-            slideAnimation.start();
-            return true;
         } else if (itemId == R.id.action_search) {
             return false;
         } else if (itemId == R.id.action_import) {
@@ -1318,48 +1254,6 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                     null, R.id.main_pane, event.viewType, event.startTime.toMillis(false), false);
             if (mSearchView != null) {
                 mSearchView.clearFocus();
-            }
-            if (mShowCalendarControls) {
-                int animationSize = (mOrientation == Configuration.ORIENTATION_LANDSCAPE) ?
-                        mControlsAnimateWidth : mControlsAnimateHeight;
-                boolean noControlsView = event.viewType == ViewType.MONTH || event.viewType == ViewType.AGENDA
-                        || event.viewType == ViewType.NOTIFICATIONS|| event.viewType == ViewType.NOTIFICATIONS_UPCOMING
-                        || event.viewType == ViewType.NOTIFICATIONS_LOG;
-                if (mControlsMenu != null) {
-                    mControlsMenu.setVisible(!noControlsView);
-                    mControlsMenu.setEnabled(!noControlsView);
-                }
-                if (noControlsView || mHideControls) {
-                    // hide minimonth and calendar frag
-                    mShowSideViews = false;
-                    if (!mHideControls) {
-                            final ObjectAnimator slideAnimation = ObjectAnimator.ofInt(this,
-                                    "controlsOffset", 0, animationSize);
-                            slideAnimation.addListener(mSlideAnimationDoneListener);
-                            slideAnimation.setDuration(mCalendarControlsAnimationTime);
-                            ObjectAnimator.setFrameDelay(0);
-                            slideAnimation.start();
-                    } else {
-                        mMiniMonth.setVisibility(View.GONE);
-                        mCalendarsList.setVisibility(View.GONE);
-                        mMiniMonthContainer.setVisibility(View.GONE);
-                    }
-                } else {
-                    // show minimonth and calendar frag
-                    mShowSideViews = true;
-                    mMiniMonth.setVisibility(View.VISIBLE);
-                    mCalendarsList.setVisibility(View.VISIBLE);
-                    mMiniMonthContainer.setVisibility(View.VISIBLE);
-                    if (!mHideControls &&
-                            (mController.getPreviousViewType() == ViewType.MONTH ||
-                             mController.getPreviousViewType() == ViewType.AGENDA)) {
-                        final ObjectAnimator slideAnimation = ObjectAnimator.ofInt(this,
-                                "controlsOffset", animationSize, 0);
-                        slideAnimation.setDuration(mCalendarControlsAnimationTime);
-                        ObjectAnimator.setFrameDelay(0);
-                        slideAnimation.start();
-                    }
-                }
             }
             updateViewSettingsVisiblility();
             displayTime = event.selectedTime != null ? event.selectedTime.toMillis(true)

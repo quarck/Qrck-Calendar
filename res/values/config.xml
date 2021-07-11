@@ -11,9 +11,7 @@
     License.
 -->
 <resources>
-    <!-- turn on/off the mini-calendar and calendar picker -->
-    <!-- supported only for x-large devices  -->
-    <bool name="show_calendar_controls">false</bool>
+
     <!-- turn on/off month with agenda view -->
     <!-- not supported for X-large devices -->
     <bool name="show_agenda_with_month">false</bool>
