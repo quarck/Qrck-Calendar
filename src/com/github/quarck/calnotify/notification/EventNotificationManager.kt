@@ -314,9 +314,8 @@ class EventNotificationManager {
         val alertOnlyOnce = notificationRecords.all{it.alertOnlyOnce}
         val contentText = if (lines.size > 0) lines[0] else ""
 
-        val prefs = GeneralPreferences.getSharedPreferences(context)
-        val useOngoing = prefs.getBoolean(GeneralPreferences.KEY_USE_ONGOING_NOTIFICATION, GeneralPreferences.DEFAULT_USE_ONGOING)
-
+        val settings = Settings(context)
+        val useOngoing = events.any { ev -> settings.getCalendarUsesOngoing(ev.calendarId) }
         val builder =
                 NotificationCompat.Builder(context, channel.channelId)
                         .setContentTitle(contentTitle)
@@ -462,8 +461,8 @@ class EventNotificationManager {
 
         val channel = NotificationChannelManager.createNotificationChannel(ctx, soundState)
 
-        val prefs = GeneralPreferences.getSharedPreferences(ctx)
-        val useOngoing = prefs.getBoolean(GeneralPreferences.KEY_USE_ONGOING_NOTIFICATION, GeneralPreferences.DEFAULT_USE_ONGOING)
+        val settings = Settings(ctx)
+        val useOngoing = settings.getCalendarUsesOngoing(event.calendarId)
 
         val builder = NotificationCompat.Builder(ctx, channel.channelId)
                 .setContentTitle(title)

@@ -75,6 +75,20 @@ class CalendarPreferences : PreferenceFragmentCompat() {
             key = VISIBLE_KEY
             title = getString(R.string.preferences_calendar_visible)
         }
+
+        val notifyPreference = SwitchPreference(context).apply {
+            key = ENABLE_NOTIFICATIONS_KEY
+            title = getString(R.string.enable_notifications)
+        }
+        val ongoingPreference = SwitchPreference(context).apply {
+            key = ONGOING_NOTIFICATION_KEY
+            title = getString(R.string.use_ongoing_notification)
+        }
+        val taskModePreference = SwitchPreference(context).apply {
+            key = TREAT_AS_TASKS_KEY
+            title = getString(R.string.treat_as_tasks)
+        }
+
         val colorPreference = Preference(context).apply {
             key = COLOR_KEY
             title = getString(R.string.preferences_calendar_color)
@@ -134,6 +148,11 @@ class CalendarPreferences : PreferenceFragmentCompat() {
         }
         screen.addPreference(visiblePreference)
         screen.addPreference(colorPreference)
+
+        screen.addPreference(notifyPreference)
+        screen.addPreference(ongoingPreference)
+        screen.addPreference(taskModePreference)
+
         if (isLocalAccount) {
             screen.addPreference(displayNamePreference)
             screen.addPreference(deletePreference)
@@ -233,6 +252,9 @@ class CalendarPreferences : PreferenceFragmentCompat() {
 
         const val SYNCHRONIZE_KEY = "synchronize"
         const val VISIBLE_KEY = "visible"
+        const val ENABLE_NOTIFICATIONS_KEY = "notify"
+        const val ONGOING_NOTIFICATION_KEY = "ongoing"
+        const val TREAT_AS_TASKS_KEY = "tasks"
         const val COLOR_KEY = "color"
         const val DISPLAY_NAME_KEY = "displayName"
     }

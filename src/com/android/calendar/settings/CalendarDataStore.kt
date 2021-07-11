@@ -27,7 +27,7 @@ import androidx.preference.PreferenceDataStore
  * Custom data store for preferences that saves/retrieves settings of an individual calendar
  * from Android's calendar database.
  */
-class CalendarDataStore(activity: FragmentActivity, calendarId: Long) : PreferenceDataStore() {
+class CalendarDataStore(val activity: FragmentActivity, val calendarId: Long) : PreferenceDataStore() {
     private var contentResolver = activity.contentResolver
     private var calendarUri = ContentUris.withAppendedId(CalendarContract.Calendars.CONTENT_URI, calendarId)
 
@@ -41,6 +41,27 @@ class CalendarDataStore(activity: FragmentActivity, calendarId: Long) : Preferen
         )
     }
 
+    private fun isLocalBooleanKey(key: String?): Boolean {
+        return when (key) {
+            CalendarPreferences.ENABLE_NOTIFICATIONS_KEY,
+            CalendarPreferences.ONGOING_NOTIFICATION_KEY,
+            CalendarPreferences.TREAT_AS_TASKS_KEY -> true
+            else -> false
+        }
+    }
+
+    private fun putLocalBoolean(key: String?, value: Boolean) {
+        if (key != null)
+            com.github.quarck.calnotify.Settings(activity).setCalendarSpecificBoolean(calendarId, key, value)
+    }
+
+    private fun getLocalBoolean(key: String?, defValue: Boolean): Boolean {
+        if (key != null)
+            return com.github.quarck.calnotify.Settings(activity).getCalendarSpecificBoolean(
+                calendarId, key, if (key == CalendarPreferences.ENABLE_NOTIFICATIONS_KEY) true else defValue)
+        return defValue
+    }
+
     private fun mapPreferenceKeyToDatabaseKey(key: String?): String {
         return when (key) {
             CalendarPreferences.SYNCHRONIZE_KEY -> CalendarContract.Calendars.SYNC_EVENTS
@@ -52,16 +73,20 @@ class CalendarDataStore(activity: FragmentActivity, calendarId: Long) : Preferen
     }
 
     override fun putBoolean(key: String?, value: Boolean) {
+        if (isLocalBooleanKey(key)) {
+            putLocalBoolean(key, value)
+            return
+        }
         val databaseKey = mapPreferenceKeyToDatabaseKey(key)
-
         val values = ContentValues()
         values.put(databaseKey, if (value) 1 else 0)
         contentResolver.update(calendarUri, values, null, null)
     }
 
     override fun getBoolean(key: String?, defValue: Boolean): Boolean {
+        if (isLocalBooleanKey(key))
+            return getLocalBoolean(key, defValue)
         val databaseKey = mapPreferenceKeyToDatabaseKey(key)
-
         contentResolver.query(calendarUri, PROJECTION, null, null, null)?.use {
             if (it.moveToFirst()) {
                 return it.getInt(it.getColumnIndex(databaseKey)) == 1

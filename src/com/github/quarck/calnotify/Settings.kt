@@ -20,6 +20,7 @@
 package com.github.quarck.calnotify
 
 import android.content.Context
+import com.android.calendar.settings.CalendarPreferences
 import com.android.calendar.settings.GeneralPreferences
 import com.android.calendar.settings.GeneralPreferences.Companion.getSharedPreferences
 import com.github.quarck.calnotify.utils.PersistentStorageBase
@@ -27,12 +28,29 @@ import com.github.quarck.calnotify.utils.PersistentStorageBase
 
 class Settings(val context: Context) : PersistentStorageBase(context, "settings") {
 
+    fun getCalendarSpecificBoolean(calendarId: Long, key: String, defValue: Boolean): Boolean
+        = getBoolean("$key.$calendarId", defValue)
+
+    fun setCalendarSpecificBoolean(calendarId: Long, key: String, value: Boolean)
+            = setBoolean("$key.$calendarId", value)
+
     fun getCalendarIsHandled(calendarId: Long): Boolean
-            = getBoolean("$CALENDAR_IS_HANDLED_KEY_PREFIX.$calendarId", true)
-
+            = getCalendarSpecificBoolean(calendarId, com.android.calendar.settings.CalendarPreferences.ENABLE_NOTIFICATIONS_KEY, true)
     fun setCalendarIsHandled(calendarId: Long, enabled: Boolean)
-            = setBoolean("$CALENDAR_IS_HANDLED_KEY_PREFIX.$calendarId", enabled)
+            = setCalendarSpecificBoolean(calendarId, com.android.calendar.settings.CalendarPreferences.ENABLE_NOTIFICATIONS_KEY, enabled)
 
+    fun getCalendarUsesOngoing(calendarId: Long): Boolean
+            = getCalendarSpecificBoolean(calendarId, com.android.calendar.settings.CalendarPreferences.ONGOING_NOTIFICATION_KEY, false)
+    fun setCalendarUsesOngoing(calendarId: Long, enabled: Boolean)
+            = setCalendarSpecificBoolean(calendarId, com.android.calendar.settings.CalendarPreferences.ONGOING_NOTIFICATION_KEY, enabled)
+
+
+    fun getCalendarIsTasks(calendarId: Long): Boolean
+            = getCalendarSpecificBoolean(calendarId, com.android.calendar.settings.CalendarPreferences.TREAT_AS_TASKS_KEY, false)
+    fun setCalendarIsTasks(calendarId: Long, enabled: Boolean)
+            = setCalendarSpecificBoolean(calendarId, com.android.calendar.settings.CalendarPreferences.TREAT_AS_TASKS_KEY, enabled)
+
+    
     val handleEventsWithNoReminders: Boolean
         get() {
             val prefs = getSharedPreferences(context)
@@ -64,12 +82,6 @@ class Settings(val context: Context) : PersistentStorageBase(context, "settings"
         get() {
             val prefs = getSharedPreferences(context)
             return prefs.getBoolean(GeneralPreferences.KEY_HANDLE_EMAIL_ONLY, false)
-        }
-
-    val useOngoingNotification: Boolean
-        get()  {
-            val prefs = getSharedPreferences(context)
-            return prefs.getBoolean(GeneralPreferences.KEY_USE_ONGOING_NOTIFICATION, GeneralPreferences.DEFAULT_USE_ONGOING)
         }
 
     var doNotShowBatteryOptimisationWarning: Boolean

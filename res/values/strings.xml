@@ -1085,5 +1085,8 @@
     <string name="pick_a_date_copy_inst">Pick a date (copy inst.)</string>
 
     <string name="reschedule_event_title">Reschedule event:</string>
+    <string name="enable_notifications">Enable notifications</string>
+    <string name="use_ongoing_notification">Use ongoing notification</string>
+    <string name="treat_as_tasks">Treat as tasks</string>
 
 </resources>

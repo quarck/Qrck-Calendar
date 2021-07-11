@@ -60,7 +60,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
     private lateinit var homeTzPref: Preference
     private lateinit var defaultReminderPref: ListPreference
     private lateinit var defaultAllDayReminderPref: ListPreference
-    private lateinit var useOngoingPref: CheckBoxPreference
     private lateinit var handleEmailOnlyEventsPref: CheckBoxPreference
     private lateinit var handleEventsWithNoRemindersPref: CheckBoxPreference
 
@@ -99,7 +98,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         homeTzPref = preferenceScreen.findPreference(KEY_HOME_TZ)!!
         defaultReminderPref = preferenceScreen.findPreference(KEY_DEFAULT_REMINDER)!!
         defaultAllDayReminderPref = preferenceScreen.findPreference(KEY_DEFAULT_ALL_DAY_REMINDER)!!
-        useOngoingPref = preferenceScreen.findPreference(KEY_USE_ONGOING_NOTIFICATION)!!
         handleEmailOnlyEventsPref = preferenceScreen.findPreference(KEY_HANDLE_EMAIL_ONLY)!!
         handleEventsWithNoRemindersPref = preferenceScreen.findPreference(KEY_HANDLE_EVENTS_WITH_NO_REMINDERS)!!
 
@@ -203,7 +201,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         homeTzPref.onPreferenceChangeListener = listener
         defaultReminderPref.onPreferenceChangeListener = listener
         defaultAllDayReminderPref.onPreferenceChangeListener = listener
-        useOngoingPref.onPreferenceChangeListener = listener
         handleEmailOnlyEventsPref.onPreferenceChangeListener = listener
         handleEventsWithNoRemindersPref.onPreferenceChangeListener = listener
     }
@@ -365,7 +362,6 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         const val KEY_DEFAULT_ALL_DAY_REMINDER = "preferences_default_all_day_reminder"
         const val KEY_HANDLE_EMAIL_ONLY = "preferences_handle_email_only_events"
         const val KEY_HANDLE_EVENTS_WITH_NO_REMINDERS = "preferences_handle_events_with_no_reminders"
-        const val KEY_USE_ONGOING_NOTIFICATION = "preference_use_ongoing_notification"
         const val DEFAULT_USE_ONGOING = true
         const val DEFAULT_REMINDER_STRING = "15"
         const val DEFAULT_ALL_DAY_REMINDER_STRING = "960"

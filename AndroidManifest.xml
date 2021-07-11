@@ -308,19 +308,6 @@
             android:parentActivityName="com.android.calendar.AllInOneActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
-
-
-        <activity
-            android:name="com.github.quarck.calnotify.prefs.CalendarsActivity"
-            android:label="@string/title_calendars_activity"
-            android:parentActivityName="com.android.calendar.AllInOneActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="com.github.quarck.calnotify.prefs.CalendarsActivity" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
         <service android:name="com.github.quarck.calnotify.calendarmonitor.CalendarMonitorIntentService" />
         <service
             android:name="com.github.quarck.calnotify.calendarmonitor.CalendarMonitorOneTimeJobService"
