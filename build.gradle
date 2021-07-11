@@ -181,8 +181,8 @@ android {
     defaultConfig {
         minSdkVersion 26
         targetSdkVersion 30
-        versionCode 14
-        versionName "1.1.4"
+        versionCode 15
+        versionName "1.1.5"
         applicationId "org.qrck.seshat"
 
         buildConfigField "long", "TIMESTAMP", System.currentTimeMillis() + "L"
