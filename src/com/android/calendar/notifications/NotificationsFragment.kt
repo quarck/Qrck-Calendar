@@ -227,7 +227,7 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
     }
 
 
-    override fun onItemClick(v: View, position: Int, eventId: Long) {
+    override fun onEventClick(v: View, position: Int, eventId: Long) {
         DevLog.info(LOG_TAG, "onItemClick, pos=$position, eventId=$eventId")
 
         val event = adapter?.getEventAtPosition(position, eventId)
@@ -246,7 +246,7 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
     }
 
     // Item was already removed from UI, we just have to dismiss it now
-    override fun onItemRemoved(event: EventAlertRecord) {
+    override fun onEventMarkDone(event: EventAlertRecord) {
 
         this.context?.let { ctx ->
             DevLog.info(LOG_TAG, "onItemRemoved: Removing event id ${event.eventId} from DB and dismissing notification id ${event.notificationId}")
@@ -257,7 +257,14 @@ class NotificationsFragment : Fragment(), CalendarController.EventHandler, Event
         }
     }
 
-    override fun onItemRestored(event: EventAlertRecord) {
+    override fun onEventReschedule(event: EventAlertRecord) {
+        this.context?.let {
+            ctx ->
+            ViewEventActivity.rescheduleEvent(ctx, event) {}
+        }
+    }
+
+    override fun onEventUnmarkDone(event: EventAlertRecord) {
         this.context?.let { ctx ->
             DevLog.info(LOG_TAG, "onItemRestored, eventId=${event.eventId}")
             CalNotifyController.restoreEvent(ctx, event)

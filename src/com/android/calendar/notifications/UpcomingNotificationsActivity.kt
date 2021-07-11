@@ -27,6 +27,7 @@ import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.calendar.*
 import com.github.quarck.calnotify.calendarmonitor.CalendarMonitor
 import com.github.quarck.calnotify.ui.EventListAdapter
+import com.github.quarck.calnotify.ui.ViewEventActivity
 import com.github.quarck.calnotify.ui.ViewEventActivityUpcoming
 import com.github.quarck.calnotify.utils.adjustCalendarColor
 import com.github.quarck.calnotify.utils.logs.DevLog
@@ -113,9 +114,15 @@ class UpcomingEventListAdapter(
 
                     val escapeVelocityMultiplier = 5.0f
 
-                    val background = ColorDrawable(DynamicTheme.resolveColor(context, R.attr.cn_skip_event_bg))
+                    val backgroundSkip = ColorDrawable(DynamicTheme.resolveColor(context, R.attr.cn_skip_event_bg))
+                    val backgroundReschedule = ColorDrawable(DynamicTheme.resolveColor(context, R.attr.cn_reschedule_event_bg))
+
                     val iconsColor = DynamicTheme.resolveColor(context, R.attr.cn_icons)
-                    val vMark: Drawable = (ContextCompat.getDrawable(context, R.drawable.ic_check_white_24dp) ?: throw Exception("Now v-mark"))
+                    val skipIcon: Drawable = (ContextCompat.getDrawable(context, R.drawable.ic_check_white_24dp) ?: throw Exception("Now v-mark"))
+                            .apply{
+                                colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(iconsColor, BlendModeCompat.SRC_ATOP)
+                            }
+                    val rescheduleIcon: Drawable = (ContextCompat.getDrawable(context, R.drawable.ic_next_week_white_24dp) ?: throw Exception("Now v-mark"))
                             .apply{
                                 colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(iconsColor, BlendModeCompat.SRC_ATOP)
                             }
@@ -148,7 +155,12 @@ class UpcomingEventListAdapter(
                             val event = getEventAtPosition(swipedPosition)
 
                             if (event != null) {
-                                toggleSkipNotification(event, swipedPosition)
+                                if (direction == ItemTouchHelper.LEFT) {
+                                    cb.onEventReschedule(event)
+                                    synchronized(this) { notifyDataSetChanged() }
+                                } else {
+                                    toggleSkipNotification(event, swipedPosition)
+                                }
                             }
                             else {
                                 DevLog.error(LOG_TAG, "Failed to get event at post $swipedPosition")
@@ -193,26 +205,29 @@ class UpcomingEventListAdapter(
                         if (viewHolder.adapterPosition == -1)
                             return
 
-                        if (dX < 0)
-                            background.setBounds(
+                        if (dX < 0) {
+                            backgroundReschedule.setBounds(
                                     itemView.right + dX.toInt() + bgMargin,
                                     itemView.top + bgMargin,
                                     itemView.right - bgMargin,
                                     itemView.bottom - bgMargin
                             )
-                        else
-                            background.setBounds(
+                            backgroundReschedule.draw(c)
+
+                        } else {
+                            backgroundSkip.setBounds(
                                     itemView.left + bgMargin,
                                     itemView.top + bgMargin,
                                     itemView.left + (dX.toInt() - bgMargin).coerceAtLeast(0),
                                     itemView.bottom - bgMargin
                             )
 
-                        background.draw(c)
+                            backgroundSkip.draw(c)
+                        }
 
                         val itemHeight = itemView.bottom - itemView.top
-                        val intrinsicWidth = vMark.intrinsicWidth
-                        val intrinsicHeight = vMark.intrinsicWidth
+                        val intrinsicWidth = skipIcon.intrinsicWidth
+                        val intrinsicHeight = skipIcon.intrinsicWidth
 
 
                         if (dX < 0) {
@@ -220,17 +235,17 @@ class UpcomingEventListAdapter(
                             val vMarkRight = itemView.right - vMarkMargin
                             val vMarkTop = itemView.top + (itemHeight - intrinsicHeight) / 2
                             val vMarkBottom = vMarkTop + intrinsicHeight
-                            vMark.setBounds(vMarkLeft, vMarkTop, vMarkRight, vMarkBottom)
+                            rescheduleIcon.setBounds(vMarkLeft, vMarkTop, vMarkRight, vMarkBottom)
+                            rescheduleIcon.draw(c)
                         }
                         else {
                             val vMarkLeft = itemView.left + vMarkMargin
                             val vMarkRight = itemView.left + vMarkMargin + intrinsicWidth
                             val vMarkTop = itemView.top + (itemHeight - intrinsicHeight) / 2
                             val vMarkBottom = vMarkTop + intrinsicHeight
-                            vMark.setBounds(vMarkLeft, vMarkTop, vMarkRight, vMarkBottom)
+                            skipIcon.setBounds(vMarkLeft, vMarkTop, vMarkRight, vMarkBottom)
+                            skipIcon.draw(c)
                         }
-
-                        vMark.draw(c)
 
                         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     }
@@ -473,6 +488,11 @@ class UpcomingNotificationsActivity : AppCompatActivity() {
             monEntry.wasHandled = true
             CalNotifyController.dismissFutureEvent(this, MonitorDataPair.fromEventAlertRecord(event))
         }
+    }
+
+    fun onEventReschedule(event: UpcomingEventAlertRecordWrap) {
+        if (event.event != null)
+            ViewEventActivity.rescheduleEvent(this, event.event) {}
     }
 
     companion object {

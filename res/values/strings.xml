@@ -1081,6 +1081,9 @@
     <string name="preferences_use_ongoing_notification">Use ongoing notification</string>
     <string name="preferences_use_ongoing_notification_summary">Display all notifications are ongoing\nIf this option is disabled, swiping of the notification away only clears the system notification area, while event still has to be marked as done (via swipe) inside the app</string>
     <string name="at_comma">At:</string>
+    <string name="pick_a_date">Pick a date</string>
+    <string name="pick_a_date_copy_inst">Pick a date (copy inst.)</string>
 
+    <string name="reschedule_event_title">Reschedule event:</string>
 
 </resources>

@@ -67,6 +67,7 @@
         <attr name="cn_ultra_light_divider" format="color" />
         <attr name="cn_complete_event_bg" format="color" />
         <attr name="cn_skip_event_bg" format="color" />
+        <attr name="cn_reschedule_event_bg" format="color" />
         <attr name="cn_cal_sample_primary" format="color" />
     </declare-styleable>
 </resources>

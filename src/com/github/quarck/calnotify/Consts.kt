@@ -87,6 +87,7 @@ object Consts {
     const val DEFAULT_LED_COLOR = 0x7f0000ff
 
     const val ALARM_THRESHOLD = 24 * 1000L // multiple of both, 2 and 3
+    const val MIN_MOVE_GAP_THRESHOLD = 4 * 3600 * 1000L
 
     val DEFAULT_SNOOZE_PRESETS = longArrayOf(
             15 * MINUTE_IN_MILLISECONDS,

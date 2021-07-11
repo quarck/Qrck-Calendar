@@ -679,11 +679,11 @@ object CalNotifyController  {
         }
     }
 
-    fun moveEvent(context: Context, event: EventAlertRecord, addTime: Long): EventAlertRecord? {
+    fun moveEventForward(context: Context, event: EventAlertRecord, newEventStart: Long): EventAlertRecord? {
 
-        val moved = calendarEditor.moveEvent(context, event, addTime)
+        val moved = calendarEditor.moveEventForward(context, event, newEventStart)
         if (moved != null) {
-            DevLog.info(LOG_TAG, "moveEvent: Moved event ${event.eventId} by ${addTime / 1000L} seconds")
+            DevLog.info(LOG_TAG, "moveEventForward: Moved event ${event.eventId} new start ${newEventStart}")
             EventsStorage(context).use {
                 db ->
                 dismissEvent(
@@ -701,9 +701,9 @@ object CalNotifyController  {
         return moved
     }
 
-    fun moveAsCopy(context: Context, calendar: CalendarRecord, event: EventAlertRecord, addTime: Long): EventAlertRecord? {
+    fun moveRepeatingForwardAsCopy(context: Context, calendar: CalendarRecord, event: EventAlertRecord, newEventStart: Long): EventAlertRecord? {
 
-        val moved = calendarEditor.moveRepeatingAsCopy(context, calendar, event, addTime)
+        val moved = calendarEditor.moveRepeatingForwardAsCopy(context, calendar, event, newEventStart)
         if (moved != null) {
             DevLog.debug(LOG_TAG, "Event created: id=${moved.eventId}")
 

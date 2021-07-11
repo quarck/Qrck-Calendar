@@ -9,4 +9,7 @@
     <item android:id="@+id/action_move_copy_next_week" android:title="@string/copy_next_week" />
     <item android:id="@+id/action_move_copy_next_month_30d" android:title="@string/copy_next_month_30d" />
 
+    <item android:id="@+id/action_move_pick_a_date" android:title="@string/pick_a_date" android:visible="false" />
+    <item android:id="@+id/action_move_copy_pick_a_date" android:title="@string/pick_a_date_copy_inst"  android:visible="false"  />
+
 </menu>

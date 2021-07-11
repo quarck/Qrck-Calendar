@@ -21,7 +21,10 @@ package com.github.quarck.calnotify.ui
 
 //import com.github.quarck.calnotify.utils.logs.Logger
 
+import android.app.DatePickerDialog
 import android.content.ContentUris
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.net.Uri
@@ -31,10 +34,8 @@ import android.provider.CalendarContract.*
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
-import android.widget.PopupMenu
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
@@ -52,13 +53,13 @@ import com.github.quarck.calnotify.calendarmonitor.CalendarMonitor
 import com.github.quarck.calnotify.calendarmonitor.CalendarReloadManager
 import com.github.quarck.calnotify.eventsstorage.EventsStorage
 import com.github.quarck.calnotify.permissions.PermissionsManager
-import com.github.quarck.calnotify.utils.DateTimeUtils
-import com.github.quarck.calnotify.utils.adjustCalendarColor
+import com.github.quarck.calnotify.utils.*
 import com.github.quarck.calnotify.utils.logs.DevLog
 import com.github.quarck.calnotify.utils.maps.MapsIntents
 import com.github.quarck.calnotify.utils.textutils.EventFormatter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.qrck.seshat.R
+import java.util.*
 
 
 // TODO: add repeating rule and calendar name somewhere on the snooze activity
@@ -394,29 +395,43 @@ open class ViewEventActivity : AppCompatActivity() {
         val inflater = popup.menuInflater
         inflater.inflate(R.menu.move_options, popup.menu)
 
+        val eventStart = if (event.isRepeating) event.instanceStartTime else event.startTime
+
+        val nextDayStart = eventStart + 1 * Consts.DAY_IN_SECONDS * 1000L
+        val nextWeekStart = eventStart + 7 * Consts.DAY_IN_SECONDS * 1000L
+        val nextMonthStart = eventStart + 30 * Consts.DAY_IN_SECONDS * 1000L
+
         if (event.isRepeating) {
             popup.menu.findItem(R.id.action_move_next_day)?.isVisible = false
             popup.menu.findItem(R.id.action_move_next_week)?.isVisible = false
             popup.menu.findItem(R.id.action_move_next_month_30d)?.isVisible = false
+
+            popup.menu.findItem(R.id.action_move_copy_next_day)?.isVisible = shouldOfferMove(nextDayStart)
+            popup.menu.findItem(R.id.action_move_copy_next_week)?.isVisible = shouldOfferMove(nextWeekStart)
+            popup.menu.findItem(R.id.action_move_copy_next_month_30d)?.isVisible = shouldOfferMove(nextMonthStart)
         }
         else {
             popup.menu.findItem(R.id.action_move_copy_next_day)?.isVisible = false
             popup.menu.findItem(R.id.action_move_copy_next_week)?.isVisible = false
             popup.menu.findItem(R.id.action_move_copy_next_month_30d)?.isVisible = false
+
+            popup.menu.findItem(R.id.action_move_next_day)?.isVisible = shouldOfferMove(nextDayStart)
+            popup.menu.findItem(R.id.action_move_next_week)?.isVisible = shouldOfferMove(nextWeekStart)
+            popup.menu.findItem(R.id.action_move_next_month_30d)?.isVisible = shouldOfferMove(nextMonthStart)
         }
 
         popup.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_move_next_day, R.id.action_move_copy_next_day -> {
-                    reschedule(addTime = 1 * Consts.DAY_IN_SECONDS * 1000L)
+                    reschedule(this, event, calendar, nextDayStart, onSuccess = { finish() })
                     true
                 }
                 R.id.action_move_next_week, R.id.action_move_copy_next_week -> {
-                    reschedule(addTime = 7 * Consts.DAY_IN_SECONDS * 1000L)
+                    reschedule(this, event, calendar, nextWeekStart, onSuccess = { finish() })
                     true
                 }
                 R.id.action_move_next_month_30d, R.id.action_move_copy_next_month_30d -> {
-                    reschedule(addTime = 30 * Consts.DAY_IN_SECONDS * 1000L)
+                    reschedule(this, event, calendar, nextMonthStart, onSuccess = { finish() })
                     true
                 }
                 else -> false
@@ -475,33 +490,132 @@ open class ViewEventActivity : AppCompatActivity() {
         }
     }
 
-    private fun reschedule(addTime: Long) {
-
-        DevLog.info(LOG_TAG, "Moving event ${event.eventId} by ${addTime / 1000L} seconds, isRepeating = ${event.isRepeating}");
-
-        if (!event.isRepeating) {
-            val moved = CalNotifyController.moveEvent(this, event, addTime)
-
-            if (moved != null) {
-                SnoozeResult(SnoozeType.Moved, event.startTime).toast(this) // Show
-                finish()  // terminate ourselves
-            } else {
-                DevLog.info(LOG_TAG, "snooze: Failed to move event ${event.eventId} by ${addTime / 1000L} seconds")
-            }
-        }
-        else {
-            val moved = CalNotifyController.moveAsCopy(this, calendar, event, addTime)
-            if (moved != null) {
-                SnoozeResult(SnoozeType.Moved, event.startTime).toast(this) // Show
-                finish() // terminate ourselves
-            } else {
-                DevLog.info(LOG_TAG, "snooze: Failed to move event ${event.eventId} by ${addTime / 1000L} seconds")
-            }
-        }
-    }
-
     companion object {
         private const val LOG_TAG = "ActivitySnooze"
+
+        private fun shouldOfferMove(newStartTime: Long): Boolean
+            = newStartTime > System.currentTimeMillis() + Consts.MIN_MOVE_GAP_THRESHOLD
+
+        private fun reschedule(ctx: Context, event: EventAlertRecord, calendar: CalendarRecord?, newStartTime: Long, onSuccess: ()->Unit) {
+
+            DevLog.info(LOG_TAG, "Moving event ${event.eventId} to the new start ${newStartTime}, isRepeating = ${event.isRepeating}");
+
+            if (!event.isRepeating) {
+                val moved = CalNotifyController.moveEventForward(ctx, event, newStartTime)
+
+                if (moved != null) {
+                    SnoozeResult(SnoozeType.Moved, moved.startTime).toast(ctx) // Show
+                    onSuccess()
+                } else {
+                    DevLog.info(LOG_TAG, "snooze: Failed to move event ${event.eventId} to ${newStartTime}")
+                }
+            }
+            else {
+                val cal = calendar ?: CalendarProvider.getCalendarById(ctx, event.calendarId)
+                if (cal != null) {
+                    val moved = CalNotifyController.moveRepeatingForwardAsCopy(ctx, cal, event, newStartTime)
+                    if (moved != null) {
+                        SnoozeResult(SnoozeType.Moved, moved.startTime).toast(ctx) // Show
+                        onSuccess()
+                    } else {
+                        DevLog.info(LOG_TAG, "snooze: Failed to move event ${event.eventId} to ${newStartTime}")
+                    }
+                } else {
+                    DevLog.info(LOG_TAG, "snooze: Failed to move event ${event.eventId} to ${newStartTime} - no calendar ${event.calendarId} found")
+                }
+            }
+        }
+
+        private fun pickADateReschedule(ctx: Context, event: EventAlertRecord, onSuccess: () -> Unit) {
+
+            val cal = DateTimeUtils.createCalendarTime(System.currentTimeMillis())
+
+            val dialog = DatePickerDialog(
+                    ctx,
+                    {
+                        _, year, month, day ->
+
+                        cal.year = year
+                        cal.month = month
+                        cal.dayOfMonth = day
+
+                        val newStart = cal.timeInMillis
+                        if (shouldOfferMove(newStart))
+                            reschedule(ctx, event, null, newStart, onSuccess)
+                    },
+                    cal.year,
+                    cal.month,
+                    cal.dayOfMonth
+            )
+
+            dialog.datePicker.firstDayOfWeek = Calendar.MONDAY
+
+            dialog.show()
+        }
+
+        fun rescheduleEvent(ctx: Context, event: EventAlertRecord, onSuccess: () -> Unit) {
+
+            val eventStart = if (event.isRepeating) event.instanceStartTime else event.startTime
+
+            val nextDayStart = eventStart + 1 * Consts.DAY_IN_SECONDS * 1000L
+            val nextWeekStart = eventStart + 7 * Consts.DAY_IN_SECONDS * 1000L
+            val nextMonthStart = eventStart + 30 * Consts.DAY_IN_SECONDS * 1000L
+
+            val res = ctx.resources
+
+            val listValues = MutableList<Int>(0, {0})
+            val listNames = MutableList<String>(0, {""})
+
+            if (shouldOfferMove(nextDayStart)) {
+                listValues.add(R.id.action_move_next_day)
+                listNames.add(if (event.isRepeating) res.getString(R.string.copy_next_day) else res.getString(R.string.next_day))
+            }
+            if (shouldOfferMove(nextWeekStart)) {
+                listValues.add(R.id.action_move_next_week)
+                listNames.add(if (event.isRepeating) res.getString(R.string.copy_next_week) else res.getString(R.string.next_week))
+            }
+            if (shouldOfferMove(nextMonthStart)) {
+                listValues.add(R.id.action_move_next_month_30d)
+                listNames.add(if (event.isRepeating) res.getString(R.string.copy_next_month_30d) else res.getString(R.string.next_month_30d))
+            }
+
+            listValues.add(R.id.action_move_pick_a_date)
+            listNames.add(if (event.isRepeating) res.getString(R.string.pick_a_date_copy_inst) else res.getString(R.string.pick_a_date))
+
+            val adapter = ArrayAdapter<String>(ctx, R.layout.simple_list_item_medium)
+            adapter.addAll(listNames)
+
+            val builder = AlertDialog.Builder(ctx)
+            builder.setTitle(res.getString(R.string.reschedule_event_title))
+            builder.setCancelable(true)
+            builder.setAdapter(adapter) {
+                _, which ->
+                if (which in 0..listValues.size-1) {
+                    val itemId = listValues[which]
+                    when (itemId) {
+                        R.id.action_move_next_day -> {
+                            reschedule(ctx, event, null, nextDayStart, onSuccess)
+                        }
+                        R.id.action_move_next_week -> {
+                            reschedule(ctx, event, null, nextWeekStart, onSuccess)
+                        }
+                        R.id.action_move_next_month_30d -> {
+                            reschedule(ctx, event, null, nextMonthStart, onSuccess)
+                        }
+                        R.id.action_move_pick_a_date -> {
+                            pickADateReschedule(ctx, event, onSuccess)
+                        }
+                    }
+                }
+            }
+
+            builder.setNegativeButton(android.R.string.cancel) {
+                _: DialogInterface?, _: Int ->
+            }
+
+            builder.show()
+
+        }
     }
 
 }

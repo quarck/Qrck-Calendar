@@ -19,10 +19,10 @@
 
 package com.github.quarck.calnotify.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -36,7 +36,6 @@ import android.widget.TextView
 import androidx.core.graphics.BlendModeColorFilterCompat
 import androidx.core.graphics.BlendModeCompat
 import com.android.calendar.DynamicTheme
-import com.android.calendar.Utils
 import org.qrck.seshat.R
 import com.github.quarck.calnotify.calendar.*
 import com.github.quarck.calnotify.utils.logs.DevLog
@@ -44,9 +43,10 @@ import com.github.quarck.calnotify.utils.textutils.EventFormatter
 import com.github.quarck.calnotify.utils.adjustCalendarColor
 
 interface EventListCallback {
-    fun onItemClick(v: View, position: Int, eventId: Long): Unit
-    fun onItemRemoved(event: EventAlertRecord)
-    fun onItemRestored(event: EventAlertRecord) // e.g. undo
+    fun onEventClick(v: View, position: Int, eventId: Long): Unit
+    fun onEventMarkDone(event: EventAlertRecord)
+    fun onEventUnmarkDone(event: EventAlertRecord) // e.g. undo
+    fun onEventReschedule(event: EventAlertRecord)
     fun onScrollPositionChange(newPos: Int)
 }
 
@@ -81,7 +81,7 @@ class EventListAdapter(
 
         init {
             val itemClickListener = View.OnClickListener {
-                callback.onItemClick(itemView, adapterPosition, eventId);
+                callback.onEventClick(itemView, adapterPosition, eventId);
             }
 
             eventHolder?.setOnClickListener(itemClickListener)
@@ -138,12 +138,21 @@ class EventListAdapter(
 
                     val iconsColor = DynamicTheme.resolveColor(context, R.attr.cn_icons)
 
-                    val background = ColorDrawable(DynamicTheme.resolveColor(context, R.attr.cn_complete_event_bg))
-                    val vMark = (ContextCompat.getDrawable(context, R.drawable.ic_check_white_24dp) ?: throw Exception("Now v-mark"))
+                    val backgroundComplete = ColorDrawable(DynamicTheme.resolveColor(context, R.attr.cn_complete_event_bg))
+                    val backgroundReschedule = ColorDrawable(DynamicTheme.resolveColor(context, R.attr.cn_reschedule_event_bg))
+
+                    val markDoneIcon = (ContextCompat.getDrawable(context, R.drawable.ic_check_white_24dp) ?: throw Exception("No v-mark"))
                             .apply{
                                 colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
                                         iconsColor, BlendModeCompat.SRC_ATOP)
                             }
+
+                    val rescheduleIcon = (ContextCompat.getDrawable(context, R.drawable.ic_next_week_white_24dp) ?: throw Exception("No v-mark"))
+                            .apply{
+                                colorFilter = BlendModeColorFilterCompat.createBlendModeColorFilterCompat(
+                                        iconsColor, BlendModeCompat.SRC_ATOP)
+                            }
+
 
                     var vMarkMargin = context.resources.getDimension(R.dimen.ic_clear_margin).toInt()
                     var bgMargin = context.resources.getDimension(R.dimen.swipe_bg_margin).toInt()
@@ -180,8 +189,13 @@ class EventListAdapter(
                             val event = getEventAtPosition(swipedPosition)
 
                             if (event != null) {
-                                removeWithUndo(event)
-                                callback.onItemRemoved(event)
+                                if (direction == ItemTouchHelper.LEFT) {
+                                    callback.onEventReschedule(event)
+                                    synchronized(this) { notifyDataSetChanged() }
+                                } else {
+                                    markDoneWithUndo(event)
+                                    callback.onEventMarkDone(event)
+                                }
                             }
                             else {
                                 DevLog.error(LOG_TAG, "Failed to get event at post $swipedPosition")
@@ -226,26 +240,30 @@ class EventListAdapter(
                         if (viewHolder.adapterPosition == -1)
                             return
 
-                        if (dX < 0)
-                            background.setBounds(
+                        if (dX < 0) {
+                            backgroundReschedule.setBounds(
                                     itemView.right + dX.toInt() + bgMargin,
                                     itemView.top + bgMargin,
                                     itemView.right - bgMargin,
                                     itemView.bottom - bgMargin
                             )
-                        else
-                            background.setBounds(
+                            backgroundReschedule.draw(c)
+                        } else {
+                            backgroundComplete.setBounds(
                                     itemView.left + bgMargin,
                                     itemView.top + bgMargin,
                                     itemView.left + (dX.toInt() - bgMargin).coerceAtLeast(0),
                                     itemView.bottom - bgMargin
                             )
-
-                        background.draw(c)
+                            backgroundComplete.draw(c)
+                        }
 
                         val itemHeight = itemView.bottom - itemView.top
-                        val intrinsicWidth = vMark.intrinsicWidth
-                        val intrinsicHeight = vMark.intrinsicWidth
+
+                        // We assume that both markDoneIcon and rescheduleIcon are of the exact same dimension here,
+                        // otherwise rescheduleIcon will be truncated in a bad way
+                        val intrinsicWidth = markDoneIcon.intrinsicWidth
+                        val intrinsicHeight = markDoneIcon.intrinsicWidth
 
 
                         if (dX < 0) {
@@ -253,17 +271,17 @@ class EventListAdapter(
                             val vMarkRight = itemView.right - vMarkMargin
                             val vMarkTop = itemView.top + (itemHeight - intrinsicHeight) / 2
                             val vMarkBottom = vMarkTop + intrinsicHeight
-                            vMark.setBounds(vMarkLeft, vMarkTop, vMarkRight, vMarkBottom)
+                            rescheduleIcon.setBounds(vMarkLeft, vMarkTop, vMarkRight, vMarkBottom)
+                            rescheduleIcon.draw(c)
                         }
                         else {
                             val vMarkLeft = itemView.left + vMarkMargin
                             val vMarkRight = itemView.left + vMarkMargin + intrinsicWidth
                             val vMarkTop = itemView.top + (itemHeight - intrinsicHeight) / 2
                             val vMarkBottom = vMarkTop + intrinsicHeight
-                            vMark.setBounds(vMarkLeft, vMarkTop, vMarkRight, vMarkBottom)
+                            markDoneIcon.setBounds(vMarkLeft, vMarkTop, vMarkRight, vMarkBottom)
+                            markDoneIcon.draw(c)
                         }
-
-                        vMark.draw(c)
 
                         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     }
@@ -276,6 +294,7 @@ class EventListAdapter(
     }
 
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         //
         if (position < 0 || position >= events.size)
@@ -291,7 +310,7 @@ class EventListAdapter(
 
             holder.undoButton?.setOnClickListener {
                 _ ->
-                callback.onItemRestored(event)
+                callback.onEventUnmarkDone(event)
                 pendingEventRemoveRunnables.remove(eventKey)
                 eventsPendingRemoval.remove(eventKey)
                 notifyItemChanged(events.indexOf(event))
@@ -392,14 +411,7 @@ class EventListAdapter(
         notifyItemRemoved(idx)
     }
 
-    fun removeAll() {
-        synchronized(this) {
-            events = arrayOf<EventAlertRecord>();
-            notifyDataSetChanged()
-        }
-    }
-
-    fun removeWithUndo(event: EventAlertRecord) {
+    fun markDoneWithUndo(event: EventAlertRecord) {
 
         val eventKey = event.key
 
@@ -417,7 +429,7 @@ class EventListAdapter(
                                 notifyItemRemoved(idx)
                             }
                             else {
-                                DevLog.error(LOG_TAG, "removeWithUndo pending action: cannot find event with id ${event.eventId}, instance start ${event.instanceStartTime}")
+                                DevLog.error(LOG_TAG, "markDoneWithUndo pending action: cannot find event with id ${event.eventId}, instance start ${event.instanceStartTime}")
                                 DevLog.error(LOG_TAG, "Known events: ")
                                 for (ev in events) {
                                     DevLog.error(LOG_TAG, "${ev.eventId}, ${ev.instanceStartTime}, eq: ${ev == event}")

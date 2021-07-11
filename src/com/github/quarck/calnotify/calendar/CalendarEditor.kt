@@ -49,11 +49,24 @@ class CalendarEditor(val provider: CalendarProvider) {
         return eventId
     }
 
-    fun moveEvent(context: Context, event: EventAlertRecord, addTimeMillis: Long): EventAlertRecord? {
+    fun moveEventForward(context: Context, event: EventAlertRecord, newStartTime: Long): EventAlertRecord? {
 
         if (!PermissionsManager.hasAllPermissions(context)) {
-            DevLog.error(LOG_TAG, "moveEvent: no permissions");
-            return null;
+            DevLog.error(LOG_TAG, "moveEventForward: no permissions");
+            return null
+        }
+
+        if (newStartTime <= event.startTime) {
+            DevLog.error(LOG_TAG, "moveEventForward: disallowing move backward ${event.startTime} -> ${newStartTime}")
+            return null
+        }
+
+        val newEndTime = event.endTime + (newStartTime - event.startTime)
+        val currentTime = System.currentTimeMillis()
+
+        if (currentTime + Consts.ALARM_THRESHOLD > newStartTime) {
+            DevLog.error(LOG_TAG, "moveEventForward: new start time is already in the past: ${newStartTime} vs current ${currentTime}")
+            return null
         }
 
         // Get full event details from the provider, if failed - construct a failback version
@@ -70,26 +83,6 @@ class CalendarEditor(val provider: CalendarProvider) {
                         reminders = listOf<EventReminderRecord>(EventReminderRecord.minutes(15)),
                         color = event.color
                 )
-
-        val newStartTime: Long
-        val newEndTime: Long
-
-        val currentTime = System.currentTimeMillis()
-
-        val numSecondsInThePast = currentTime + Consts.ALARM_THRESHOLD - event.startTime
-
-        if (numSecondsInThePast > 0) {
-            val addUnits = numSecondsInThePast / addTimeMillis + 1
-
-            newStartTime = event.startTime + addTimeMillis * addUnits
-            newEndTime = event.endTime + addTimeMillis * addUnits
-
-            DevLog.warn(LOG_TAG, "Requested time is already in the past, total added time: ${addTimeMillis * addUnits}")
-        }
-        else {
-            newStartTime = event.startTime + addTimeMillis
-            newEndTime = event.endTime + addTimeMillis
-        }
 
         DevLog.info(LOG_TAG, "Moving event ${event.eventId} from ${event.startTime} / ${event.endTime} to $newStartTime / $newEndTime")
 
@@ -113,37 +106,31 @@ class CalendarEditor(val provider: CalendarProvider) {
         }
     }
 
-    fun moveRepeatingAsCopy(context: Context, calendar: CalendarRecord, event: EventAlertRecord, addTimeMillis: Long): EventAlertRecord? {
+    fun moveRepeatingForwardAsCopy(context: Context, calendar: CalendarRecord, event: EventAlertRecord, newStartTime: Long): EventAlertRecord? {
 
         if (!PermissionsManager.hasAllPermissions(context)) {
-            DevLog.error(LOG_TAG, "moveRepeatingAsCopy: no permissions");
+            DevLog.error(LOG_TAG, "moveRepeatingForwardAsCopy: no permissions");
             return null
         }
+
+        if (newStartTime <= event.instanceStartTime) {
+            DevLog.error(LOG_TAG, "moveRepeatingForwardAsCopy: disallowing move backward ${event.instanceStartTime} -> ${newStartTime}")
+            return null
+        }
+
+        val newEndTime = event.instanceEndTime + (newStartTime - event.instanceStartTime)
+        val currentTime = System.currentTimeMillis()
+
+        if (currentTime + Consts.ALARM_THRESHOLD > newStartTime) {
+            DevLog.error(LOG_TAG, "moveRepeatingForwardAsCopy: new start time is already in the past: ${newStartTime} vs current ${currentTime}")
+            return null
+        }
+
 
         // Get full event details from the provider, if failed - construct a failback version
         val oldEvent = provider.getEvent(context, event.eventId) ?: return null
 
-        val newStartTime: Long
-        val newEndTime: Long
-
-        val currentTime = System.currentTimeMillis()
-
-        val numSecondsInThePast = currentTime + Consts.ALARM_THRESHOLD - event.instanceStartTime
-
-        if (numSecondsInThePast > 0) {
-            val addUnits = numSecondsInThePast / addTimeMillis + 1
-
-            newStartTime = event.instanceStartTime + addTimeMillis * addUnits
-            newEndTime = event.instanceEndTime + addTimeMillis * addUnits
-
-            DevLog.warn(LOG_TAG, "Requested time is already in the past, total added time: ${addTimeMillis * addUnits}")
-        }
-        else {
-            newStartTime = event.instanceStartTime + addTimeMillis
-            newEndTime = event.instanceEndTime + addTimeMillis
-        }
-
-        DevLog.info(LOG_TAG, "Moving event ${event.eventId} from ${event.startTime} / ${event.endTime} to $newStartTime / $newEndTime")
+        DevLog.info(LOG_TAG, "Moving event ${event.eventId} from ${event.instanceStartTime} / ${event.instanceEndTime} to $newStartTime / $newEndTime")
 
         val details = oldEvent.details.copy(
                 startTime = newStartTime,
@@ -169,44 +156,44 @@ class CalendarEditor(val provider: CalendarProvider) {
         return null
     }
 
-    fun updateEvent(context: Context, eventToEdit: EventRecord, details: CalendarEventDetails): Boolean {
-
-        if (!PermissionsManager.hasAllPermissions(context)) {
-            DevLog.error(LOG_TAG, "updateEvent: no permissions");
-            return false;
-        }
-
-        val ret = provider.updateEvent(context, eventToEdit, details)
-        if (ret) {
-            DevLog.info(LOG_TAG, "Successfully updated provider, event ${eventToEdit.eventId}")
-        }
-        else {
-            DevLog.error(LOG_TAG, "Failed to updated provider, event ${eventToEdit.eventId}")
-        }
-
-        DevLog.info(LOG_TAG, "Adding edit request into DB: ${eventToEdit.eventId} ")
-
-        if (ret && (eventToEdit.startTime != details.startTime)) {
-
-            DevLog.info(LOG_TAG, "Event ${eventToEdit.eventId} was moved, ${eventToEdit.startTime} != ${details.startTime}, checking for notification auto-dismissal")
-
-            val newEvent = provider.getEvent(context, eventToEdit.eventId)
-
-            if (newEvent != null) {
-                CalNotifyController.onCalendarEventMovedWithinApp(
-                        context,
-                        eventToEdit,
-                        newEvent
-                )
-            }
-        }
-
-        if (eventToEdit.eventId != -1L) {
-            CalNotifyController.CalendarMonitor.onEventEditedByUs(context, eventToEdit.eventId);
-        }
-
-        return ret
-    }
+//    fun updateEvent(context: Context, eventToEdit: EventRecord, details: CalendarEventDetails): Boolean {
+//
+//        if (!PermissionsManager.hasAllPermissions(context)) {
+//            DevLog.error(LOG_TAG, "updateEvent: no permissions");
+//            return false;
+//        }
+//
+//        val ret = provider.updateEvent(context, eventToEdit, details)
+//        if (ret) {
+//            DevLog.info(LOG_TAG, "Successfully updated provider, event ${eventToEdit.eventId}")
+//        }
+//        else {
+//            DevLog.error(LOG_TAG, "Failed to updated provider, event ${eventToEdit.eventId}")
+//        }
+//
+//        DevLog.info(LOG_TAG, "Adding edit request into DB: ${eventToEdit.eventId} ")
+//
+//        if (ret && (eventToEdit.startTime != details.startTime)) {
+//
+//            DevLog.info(LOG_TAG, "Event ${eventToEdit.eventId} was moved, ${eventToEdit.startTime} != ${details.startTime}, checking for notification auto-dismissal")
+//
+//            val newEvent = provider.getEvent(context, eventToEdit.eventId)
+//
+//            if (newEvent != null) {
+//                CalNotifyController.onCalendarEventMovedWithinApp(
+//                        context,
+//                        eventToEdit,
+//                        newEvent
+//                )
+//            }
+//        }
+//
+//        if (eventToEdit.eventId != -1L) {
+//            CalNotifyController.CalendarMonitor.onEventEditedByUs(context, eventToEdit.eventId);
+//        }
+//
+//        return ret
+//    }
 
     companion object {
         const val LOG_TAG = "CalendarChangeMonitor"
