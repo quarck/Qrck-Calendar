@@ -88,6 +88,11 @@
             app:title="@string/preferences_alerts_title" />
 
         <Preference
+            app:key="preferences_notification_task"
+            app:title="@string/task_notifications"
+            app:summary="@string/task_notifications_summary"/>
+
+        <Preference
             app:key="preferences_notification_alarm"
             app:title="@string/preferences_alarm_alerts_title"
             app:summary="@string/preferences_alarm_alerts_explanation"/>

@@ -66,6 +66,7 @@ class GeneralPreferences : PreferenceFragmentCompat(),
     // >= 26
     private lateinit var notificationPref: Preference
     private lateinit var alarmNotificationPref: Preference
+    private lateinit var taskNotificationPref: Preference
 
     // < 26
     private lateinit var tzPickerUtils: TimeZonePickerUtils
@@ -106,6 +107,7 @@ class GeneralPreferences : PreferenceFragmentCompat(),
 
         notificationPref = preferenceScreen.findPreference(KEY_NOTIFICATION)!!
         alarmNotificationPref = preferenceScreen.findPreference(KEY_NOTIFICATION_ALARM)!!
+        taskNotificationPref = preferenceScreen.findPreference(KEY_NOTIFICATION_TASK)!!
 
         defaultEventDurationPref.summary = defaultEventDurationPref.entry
         themePref.summary = themePref.entry
@@ -300,6 +302,10 @@ class GeneralPreferences : PreferenceFragmentCompat(),
                 showNotificationChannel()
                 return true
             }
+            KEY_NOTIFICATION_TASK -> {
+                showTaskNotificationChannel()
+                return true
+            }
             KEY_NOTIFICATION_ALARM -> {
                 showAlarmNotificationChannel()
                 return true
@@ -325,12 +331,17 @@ class GeneralPreferences : PreferenceFragmentCompat(),
 
     @TargetApi(Build.VERSION_CODES.O)
     private fun showNotificationChannel() {
-        com.github.quarck.calnotify.notification.NotificationChannelManager.launchChannelSettings(activity!!, false)
+        com.github.quarck.calnotify.notification.NotificationChannelManager.launchChannelSettings(activity!!, false,false)
     }
 
     @TargetApi(Build.VERSION_CODES.O)
     private fun showAlarmNotificationChannel() {
-        com.github.quarck.calnotify.notification.NotificationChannelManager.launchChannelSettings(activity!!, true)
+        com.github.quarck.calnotify.notification.NotificationChannelManager.launchChannelSettings(activity!!, false,true)
+    }
+
+    @TargetApi(Build.VERSION_CODES.O)
+    private fun showTaskNotificationChannel() {
+        com.github.quarck.calnotify.notification.NotificationChannelManager.launchChannelSettings(activity!!, true,false)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -358,6 +369,7 @@ class GeneralPreferences : PreferenceFragmentCompat(),
         const val KEY_ALERTS_CATEGORY = "preferences_alerts_category"
         const val KEY_NOTIFICATION = "preferences_notification"
         const val KEY_NOTIFICATION_ALARM = "preferences_notification_alarm"
+        const val KEY_NOTIFICATION_TASK = "preferences_notification_task"
         const val KEY_DEFAULT_REMINDER = "preferences_default_reminder"
         const val KEY_DEFAULT_ALL_DAY_REMINDER = "preferences_default_all_day_reminder"
         const val KEY_HANDLE_EMAIL_ONLY = "preferences_handle_email_only_events"

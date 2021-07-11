@@ -124,6 +124,7 @@ class EventNotificationManager {
             val events = getEventsAndUnSnooze(db)
             val notificationRecords = generateNotificationRecords(
                     context = context,
+                    settings = Settings(context),
                     events = events,
                     primaryEventId = primaryEventId,
                     isReminder = isReminder
@@ -131,6 +132,7 @@ class EventNotificationManager {
 
             if (shouldCollapseAll(events)) {
                 val (alarms, nonAlarms) = notificationRecords.partition { it.event.isAlarm }
+
                 if (alarms.isNotEmpty()) {
                     postIndividualNotifications(context, db, formatterLocal, alarms.toMutableList())
                 }
@@ -197,6 +199,7 @@ class EventNotificationManager {
 
     private fun generateNotificationRecords(
             context: Context,
+            settings: Settings,
             events: List<EventAlertRecord>,
             primaryEventId: Long?,
             isReminder: Boolean
@@ -217,6 +220,8 @@ class EventNotificationManager {
             val soundState =
                     if (event.isAlarm)
                         NotificationChannelManager.SoundState.Alarm
+                    else if (settings.getCalendarIsTasks(event.calendarId))
+                        NotificationChannelManager.SoundState.Task
                     else
                         NotificationChannelManager.SoundState.Normal
 
@@ -279,11 +284,16 @@ class EventNotificationManager {
 
         val numEvents = events.size
 
+        val anyAlarms = notificationRecords.any { it.soundState == NotificationChannelManager.SoundState.Alarm }
+        val anyOrdinaryEvents = notificationRecords.any { it.soundState == NotificationChannelManager.SoundState.Normal }
+
         val soundState =
-                if (notificationRecords.any {it.event.isAlarm})
+                if (anyAlarms)
                     NotificationChannelManager.SoundState.Alarm
-                else
+                else if (anyOrdinaryEvents)
                     NotificationChannelManager.SoundState.Normal
+                else
+                    NotificationChannelManager.SoundState.Task
 
         val channel = NotificationChannelManager.createNotificationChannel(context, soundState)
 

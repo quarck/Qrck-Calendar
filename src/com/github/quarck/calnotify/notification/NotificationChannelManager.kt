@@ -175,11 +175,13 @@ object NotificationChannelManager {
     // Note: don't forget to change notification_preferences.xml and reminder_preferences.xml if
     // channel name is changed!
 
-    const val NOTIFICATION_CHANNEL_ID_DEFAULT = "com.github.calnotify.notify.v6r2.cal"
-    const val NOTIFICATION_CHANNEL_ID_ALARM = "com.github.calnotify.notify.v6r2.calalrm"
+    const val NOTIFICATION_CHANNEL_ID_DEFAULT = "com.github.calnotify.notify.v6r3.cal"
+    const val NOTIFICATION_CHANNEL_ID_TASK = "com.github.calnotify.notify.v6r3.caltask"
+    const val NOTIFICATION_CHANNEL_ID_ALARM = "com.github.calnotify.notify.v6r3.calalrm"
 
     enum class SoundState {
         Normal,
+        Task,
         Alarm
     }
 
@@ -200,6 +202,12 @@ object NotificationChannelManager {
                 channelId = NOTIFICATION_CHANNEL_ID_DEFAULT
                 channelName = context.getString(R.string.notification_channel_default)
                 channelDesc = context.getString(R.string.notification_channel_default_desc)
+                importance = NotificationChannelAttributes.IMPORTANCE_DEFAULT
+            }
+            NotificationChannelManager.SoundState.Task -> {
+                channelId = NOTIFICATION_CHANNEL_ID_TASK
+                channelName = context.getString(R.string.notification_channel_task)
+                channelDesc = context.getString(R.string.notification_channel_task_desc)
                 importance = NotificationChannelAttributes.IMPORTANCE_DEFAULT
             }
             NotificationChannelManager.SoundState.Alarm -> {
@@ -245,9 +253,11 @@ object NotificationChannelManager {
 
         notificationChannel.enableVibration = true
 
-        if (soundState == SoundState.Normal)
+        if (soundState == SoundState.Normal) {
             notificationChannel.vibrationPattern = Consts.VIBRATION_PATTERN_DEFAULT
-        else {
+        } else if (soundState == SoundState.Normal) {
+            notificationChannel.vibrationPattern = Consts.VIBRATION_PATTERN_TASK
+        } else {
             notificationChannel.vibrationPattern = Consts.VIBRATION_PATTERN_ALARM
             notificationChannel.legacyStreamType = AudioManager.STREAM_ALARM
             notificationChannel.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
@@ -262,7 +272,6 @@ object NotificationChannelManager {
             = createNotificationChannelForSoundState(context, soundState)
 
     fun launchSystemSettingForChannel(context: Context, soundState: SoundState) {
-
         val channel = createNotificationChannel(context, soundState)
         val intent = Intent(android.provider.Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS)
         intent.putExtra(android.provider.Settings.EXTRA_APP_PACKAGE, context.packageName)
@@ -271,9 +280,11 @@ object NotificationChannelManager {
     }
 
     @JvmStatic
-    fun launchChannelSettings(context: Context, alarm: Boolean) {
+    fun launchChannelSettings(context: Context, task: Boolean, alarm: Boolean) {
         if (alarm)
             launchSystemSettingForChannel(context, SoundState.Alarm)
+        else if (task)
+            launchSystemSettingForChannel(context, SoundState.Task)
         else
             launchSystemSettingForChannel(context, SoundState.Normal)
     }

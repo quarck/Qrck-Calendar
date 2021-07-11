@@ -973,6 +973,8 @@
 
     <string name="notification_channel_default">Calendar Events</string>
     <string name="notification_channel_default_desc">Default channel for calendar events</string>
+    <string name="notification_channel_task">Task Events Notifications</string>
+    <string name="notification_channel_task_desc">Channel for Task-Like events</string>
     <string name="notification_channel_alarm">Alarm Notifications</string>
     <string name="notification_channel_alarm_desc">Notifications that behave like an alarm (with #alarm tag)</string>
 
@@ -1088,5 +1090,7 @@
     <string name="enable_notifications">Enable notifications</string>
     <string name="use_ongoing_notification">Use ongoing notification</string>
     <string name="treat_as_tasks">Treat as tasks</string>
+    <string name="task_notifications">Task Notifications</string>
+    <string name="task_notifications_summary">Events with calendar configured as \'treat as tasks\' will use this channel</string>
 
 </resources>

@@ -59,11 +59,17 @@ object Consts {
 
     val VIBRATION_PATTERN_DEFAULT = longArrayOf(0,
             // on off
-            60, 60,
-            60, 60,
-            60, 60,
-            60, 200,
+            160, 160,
+            160, 160,
+            160, 160,
+            160, 200,
             1200
+    )
+
+    val VIBRATION_PATTERN_TASK = longArrayOf(
+        100, 100,
+        200, 200,
+        400,
     )
 
     val VIBRATION_PATTERN_ALARM = longArrayOf(0,
