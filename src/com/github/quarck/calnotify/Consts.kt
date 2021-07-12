@@ -63,13 +63,13 @@ object Consts {
             160, 160,
             160, 160,
             160, 200,
-            1200
+            1500
     )
 
     val VIBRATION_PATTERN_TASK = longArrayOf(
         100, 100,
         200, 200,
-        400,
+        500,
     )
 
     val VIBRATION_PATTERN_ALARM = longArrayOf(0,
@@ -77,17 +77,17 @@ object Consts {
             240, 240,
             240, 240,
             240, 400,
-            1200, 2000,
+            1500, 2500,
 
             240, 240,
             240, 240,
             240, 400,
-            1200, 2000,
+            1500, 2500,
 
             240, 240,
             240, 240,
             240, 400,
-            1200,
+            1500,
     )
 
     const val DEFAULT_LED_COLOR = 0x7f0000ff
