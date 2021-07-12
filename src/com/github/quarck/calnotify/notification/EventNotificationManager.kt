@@ -474,10 +474,16 @@ class EventNotificationManager {
         val settings = Settings(ctx)
         val useOngoing = settings.getCalendarUsesOngoing(event.calendarId)
 
+        val notificationIconId = when(soundState) {
+            NotificationChannelManager.SoundState.Normal -> R.drawable.ic_event_white_24dp
+            NotificationChannelManager.SoundState.Task -> R.drawable.ic_task_white_24dp
+            NotificationChannelManager.SoundState.Alarm -> R.drawable.ic_task_alarm_white_24dp
+        }
+
         val builder = NotificationCompat.Builder(ctx, channel.channelId)
                 .setContentTitle(title)
                 .setContentText(notificationTextString)
-                .setSmallIcon(R.drawable.ic_event_white_24dp)
+                .setSmallIcon(notificationIconId)
                 .setContentIntent(snoozeActivityIntent)
                 .setAutoCancel(false)
                 .setOngoing(useOngoing)
@@ -490,10 +496,17 @@ class EventNotificationManager {
 
         builder.setGroup(NOTIFICATION_GROUP)
 
+        val dismissTitle = ctx.getString(
+            if (soundState == NotificationChannelManager.SoundState.Task)
+                R.string.done
+            else
+                R.string.dismiss
+        )
+
         val dismissAction =
                 NotificationCompat.Action.Builder(
                         R.drawable.ic_clear_white_24dp,
-                        ctx.getString(R.string.done),
+                        dismissTitle,
                         dismissPendingIntent
                 ).build()
 

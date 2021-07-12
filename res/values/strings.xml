@@ -795,6 +795,7 @@
     <string name="empty" translatable="false" />
 
     <string name="done">done</string>
+    <string name="dismiss">dismiss</string>
 
     <string name="empty_title">(No title)</string>
     <string name="snooze_event_for">Snooze:</string>
