@@ -1091,6 +1091,7 @@
     <string name="enable_notifications">Enable notifications</string>
     <string name="use_ongoing_notification">Use ongoing notification</string>
     <string name="treat_as_tasks">Treat as tasks</string>
+    <string name="treat_as_tasks_summary">This will apply the following:\n 1) Event notifications will be less annoying for all events on this calendar\n 2) Such events will not be shown on the Agenda view\n</string>
     <string name="task_notifications">Task Notifications</string>
     <string name="task_notifications_summary">Events with calendar configured as \'treat as tasks\' will use this channel</string>
 

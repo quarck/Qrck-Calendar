@@ -51,8 +51,13 @@ class CalendarDataStore(val activity: FragmentActivity, val calendarId: Long) : 
     }
 
     private fun putLocalBoolean(key: String?, value: Boolean) {
-        if (key != null)
-            com.github.quarck.calnotify.Settings(activity).setCalendarSpecificBoolean(calendarId, key, value)
+        if (key != null) {
+            val settings = com.github.quarck.calnotify.Settings(activity)
+            if (key == CalendarPreferences.TREAT_AS_TASKS_KEY)
+                settings.setCalendarIsTasks(calendarId, value)
+            else
+                settings.setCalendarSpecificBoolean(calendarId, key, value)
+        }
     }
 
     private fun getLocalBoolean(key: String?, defValue: Boolean): Boolean {

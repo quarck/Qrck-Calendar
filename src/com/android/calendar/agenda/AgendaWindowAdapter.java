@@ -120,7 +120,7 @@ public class AgendaWindowAdapter extends BaseAdapter
             Instances.ORGANIZER, // 14
             Instances.OWNER_ACCOUNT, // 15
             Instances.CAN_ORGANIZER_RESPOND, // 16
-            Instances.EVENT_TIMEZONE, // 17
+            Instances.EVENT_TIMEZONE // 17
     };
     // Listview may have a bug where the index/position is not consistent when there's a header.
     // position == positionInListView - OFF_BY_ONE_BUG
@@ -208,6 +208,9 @@ public class AgendaWindowAdapter extends BaseAdapter
     };
     private boolean mShuttingDown;
     private boolean mHideDeclined;
+
+    private long[] mHideCalendars = new long[2];
+
     /** The current search query, or null if none */
     private String mSearchQuery;
     private long mSelectedInstanceId = -1;
@@ -215,6 +218,7 @@ public class AgendaWindowAdapter extends BaseAdapter
 
     public AgendaWindowAdapter(Context context,
             AgendaListView agendaListView, boolean showEventOnStart) {
+
         mContext = context;
         mResources = context.getResources();
         mSelectedItemBackgroundColor = mResources
@@ -700,15 +704,23 @@ public class AgendaWindowAdapter extends BaseAdapter
     }
 
     private String buildQuerySelection() {
-        // Respect the preference to show/hide declined events
+        StringBuilder sb = new StringBuilder(Calendars.VISIBLE + "=1");
 
+        // Respect the preference to show/hide declined events
         if (mHideDeclined) {
-            return Calendars.VISIBLE + "=1 AND "
-                    + Instances.SELF_ATTENDEE_STATUS + "!="
-                    + Attendees.ATTENDEE_STATUS_DECLINED;
-        } else {
-            return Calendars.VISIBLE + "=1";
+            sb.append(" AND ");
+            sb.append(Instances.SELF_ATTENDEE_STATUS + "!=" + Attendees.ATTENDEE_STATUS_DECLINED);
         }
+
+        if (mHideCalendars != null && mHideCalendars.length > 0) {
+            for (long calendarId: mHideCalendars) {
+                sb.append(" AND ");
+                sb.append(Instances.CALENDAR_ID + "!=");
+                sb.append(calendarId);
+            }
+        }
+
+        return sb.toString();
     }
 
     private Uri buildQueryUri(int start, int end, String searchQuery) {
@@ -854,6 +866,10 @@ public class AgendaWindowAdapter extends BaseAdapter
 
     public void setHideDeclinedEvents(boolean hideDeclined) {
         mHideDeclined = hideDeclined;
+    }
+
+    public void setHideCalendars(long[] calendarIds) {
+        mHideCalendars = calendarIds;
     }
 
     public void setSelectedView(View v) {

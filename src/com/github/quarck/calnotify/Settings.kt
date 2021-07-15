@@ -35,22 +35,43 @@ class Settings(val context: Context) : PersistentStorageBase(context, "settings"
             = setBoolean("$key.$calendarId", value)
 
     fun getCalendarIsHandled(calendarId: Long): Boolean
-            = getCalendarSpecificBoolean(calendarId, com.android.calendar.settings.CalendarPreferences.ENABLE_NOTIFICATIONS_KEY, true)
+            = getCalendarSpecificBoolean(calendarId, CalendarPreferences.ENABLE_NOTIFICATIONS_KEY, true)
     fun setCalendarIsHandled(calendarId: Long, enabled: Boolean)
-            = setCalendarSpecificBoolean(calendarId, com.android.calendar.settings.CalendarPreferences.ENABLE_NOTIFICATIONS_KEY, enabled)
+            = setCalendarSpecificBoolean(calendarId, CalendarPreferences.ENABLE_NOTIFICATIONS_KEY, enabled)
 
     fun getCalendarUsesOngoing(calendarId: Long): Boolean
-            = getCalendarSpecificBoolean(calendarId, com.android.calendar.settings.CalendarPreferences.ONGOING_NOTIFICATION_KEY, false)
+            = getCalendarSpecificBoolean(calendarId, CalendarPreferences.ONGOING_NOTIFICATION_KEY, false)
     fun setCalendarUsesOngoing(calendarId: Long, enabled: Boolean)
-            = setCalendarSpecificBoolean(calendarId, com.android.calendar.settings.CalendarPreferences.ONGOING_NOTIFICATION_KEY, enabled)
+            = setCalendarSpecificBoolean(calendarId, CalendarPreferences.ONGOING_NOTIFICATION_KEY, enabled)
 
 
     fun getCalendarIsTasks(calendarId: Long): Boolean
-            = getCalendarSpecificBoolean(calendarId, com.android.calendar.settings.CalendarPreferences.TREAT_AS_TASKS_KEY, false)
-    fun setCalendarIsTasks(calendarId: Long, enabled: Boolean)
-            = setCalendarSpecificBoolean(calendarId, com.android.calendar.settings.CalendarPreferences.TREAT_AS_TASKS_KEY, enabled)
+            = getCalendarSpecificBoolean(calendarId, CalendarPreferences.TREAT_AS_TASKS_KEY, false)
 
-    
+    fun setCalendarIsTasks(calendarId: Long, enabled: Boolean) {
+        setCalendarSpecificBoolean(calendarId, CalendarPreferences.TREAT_AS_TASKS_KEY, enabled)
+
+        val taskCalendars =
+            getString(CalendarPreferences.TREAT_AS_TASKS_KEY, "")
+                .split(',')
+                .filter{ it != "" && it != calendarId.toString() }
+                .toHashSet()
+        if (enabled)
+            taskCalendars.add(calendarId.toString())
+
+        setString(CalendarPreferences.TREAT_AS_TASKS_KEY, taskCalendars.joinToString(","))
+    }
+
+    fun getTaskCalendarIds(): LongArray {
+        val taskCalendars =
+            getString(CalendarPreferences.TREAT_AS_TASKS_KEY, "")
+                .split(',')
+                .filter{ it != ""}
+                .map{ it.toLong() }
+                .toLongArray()
+        return taskCalendars
+    }
+
     val handleEventsWithNoReminders: Boolean
         get() {
             val prefs = getSharedPreferences(context)

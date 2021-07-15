@@ -87,6 +87,7 @@ class CalendarPreferences : PreferenceFragmentCompat() {
         val taskModePreference = SwitchPreference(context).apply {
             key = TREAT_AS_TASKS_KEY
             title = getString(R.string.treat_as_tasks)
+            summary = getString(R.string.treat_as_tasks_summary)
         }
 
         val colorPreference = Preference(context).apply {

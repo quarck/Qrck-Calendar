@@ -45,6 +45,7 @@ import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.StickyHeaderListView;
 import com.android.calendar.Utils;
 import com.android.calendar.settings.GeneralPreferences;
+import com.github.quarck.calnotify.Settings;
 import com.github.quarck.calnotify.ui.ViewEventActivity;
 
 import java.util.Date;
@@ -206,8 +207,11 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
                 getActivity());
         boolean hideDeclined = prefs.getBoolean(
                 GeneralPreferences.KEY_HIDE_DECLINED, false);
-
         mAgendaListView.setHideDeclinedEvents(hideDeclined);
+
+        long[] hiddenCalendars = new Settings(getActivity()).getTaskCalendarIds();
+        mAgendaListView.setHideCalendars(hiddenCalendars);
+
         if (mLastHandledEventId != -1) {
             mAgendaListView.goTo(mLastHandledEventTime, mLastHandledEventId, mQuery, true, false);
             mLastHandledEventTime = null;
