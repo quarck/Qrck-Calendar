@@ -374,7 +374,7 @@ open class ViewEventActivity : AppCompatActivity() {
 
         when (item.itemId) {
             R.id.action_edit -> {
-                confirmAndEdit()
+                editEvent(this, event) { finish() }
             }
 
             R.id.action_delete_event -> {
@@ -462,17 +462,6 @@ open class ViewEventActivity : AppCompatActivity() {
 //                .show()
 //    }
 //
-
-    private fun confirmAndEdit() {
-        val uri = ContentUris.withAppendedId(Events.CONTENT_URI, event.eventId)
-        val intent = Intent(Intent.ACTION_EDIT, uri)
-        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, event.instanceStartTime)
-        intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.instanceEndTime)
-        intent.setClass(this, com.android.calendar.event.EditEventActivity::class.java)
-        intent.putExtra(CalendarController.EVENT_EDIT_ON_LAUNCH, true)
-        startActivity(intent)
-        finish()
-    }
 
     private fun confirmAndDelete() {
 
@@ -615,6 +604,17 @@ open class ViewEventActivity : AppCompatActivity() {
 
             builder.show()
 
+        }
+
+        fun editEvent(ctx: Context, event: EventAlertRecord, onComplete: () -> Unit) {
+            val uri = ContentUris.withAppendedId(Events.CONTENT_URI, event.eventId)
+            val intent = Intent(Intent.ACTION_EDIT, uri)
+            intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, event.instanceStartTime)
+            intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, event.instanceEndTime)
+            intent.setClass(ctx, com.android.calendar.event.EditEventActivity::class.java)
+            intent.putExtra(CalendarController.EVENT_EDIT_ON_LAUNCH, true)
+            ctx.startActivity(intent)
+            onComplete()
         }
     }
 

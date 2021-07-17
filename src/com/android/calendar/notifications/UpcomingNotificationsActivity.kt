@@ -494,7 +494,7 @@ class UpcomingNotificationsActivity : AppCompatActivity() {
 
     fun onEventReschedule(event: UpcomingEventAlertRecordWrap) {
         if (event.event != null)
-            ViewEventActivity.rescheduleEvent(this, event.event) {}
+            ViewEventActivity.editEvent(this, event.event) {}
         reload()
     }
 
