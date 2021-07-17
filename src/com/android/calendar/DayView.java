@@ -119,8 +119,9 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
     // duration to show the event clicked
     private static final int CLICK_DISPLAY_DURATION = 50;
 
-    private static final int MENU_AGENDA = 2;
-    private static final int MENU_DAY = 3;
+    private static final int MENU_AGENDA_EVENTS = 2;
+    private static final int MENU_AGENDA_TASKS = 3;
+    private static final int MENU_DAY = 4;
     private static final int MENU_EVENT_VIEW = 5;
     private static final int MENU_EVENT_CREATE = 6;
     private static final int MENU_EVENT_EDIT = 7;
@@ -4469,9 +4470,14 @@ public class DayView extends View implements View.OnCreateContextMenuListener,
                             ViewType.DAY);
                     break;
                 }
-                case MENU_AGENDA: {
+                case MENU_AGENDA_EVENTS: {
                     mController.sendEvent(this, EventType.GO_TO, getSelectedTime(), null, -1,
-                            ViewType.AGENDA);
+                            ViewType.AGENDA_EVENTS);
+                    break;
+                }
+                case MENU_AGENDA_TASKS: {
+                    mController.sendEvent(this, EventType.GO_TO, getSelectedTime(), null, -1,
+                            ViewType.AGENDA_TASKS);
                     break;
                 }
                 case MENU_EVENT_CREATE: {

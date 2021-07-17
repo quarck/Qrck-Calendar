@@ -94,7 +94,15 @@ public class CalendarToolbarHandler {
                 mToolbar.setSubtitle("");
                 mToolbar.setTitle(buildMonthYearDate());
                 break;
-            case CalendarController.ViewType.AGENDA:
+            case CalendarController.ViewType.AGENDA_EVENTS:
+                mToolbar.setSubtitle(buildDayOfWeek());
+                mToolbar.setTitle(buildAgendaTitle(true));
+                break;
+            case CalendarController.ViewType.AGENDA_TASKS:
+                mToolbar.setSubtitle(buildDayOfWeek());
+                mToolbar.setTitle(buildAgendaTitle(false));
+                break;
+            case CalendarController.ViewType.AGENDA_SEARCH:
                 mToolbar.setSubtitle(buildDayOfWeek());
                 mToolbar.setTitle(buildFullDate());
                 break;
@@ -161,6 +169,16 @@ public class CalendarToolbarHandler {
         String date = DateUtils.formatDateRange(mContext, mFormatter, mMilliTime, mMilliTime,
                 DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_YEAR, mTimeZone).toString();
         return date;
+    }
+
+    private String buildAgendaTitle(boolean isEvents) {
+
+        String date = buildFullDate();
+        String suffix = mContext.getResources().getString(
+                isEvents ? R.string.agenda_events_suffix
+                        : R.string.agenda_tasks_suffix
+        );
+        return date + suffix;
     }
 
     private String buildMonthYearDate() {

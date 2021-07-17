@@ -7,9 +7,13 @@
             android:icon="@drawable/ic_view_agenda_white_24dp"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/agenda_menu_item"
+            android:id="@+id/agenda_events_menu_item"
             android:icon="@drawable/ic_menu_agenda_view"
-            android:title="@string/agenda_view" />
+            android:title="@string/agenda_view_events" />
+        <item
+            android:id="@+id/agenda_tasks_menu_item"
+            android:icon="@drawable/ic_menu_agenda_view"
+            android:title="@string/agenda_view_tasks" />
 
         <item
             android:id="@+id/day_menu_item"

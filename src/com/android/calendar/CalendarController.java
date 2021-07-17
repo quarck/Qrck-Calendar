@@ -283,7 +283,8 @@ public class CalendarController {
         } else if (event.viewType != ViewType.EDIT) {
             mViewType = event.viewType;
 
-            if (event.viewType == ViewType.AGENDA
+            if (event.viewType == ViewType.AGENDA_EVENTS
+                    || event.viewType == ViewType.AGENDA_TASKS
                     || event.viewType == ViewType.DAY
                     || (Utils.getAllowWeekForDetailView() && event.viewType == ViewType.WEEK)) {
                 mDetailViewType = mViewType;
@@ -731,15 +732,17 @@ public class CalendarController {
     public interface ViewType {
         final int DETAIL = -1;
         final int CURRENT = 0;
-        final int AGENDA = 1;
-        final int DAY = 2;
-        final int WEEK = 3;
-        final int MONTH = 4;
-        final int EDIT = 5;
-        final int NOTIFICATIONS = 6;
-        final int NOTIFICATIONS_LOG = 7;
-        final int NOTIFICATIONS_UPCOMING = 8;
-        final int MAX_VALUE = 8;
+        final int AGENDA_EVENTS = 1;
+        final int AGENDA_TASKS = 2;
+        final int AGENDA_SEARCH = 3; // combines both events and tasks, but only used to display search results
+        final int DAY = 4;
+        final int WEEK = 5;
+        final int MONTH = 6;
+        final int EDIT = 7;
+        final int NOTIFICATIONS = 8;
+        final int NOTIFICATIONS_LOG = 9;
+        final int NOTIFICATIONS_UPCOMING = 10;
+        final int MAX_VALUE = 10;
     }
 
     public interface EventHandler {

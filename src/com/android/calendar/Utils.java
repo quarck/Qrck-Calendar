@@ -393,7 +393,10 @@ public class Utils {
         if (mAllowWeekForDetailView && viewId == CalendarController.ViewType.WEEK) {
             validDetailView = true;
         } else {
-            validDetailView = viewId == CalendarController.ViewType.AGENDA
+            validDetailView =
+                    viewId == CalendarController.ViewType.AGENDA_EVENTS
+                    || viewId == CalendarController.ViewType.AGENDA_TASKS
+                    || viewId == CalendarController.ViewType.AGENDA_SEARCH
                     || viewId == CalendarController.ViewType.DAY;
         }
 

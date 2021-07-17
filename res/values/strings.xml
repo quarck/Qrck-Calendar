@@ -95,8 +95,14 @@
          Day view. -->
     <string name="show_day_view">"Show day"</string>
     <!-- This is a label on a menu item. Pressing this menu item displays the
-         Agenda view. -->
-    <string name="agenda_view">"Agenda"</string>
+         Agenda(Events) view. -->
+    <string name="agenda_view_events">"Agenda"</string>
+    <!-- This is a label on a menu item. Pressing this menu item displays the
+         Agenda(Tasks) view. -->
+    <string name="agenda_view_tasks">"Tasks"</string>
+    <!-- This is a label on a menu item. Pressing this menu item displays the
+         Agenda(Tasks) view. -->
+    <string name="agenda_view_search_results">Agenda</string>
     <!-- This is a label on a menu item. Pressing this menu item displays the
          Day view. -->
     <string name="day_view">"Day"</string>
@@ -1094,5 +1100,7 @@
     <string name="treat_as_tasks_summary">This will apply the following:\n 1) Event notifications will be less annoying for all events on this calendar\n 2) Such events will not be shown on the Agenda view\n</string>
     <string name="task_notifications">Task Notifications</string>
     <string name="task_notifications_summary">Events with calendar configured as \'treat as tasks\' will use this channel</string>
+    <string name="agenda_events_suffix"></string>
+    <string name="agenda_tasks_suffix">" (Tasks)"</string>
 
 </resources>

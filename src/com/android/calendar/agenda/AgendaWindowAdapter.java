@@ -209,7 +209,7 @@ public class AgendaWindowAdapter extends BaseAdapter
     private boolean mShuttingDown;
     private boolean mHideDeclined;
 
-    private long[] mHideCalendars = new long[2];
+    private String mCalendarsFilter = "";
 
     /** The current search query, or null if none */
     private String mSearchQuery;
@@ -712,12 +712,9 @@ public class AgendaWindowAdapter extends BaseAdapter
             sb.append(Instances.SELF_ATTENDEE_STATUS + "!=" + Attendees.ATTENDEE_STATUS_DECLINED);
         }
 
-        if (mHideCalendars != null && mHideCalendars.length > 0) {
-            for (long calendarId: mHideCalendars) {
-                sb.append(" AND ");
-                sb.append(Instances.CALENDAR_ID + "!=");
-                sb.append(calendarId);
-            }
+        if (!mCalendarsFilter.equals("")) {
+            sb.append(" AND ");
+            sb.append(mCalendarsFilter);
         }
 
         return sb.toString();
@@ -868,8 +865,8 @@ public class AgendaWindowAdapter extends BaseAdapter
         mHideDeclined = hideDeclined;
     }
 
-    public void setHideCalendars(long[] calendarIds) {
-        mHideCalendars = calendarIds;
+    public void setCalendarsFilter(String calFilter) {
+        mCalendarsFilter = calFilter;
     }
 
     public void setSelectedView(View v) {

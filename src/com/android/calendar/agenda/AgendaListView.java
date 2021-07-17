@@ -410,8 +410,8 @@ public class AgendaListView extends ListView implements OnItemClickListener {
         mWindowAdapter.setHideDeclinedEvents(hideDeclined);
     }
 
-    public void setHideCalendars(long[] calendarIds) {
-        mWindowAdapter.setHideCalendars(calendarIds);
+    public void setCalendarsFilter(String filter) {
+        mWindowAdapter.setCalendarsFilter(filter);
     }
 
     public void onResume() {

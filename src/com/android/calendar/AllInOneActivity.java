@@ -49,6 +49,9 @@ import android.provider.CalendarContract;
 import android.provider.CalendarContract.Attendees;
 import android.provider.CalendarContract.Events;
 
+import com.android.calendar.agenda.AgendaEventsFragment;
+import com.android.calendar.agenda.AgendaSearchFragment;
+import com.android.calendar.agenda.AgendaTasksFragment;
 import com.android.calendar.notifications.NotificationsFragment;
 import com.android.calendar.settings.SettingsActivity;
 import com.android.calendar.settings.GeneralPreferences;
@@ -440,8 +443,14 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         } else {
             int titleResource;
             switch (viewType) {
-                case ViewType.AGENDA:
-                    titleResource = R.string.agenda_view;
+                case ViewType.AGENDA_EVENTS:
+                    titleResource = R.string.agenda_view_events;
+                    break;
+                case ViewType.AGENDA_TASKS:
+                    titleResource = R.string.agenda_view_tasks;
+                    break;
+                case ViewType.AGENDA_SEARCH:
+                    titleResource = R.string.agenda_view_search_results;
                     break;
                 case ViewType.DAY:
                     titleResource = R.string.day_view;
@@ -670,14 +679,15 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         outState.putInt(BUNDLE_KEY_RESTORE_VIEW, mCurrentView);
         if (mCurrentView == ViewType.EDIT) {
             outState.putLong(BUNDLE_KEY_EVENT_ID, mController.getEventId());
-        } else if (mCurrentView == ViewType.AGENDA) {
+        } else if (mCurrentView == ViewType.AGENDA_EVENTS
+                || mCurrentView == ViewType.AGENDA_TASKS
+                || mCurrentView == ViewType.AGENDA_SEARCH) {
             FragmentManager fm = getFragmentManager();
             Fragment f = fm.findFragmentById(R.id.main_pane);
             if (f instanceof AgendaFragment) {
                 outState.putLong(BUNDLE_KEY_EVENT_ID, ((AgendaFragment) f).getLastShowEventId());
             }
         }
-
     }
 
     @Override
@@ -775,7 +785,11 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
 
         Time t = new Time(mTimeZone);
         t.set(timeMillis);
-        if (viewType == ViewType.AGENDA && icicle != null) {
+        boolean isAgenda =
+                viewType == ViewType.AGENDA_EVENTS
+                    || viewType == ViewType.AGENDA_TASKS
+                    || viewType == ViewType.AGENDA_SEARCH;
+        if (isAgenda && icicle != null) {
             mController.sendEvent(this, EventType.GO_TO, t, null,
                     icicle.getLong(BUNDLE_KEY_EVENT_ID, -1), viewType);
         } else if (viewType != ViewType.EDIT) {
@@ -924,39 +938,36 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         final int itemId = item.getItemId();
-        switch (itemId) {
-            case R.id.nav_notifications:
-                if (mCurrentView != ViewType.NOTIFICATIONS) {
-                    mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.NOTIFICATIONS);
-                }
-                break;
-            case R.id.day_menu_item:
-                if (mCurrentView != ViewType.DAY) {
-                    mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.DAY);
-                }
-                break;
-            case R.id.week_menu_item:
-                if (mCurrentView != ViewType.WEEK) {
-                    mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.WEEK);
-                }
-                break;
-            case R.id.month_menu_item:
-                if (mCurrentView != ViewType.MONTH) {
-                    mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.MONTH);
-                }
-                break;
-            case R.id.agenda_menu_item:
-                if (mCurrentView != ViewType.AGENDA) {
-                    mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.AGENDA);
-                }
-                break;
-            case R.id.action_settings:
-                mController.sendEvent(this, EventType.LAUNCH_SETTINGS, null, null, 0, 0);
-                break;
-            case R.id.action_about:
-                Intent intent = new Intent(this, AboutActivity.class);
-                startActivity(intent);
-                break;
+
+        if (itemId == R.id.nav_notifications) {
+            if (mCurrentView != ViewType.NOTIFICATIONS) {
+                mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.NOTIFICATIONS);
+            }
+        } else if (itemId == R.id.day_menu_item) {
+            if (mCurrentView != ViewType.DAY) {
+                mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.DAY);
+            }
+        } else if (itemId == R.id.week_menu_item) {
+            if (mCurrentView != ViewType.WEEK) {
+                mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.WEEK);
+            }
+        } else if (itemId == R.id.month_menu_item) {
+            if (mCurrentView != ViewType.MONTH) {
+                mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.MONTH);
+            }
+        } else if (itemId == R.id.agenda_events_menu_item) {
+            if (mCurrentView != ViewType.AGENDA_EVENTS) {
+                mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.AGENDA_EVENTS);
+            }
+        } else if (itemId == R.id.agenda_tasks_menu_item) {
+            if (mCurrentView != ViewType.AGENDA_TASKS) {
+                mController.sendEvent(this, EventType.GO_TO, null, null, -1, ViewType.AGENDA_TASKS);
+            }
+        } else if (itemId == R.id.action_settings) {
+            mController.sendEvent(this, EventType.LAUNCH_SETTINGS, null, null, 0, 0);
+        } else if (itemId == R.id.action_about) {
+            Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
         }
         mDrawerLayout.closeDrawers();
         return true;
@@ -1011,7 +1022,9 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         FragmentManager fragmentManager = getFragmentManager();
         // Check if our previous view was an Agenda view
         // TODO remove this if framework ever supports nested fragments
-        if (mCurrentView == ViewType.AGENDA) {
+        if (mCurrentView == ViewType.AGENDA_EVENTS
+                || mCurrentView == ViewType.AGENDA_TASKS
+                || mCurrentView == ViewType.AGENDA_SEARCH) {
             // If it was, we need to do some cleanup on it to prevent the
             // edit/delete buttons from coming back on a rotation.
             Fragment oldFrag = fragmentManager.findFragmentById(viewId);
@@ -1041,13 +1054,28 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                 }
                 break;
 
-            case ViewType.AGENDA:
-                mNavigationView.getMenu().findItem(R.id.agenda_menu_item).setChecked(true);
-                frag = new AgendaFragment(timeMillis, false);
+            case ViewType.AGENDA_EVENTS:
+                mNavigationView.getMenu().findItem(R.id.agenda_events_menu_item).setChecked(true);
+                frag = new AgendaEventsFragment(timeMillis, false);
                 if (mIsTabletConfig) {
-                    mToolbar.setTitle(R.string.agenda_view);
+                    mToolbar.setTitle(R.string.agenda_view_events);
                 }
                 break;
+            case ViewType.AGENDA_TASKS:
+                mNavigationView.getMenu().findItem(R.id.agenda_tasks_menu_item).setChecked(true);
+                frag = new AgendaTasksFragment(timeMillis, false);
+                if (mIsTabletConfig) {
+                    mToolbar.setTitle(R.string.agenda_view_tasks);
+                }
+                break;
+            case ViewType.AGENDA_SEARCH:
+                mNavigationView.getMenu().findItem(R.id.agenda_events_menu_item).setChecked(true);
+                frag = new AgendaSearchFragment(timeMillis, false);
+                if (mIsTabletConfig) {
+                    mToolbar.setTitle(R.string.agenda_view_search_results);
+                }
+                break;
+
             case ViewType.DAY:
                 mNavigationView.getMenu().findItem(R.id.day_menu_item).setChecked(true);
                 frag = new DayFragment(timeMillis, 1);
@@ -1059,7 +1087,7 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                 mNavigationView.getMenu().findItem(R.id.month_menu_item).setChecked(true);
                 frag = new MonthByWeekFragment(timeMillis, false);
                 if (mShowAgendaWithMonth) {
-                    secFrag = new AgendaFragment(timeMillis, false);
+                    secFrag = new AgendaSearchFragment(timeMillis, false);
                 }
                 if (mIsTabletConfig) {
                     mToolbar.setTitle(R.string.month_view);
@@ -1085,18 +1113,21 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
         }
 
 
+        boolean isAgenda = viewType == ViewType.AGENDA_EVENTS
+                || viewType == ViewType.AGENDA_TASKS
+                || viewType == ViewType.AGENDA_SEARCH;
 
         // Show date only on tablet configurations in views different than Agenda
         if (!mIsTabletConfig) {
             mDateRange.setVisibility(View.GONE);
-        } else if (viewType != ViewType.AGENDA && viewType != ViewType.NOTIFICATIONS) {
+        } else if (!isAgenda && viewType != ViewType.NOTIFICATIONS) {
             mDateRange.setVisibility(View.VISIBLE);
         } else {
             mDateRange.setVisibility(View.GONE);
         }
 
         // Clear unnecessary buttons from the option menu when switching from the agenda view
-        if (viewType != ViewType.AGENDA) {
+        if (!isAgenda) {
             clearOptionsMenu();
         }
 
@@ -1206,7 +1237,9 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
 
         if (mHomeTime != null
                 && (mCurrentView == ViewType.DAY || mCurrentView == ViewType.WEEK
-                        || mCurrentView == ViewType.AGENDA)
+                        || mCurrentView == ViewType.AGENDA_EVENTS
+                        || mCurrentView == ViewType.AGENDA_TASKS
+                        || mCurrentView == ViewType.AGENDA_SEARCH)
                 && !TextUtils.equals(mTimeZone, Time.getCurrentTimezone())) {
             Time time = new Time(mTimeZone);
             time.setToNow();
@@ -1267,7 +1300,9 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             // do not create the event info fragment here, it will be created by the Agenda
             // fragment
 
-            if (mCurrentView == ViewType.AGENDA) {
+            if (mCurrentView == ViewType.AGENDA_EVENTS
+                    || mCurrentView == ViewType.AGENDA_TASKS
+                    || mCurrentView == ViewType.AGENDA_SEARCH) {
                 if (event.startTime != null && event.endTime != null) {
                     // Event is all day , adjust the goto time to local time
                     if (event.isAllDay()) {
@@ -1277,11 +1312,11 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
                                 event.endTime, event.endTime.toMillis(false), mTimeZone);
                     }
                     mController.sendEvent(this, EventType.GO_TO, event.startTime, event.endTime,
-                            event.selectedTime, event.id, ViewType.AGENDA,
+                            event.selectedTime, event.id, mCurrentView,
                             CalendarController.EXTRA_GOTO_TIME, null, null);
                 } else if (event.selectedTime != null) {
                     mController.sendEvent(this, EventType.GO_TO, event.selectedTime,
-                        event.selectedTime, event.id, ViewType.AGENDA);
+                        event.selectedTime, event.id, mCurrentView);
                 }
             } else {
                 // TODO Fix the temp hack below: && mCurrentView !=

@@ -42,6 +42,7 @@ import com.android.calendar.CalendarController.EventInfo;
 import com.android.calendar.CalendarController.EventType;
 import com.android.calendar.CalendarController.ViewType;
 import com.android.calendar.agenda.AgendaFragment;
+import com.android.calendar.agenda.AgendaSearchFragment;
 import com.github.quarck.calnotify.ui.ViewEventActivity;
 
 import org.qrck.seshat.R;
@@ -164,7 +165,7 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction ft = fragmentManager.beginTransaction();
 
-        AgendaFragment searchResultsFragment = new AgendaFragment(timeMillis, true);
+        AgendaSearchFragment searchResultsFragment = new AgendaSearchFragment(timeMillis, true);
         ft.replace(R.id.body_frame, searchResultsFragment);
         mController.registerEventHandler(R.id.body_frame, searchResultsFragment);
 
@@ -198,7 +199,7 @@ public class SearchActivity extends AppCompatActivity implements CalendarControl
         EventInfo searchEventInfo = new EventInfo();
         searchEventInfo.eventType = EventType.SEARCH;
         searchEventInfo.query = searchQuery;
-        searchEventInfo.viewType = ViewType.AGENDA;
+        searchEventInfo.viewType = ViewType.AGENDA_SEARCH;
         if (goToTime != null) {
             searchEventInfo.startTime = goToTime;
         }

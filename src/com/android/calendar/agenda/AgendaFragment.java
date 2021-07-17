@@ -22,6 +22,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -55,8 +56,10 @@ import org.qrck.seshat.R;
 import static android.provider.CalendarContract.EXTRA_EVENT_BEGIN_TIME;
 import static android.provider.CalendarContract.EXTRA_EVENT_END_TIME;
 
-public class AgendaFragment extends Fragment implements CalendarController.EventHandler,
-        OnScrollListener {
+public abstract class AgendaFragment
+        extends Fragment
+        implements CalendarController.EventHandler, OnScrollListener
+{
 
     protected static final String BUNDLE_KEY_RESTORE_TIME = "key_restore_time";
     protected static final String BUNDLE_KEY_RESTORE_INSTANCE_ID = "key_restore_instance_id";
@@ -209,8 +212,7 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
                 GeneralPreferences.KEY_HIDE_DECLINED, false);
         mAgendaListView.setHideDeclinedEvents(hideDeclined);
 
-        long[] hiddenCalendars = new Settings(getActivity()).getTaskCalendarIds();
-        mAgendaListView.setHideCalendars(hiddenCalendars);
+        mAgendaListView.setCalendarsFilter(getEventsQueryFilterString(getActivity()));
 
         if (mLastHandledEventId != -1) {
             mAgendaListView.goTo(mLastHandledEventTime, mLastHandledEventId, mQuery, true, false);
@@ -423,4 +425,8 @@ public class AgendaFragment extends Fragment implements CalendarController.Event
             }
         }
     }
+
+    public abstract String getEventsQueryFilterString(Context ctx);
 }
+
+

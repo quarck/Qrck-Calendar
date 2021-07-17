@@ -50,7 +50,10 @@ public class CalendarViewAdapter extends BaseAdapter {
     public static final int DAY_BUTTON_INDEX = 0;
     public static final int WEEK_BUTTON_INDEX = 1;
     public static final int MONTH_BUTTON_INDEX = 2;
-    public static final int AGENDA_BUTTON_INDEX = 3;
+    public static final int AGENDA_EVENTS_BUTTON_INDEX = 3;
+    public static final int AGENDA_TASKS_BUTTON_INDEX = 4;
+    public static final int AGENDA_SEARCH_BUTTON_INDEX = 5;
+
     static final int VIEW_TYPE_NUM = 1;  // Increase this if you add more view types
     private static final String TAG = "MenuSpinnerAdapter";
     // Defines the types of view returned by this spinner
@@ -212,7 +215,9 @@ public class CalendarViewAdapter extends BaseAdapter {
                     date.setText(buildMonthYearDate());
                     date.setVisibility(View.VISIBLE);
                     break;
-                case ViewType.AGENDA:
+                case ViewType.AGENDA_EVENTS:
+                case ViewType.AGENDA_TASKS:
+                case ViewType.AGENDA_SEARCH:
                     weekDay.setVisibility(View.VISIBLE);
                     weekDay.setText(buildDayOfWeek());
                     date.setText(buildFullDate());
@@ -253,8 +258,14 @@ public class CalendarViewAdapter extends BaseAdapter {
                 case ViewType.MONTH:
                     title.setText(mButtonNames [MONTH_BUTTON_INDEX]);
                     break;
-                case ViewType.AGENDA:
-                    title.setText(mButtonNames [AGENDA_BUTTON_INDEX]);
+                case ViewType.AGENDA_EVENTS:
+                    title.setText(mButtonNames [AGENDA_EVENTS_BUTTON_INDEX]);
+                    break;
+                case ViewType.AGENDA_TASKS:
+                    title.setText(mButtonNames [AGENDA_TASKS_BUTTON_INDEX]);
+                    break;
+                case ViewType.AGENDA_SEARCH:
+                    title.setText(mButtonNames [AGENDA_SEARCH_BUTTON_INDEX]);
                     break;
                 case ViewType.NOTIFICATIONS:
                     title.setText(mNotificationsButtonName);
@@ -313,8 +324,20 @@ public class CalendarViewAdapter extends BaseAdapter {
                     date.setText(buildMonthDate());
                 }
                 break;
-            case AGENDA_BUTTON_INDEX:
-                viewType.setText(mButtonNames [AGENDA_BUTTON_INDEX]);
+            case AGENDA_EVENTS_BUTTON_INDEX:
+                viewType.setText(mButtonNames [AGENDA_EVENTS_BUTTON_INDEX]);
+                if (mShowDate) {
+                    date.setText(buildMonthDayDate());
+                }
+                break;
+            case AGENDA_TASKS_BUTTON_INDEX:
+                viewType.setText(mButtonNames [AGENDA_TASKS_BUTTON_INDEX]);
+                if (mShowDate) {
+                    date.setText(buildMonthDayDate());
+                }
+                break;
+            case AGENDA_SEARCH_BUTTON_INDEX:
+                viewType.setText(mButtonNames [AGENDA_SEARCH_BUTTON_INDEX]);
                 if (mShowDate) {
                     date.setText(buildMonthDayDate());
                 }
