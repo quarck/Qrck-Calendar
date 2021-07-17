@@ -907,8 +907,8 @@
 
     <string name="title_activity_privacy_policy">Privacy Policy</string>
 
-    <string name="privacy_policy_title">PRIVACY POLICY</string>
-    <string name="privacy_policy_content">This app does not steal your data\n\nNo data is being ever sent over network to any 3rd party</string>
+    <string name="privacy_policy_title"><b>Seshat calendar Privacy Policy</b></string>
+    <string name="privacy_policy_content"><b>Seshat calendar Privacy Policy</b>\n\nSeshat is an open source application that respects your privacy. Seshat application does not send any of your data to us. Also Seshat does not use the Internet permission at all.\n\n<b>What personal information do we collect from the people that visit our blog, website or app?</b>\nSeshat does not collect information from the users.\n\n<b>When do we collect information?</b>\nSeshat does not collect information from the users.\n\n<b>How do we use your information?</b>\nWe do not send your information or use it at all.\n\n<b>Do we use \'cookies\'?</b>\nWe do not use cookies.\n</string>
 
     <string name="build_time_string_format" formatted="false">Build time: %s</string>
     <string name="handle_events_with_no_reminders">Handle events with no reminders</string>
@@ -1102,5 +1102,6 @@
     <string name="task_notifications_summary">Events with calendar configured as \'treat as tasks\' will use this channel</string>
     <string name="agenda_events_suffix"></string>
     <string name="agenda_tasks_suffix">" (Tasks)"</string>
+    <string name="privacy_policy_menu_item">Privacy Policy</string>
 
 </resources>

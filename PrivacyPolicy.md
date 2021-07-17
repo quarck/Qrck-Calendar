@@ -16,4 +16,4 @@ We do not send your information or use it at all.
 
 ### Do we use 'cookies'?
 
-We do not use cookies for tracking purposes.
+We do not use cookies.

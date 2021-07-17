@@ -79,6 +79,8 @@
 
         <activity android:name="com.android.calendar.AboutActivity">
         </activity>
+        <activity android:name="com.github.quarck.calnotify.ui.PrivacyPolicyActivity">
+        </activity>
 
         <activity android:name="com.android.calendar.event.EditEventActivity"
             android:theme="@style/Base.CalendarAppThemeWithActionBar">

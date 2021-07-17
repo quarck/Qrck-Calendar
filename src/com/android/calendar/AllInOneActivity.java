@@ -57,6 +57,7 @@ import com.android.calendar.settings.SettingsActivity;
 import com.android.calendar.settings.GeneralPreferences;
 import com.android.calendar.settings.SettingsActivityKt;
 import com.android.calendar.settings.ViewDetailsPreferences;
+import com.github.quarck.calnotify.ui.PrivacyPolicyActivity;
 import com.github.quarck.calnotify.ui.ViewEventActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -967,6 +968,9 @@ public class AllInOneActivity extends AbstractCalendarActivity implements EventH
             mController.sendEvent(this, EventType.LAUNCH_SETTINGS, null, null, 0, 0);
         } else if (itemId == R.id.action_about) {
             Intent intent = new Intent(this, AboutActivity.class);
+            startActivity(intent);
+        } else if (itemId == R.id.action_privacy_policy) {
+            Intent intent = new Intent(this, PrivacyPolicyActivity.class);
             startActivity(intent);
         }
         mDrawerLayout.closeDrawers();

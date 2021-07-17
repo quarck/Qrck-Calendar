@@ -37,7 +37,12 @@
             android:alphabeticShortcut="s"
             android:icon="@drawable/ic_menu_settings"
             android:title="@string/menu_preferences" />
-        
+
+        <item
+            android:id="@+id/action_privacy_policy"
+            android:icon="@drawable/ic_info"
+            android:title="@string/privacy_policy_menu_item" />
+
         <item
             android:id="@+id/action_about"
             android:icon="@drawable/ic_info"
