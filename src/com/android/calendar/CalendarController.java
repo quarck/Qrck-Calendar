@@ -284,8 +284,9 @@ public class CalendarController {
             mViewType = event.viewType;
 
             if (event.viewType == ViewType.AGENDA_EVENTS
-                    || event.viewType == ViewType.AGENDA_TASKS
-                    || event.viewType == ViewType.DAY
+                    || event.viewType == ViewType.AGENDA_TASKS) {
+                mDetailViewType = ViewType.AGENDA_SEARCH;
+            } else if (event.viewType == ViewType.DAY
                     || (Utils.getAllowWeekForDetailView() && event.viewType == ViewType.WEEK)) {
                 mDetailViewType = mViewType;
             }
