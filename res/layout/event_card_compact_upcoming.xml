@@ -45,46 +45,28 @@
             tools:ignore="HardcodedText" />
 
 
-        <TextView
-            android:id="@+id/card_view_skip_flag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
 
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="4dp"
-
-            android:layout_marginEnd="@dimen/compact_view_right_margin"
-
-            android:layout_marginBottom="2dp"
-            android:layout_toEndOf="@id/card_view_notification_time"
-            android:text="@string/event_was_marked_as_finished"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textStyle="bold"
-            android:layout_alignBaseline="@id/card_view_notification_time"
-
-            android:textColor="@color/material_red" />
 
         <TextView
             android:id="@+id/card_view_event_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="?attr/cn_primary_text"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:layout_marginStart="@dimen/compact_view_left_margin"
-            android:layout_marginEnd="@dimen/compact_view_right_margin"
-
-            android:layout_marginTop="1dp"
-            android:layout_marginBottom="1dp"
-
-            android:text="@string/event_title_example"
-
-            android:layout_toEndOf="@id/compact_view_calendar_color"
             android:layout_below="@id/card_view_notification_time"
             android:layout_alignParentEnd="true"
-            />
+            android:layout_marginStart="@dimen/compact_view_left_margin"
+            android:layout_marginTop="1dp"
+            android:layout_marginEnd="@dimen/compact_view_right_margin"
+            android:layout_marginBottom="1dp"
+            android:layout_toEndOf="@id/compact_view_calendar_color"
+
+            android:ellipsize="end"
+            android:gravity="start"
+
+            android:maxLines="1"
+
+            android:text="@string/event_title_example"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?attr/cn_primary_text" />
 
         <TextView
             android:layout_width="wrap_content"

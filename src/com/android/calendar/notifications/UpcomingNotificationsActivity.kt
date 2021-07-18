@@ -3,6 +3,7 @@ package com.android.calendar.notifications
 import android.content.Context
 import android.content.Intent
 import android.graphics.Canvas
+import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -13,7 +14,6 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.BlendModeColorFilterCompat
@@ -21,12 +21,10 @@ import androidx.core.graphics.BlendModeCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.android.calendar.DynamicTheme
-import com.android.calendar.Utils
 import com.github.quarck.calnotify.Consts
 import com.github.quarck.calnotify.app.CalNotifyController
 import com.github.quarck.calnotify.calendar.*
 import com.github.quarck.calnotify.calendarmonitor.CalendarMonitor
-import com.github.quarck.calnotify.ui.EventListAdapter
 import com.github.quarck.calnotify.ui.ViewEventActivity
 import com.github.quarck.calnotify.ui.ViewEventActivityUpcoming
 import com.github.quarck.calnotify.utils.adjustCalendarColor
@@ -58,7 +56,6 @@ class UpcomingEventListAdapter(
         var eventTimeText: TextView = itemView.findViewById<TextView>(R.id.card_view_event_time)
 
         val notificationTimeText : TextView? = itemView.findViewById<TextView>(R.id.card_view_notification_time)
-        val notificationSkippedText : TextView? = itemView.findViewById<TextView>(R.id.card_view_skip_flag)
 
         val compactViewCalendarColor: View? = itemView.findViewById<View>(R.id.compact_view_calendar_color)
 
@@ -267,6 +264,9 @@ class UpcomingEventListAdapter(
         holder.entry = entry
 
         if (entry.event != null) {
+
+            val isNotificationSkipped = cb.getItemIsSkipped(entry)
+
             holder.mainLayout.visibility = View.VISIBLE
             holder.headingLayout.visibility = View.GONE
 
@@ -277,15 +277,28 @@ class UpcomingEventListAdapter(
             holder.eventTimeText.text = ""
 
             holder.notificationTimeText?.text = cb.getItemNotificationTime(entry)
-            holder.notificationSkippedText?.visibility = if (cb.getItemIsSkipped(entry)) View.VISIBLE else View.GONE
 
             holder.calendarColor.color = cb.getItemColor(entry)
             holder.compactViewCalendarColor?.background = holder.calendarColor
+
+            val titleText = holder.eventTitleText
+            if (isNotificationSkipped) {
+                titleText.paintFlags = titleText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                holder.eventDateText.paintFlags = holder.eventDateText.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                holder.notificationTimeText?.let {
+                    it.paintFlags = it.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+                }
+            } else {
+                titleText.paintFlags = titleText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                holder.eventDateText.paintFlags = holder.eventDateText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                holder.notificationTimeText?.let {
+                    it.paintFlags = it.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                }
+            }
         }
         else {
             holder.mainLayout.visibility = View.GONE
             holder.headingLayout.visibility = View.VISIBLE
-            holder.notificationSkippedText?.visibility = View.GONE
             holder.headingText.text = cb.getItemTitle(entry) // entry.event.title
         }
     }
