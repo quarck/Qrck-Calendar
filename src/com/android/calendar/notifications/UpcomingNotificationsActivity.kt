@@ -65,6 +65,8 @@ class UpcomingEventListAdapter(
         val undoLayout: RelativeLayout = itemView.findViewById(R.id.event_card_undo_layout)
         val mainLayout: RelativeLayout = itemView.findViewById(R.id.compact_view_content_layout)
 
+        val shadowLayout: RelativeLayout = itemView.findViewById(R.id.event_card_grey_shadow_layout)
+
         var calendarColor: ColorDrawable = ColorDrawable(0)
 
         init {
@@ -288,12 +290,14 @@ class UpcomingEventListAdapter(
                 holder.notificationTimeText?.let {
                     it.paintFlags = it.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
                 }
+                holder.shadowLayout.visibility = View.VISIBLE
             } else {
                 titleText.paintFlags = titleText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                 holder.eventDateText.paintFlags = holder.eventDateText.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                 holder.notificationTimeText?.let {
                     it.paintFlags = it.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
                 }
+                holder.shadowLayout.visibility = View.GONE
             }
         }
         else {

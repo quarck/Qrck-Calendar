@@ -87,6 +87,7 @@
         <item name="cn_skip_event_bg">@color/cn_white_skip_event_bg</item>
         <item name="cn_cal_sample_primary">@color/cn_white_cal_sample_primary</item>
         <item name="cn_reschedule_event_bg">@color/cn_white_reschedule_event_bg</item>
+        <item name="cn_card_shadow">@color/cn_card_shadow_light</item>
     </style>
 
     <style name="Base.CalendarAppThemeWithActionBar" parent="Theme.AppCompat.Light.DarkActionBar">

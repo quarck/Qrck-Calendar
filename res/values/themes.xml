@@ -64,6 +64,7 @@
         <item name="cn_skip_event_bg">@color/cn_dark_skip_event_bg</item>
         <item name="cn_cal_sample_primary">@color/cn_dark_cal_sample_primary</item>
         <item name="cn_reschedule_event_bg">@color/cn_dark_reschedule_event_bg</item>
+        <item name="cn_card_shadow">@color/cn_card_shadow_dark</item>
     </style>
 
     <style name="CalendarAppThemeBlack" parent="Theme.AppCompat.NoActionBar">
@@ -129,6 +130,7 @@
         <item name="cn_skip_event_bg">@color/cn_black_skip_event_bg</item>
         <item name="cn_cal_sample_primary">@color/cn_black_cal_sample_primary</item>
         <item name="cn_reschedule_event_bg">@color/cn_black_reschedule_event_bg</item>
+        <item name="cn_card_shadow">@color/cn_card_shadow_black</item>
     </style>
 
 

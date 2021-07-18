@@ -44,9 +44,6 @@
             android:layout_alignParentTop="true"
             tools:ignore="HardcodedText" />
 
-
-
-
         <TextView
             android:id="@+id/card_view_event_name"
             android:layout_width="match_parent"
@@ -101,8 +98,6 @@
             android:layout_below="@id/card_view_event_date"
             android:layout_toEndOf="@id/compact_view_calendar_color"
             />
-
-
 
         <ImageView
             android:id="@+id/imageview_is_alarm_indicator"
@@ -181,6 +176,17 @@
             android:layout_marginStart="25dp"
             android:text="HELLO WORLD"
             tools:ignore="HardcodedText" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/event_card_grey_shadow_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/compact_view_layout_height"
+        android:background="?attr/cn_card_shadow"
+        android:visibility="gone"
+        >
 
     </RelativeLayout>
 

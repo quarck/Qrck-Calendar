@@ -69,5 +69,6 @@
         <attr name="cn_skip_event_bg" format="color" />
         <attr name="cn_reschedule_event_bg" format="color" />
         <attr name="cn_cal_sample_primary" format="color" />
+        <attr name="cn_card_shadow" format="color" />
     </declare-styleable>
 </resources>
